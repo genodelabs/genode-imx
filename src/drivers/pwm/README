@@ -1,0 +1,21 @@
+This directory contains the implementation of the PWM driver component
+for the i.MX 8MQ SoC.
+
+Brief
+=====
+
+The driver supports the Pulse Width Modulation controller that can be found in
+the i.MX 8MQ SoC. It retrieves its device resources via the platform API.
+Moreover, a configuration is needed to set period, sample-rate,
+and clock-source.
+
+Configuration
+=============
+
+The configuration of the driver looks like the following:
+
+! <config period="5" sample="1000" clock_source="ipg"/>
+
+One can select the clock source in between "ipg", "ipg_highfreq", "ipg_32k".
+All other values set the clock source to off. Default values for sample and
+period are zero.

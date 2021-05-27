@@ -1,0 +1,18 @@
+LICENSE := GPLv2
+VERSION := 2
+
+DOWNLOADS := linux_5.7.archive reform2.git custom_patches
+
+linux_5.7.archive: reform2.git
+
+URL(linux_5.7)  := https://github.com/torvalds/linux/tarball/3d77e6a
+NAME(linux_5.7) := linux-5.7.tgz
+SHA(linux_5.7)  := 06409baa72372a008b1d3348f3be90dfe3450d799b8cbd87e5ee408a942c01e1
+DIR(linux_5.7)  := linux
+
+URL(reform2) := https://source.mnt.re/reform/reform-system-image.git
+REV(reform2) := f34c9d93cef73c50979c1f45c68b8de961faceb5
+DIR(reform2) := reform2
+
+custom_patches: reform2.git linux_5.7.archive
+	cd linux; for p in ../reform2/reform2-imx8mq/template-kernel/patches/*.patch; do patch -p1 < $$p; done; cd ..

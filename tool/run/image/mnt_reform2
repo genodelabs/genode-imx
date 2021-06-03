@@ -1,0 +1,67 @@
+##
+# Create disk image with a bootable uImage only
+#
+proc run_image {elf_img} {
+
+	set sgdisk [installed_command sgdisk]
+
+	build { u-boot }
+
+	exec mkdir -p [run_dir]/ext2
+
+	#
+	# Build uImage
+	#
+	set bin_img   [run_dir]/image.bin
+	set uboot_img [run_dir]/ext2/uImage
+	set entrypoint [exec [cross_dev_prefix]readelf -h $elf_img | \
+	                grep "Entry point address: " | \
+	                sed -e "s/.*Entry point address: *//"]
+	set load_addr [exec [cross_dev_prefix]readelf -l $elf_img | \
+	               grep -m 1 "LOAD"]
+	set load_addr [lindex [regexp -inline -all -- {\S+} $load_addr] 3]
+
+	exec [cross_dev_prefix]objcopy -O binary $elf_img $bin_img
+	exec gzip --best --force $bin_img
+	exec mkimage -A arm64 -O linux -T kernel -C gzip -a $load_addr \
+	              -e $entrypoint -d $bin_img.gz $uboot_img
+	exec rm -rf $bin_img.gz
+
+	#
+	# Build ext2 image
+	#
+	exec cp u-boot/mnt_reform2/arch/arm/dts/imx8mq-nitrogen8m_som.dtb [run_dir]/ext2/dtb
+	set size_img [expr [regsub {\s.*} [exec du -b [run_dir]/ext2] {}]]
+	set disk_size_kb [expr (($size_img / 1024) + 1800)]
+	set part_offset [expr (4 * 1024 * 1024)]
+	exec [installed_command mkfs.ext2] -q -L 'GENODE' -N 0 -E offset=$part_offset -m 5 -r 1 -t ext2 -d [run_dir]/ext2 [run_dir].ext2 [expr $disk_size_kb]k
+
+	#
+	# Create GPT partitioning scheme
+	#
+	set first_sector [expr $part_offset / 512]
+	set last_sector [expr ((($part_offset / 512) + ($disk_size_kb*2)) - 1)]
+	exec dd if=/dev/zero of=[run_dir].empty bs=512 count=64 2>/dev/null
+	exec cat [run_dir].ext2 [run_dir].empty > [run_dir].img
+	exec $sgdisk --move-second-header [run_dir].img
+	exec $sgdisk --new=1:$first_sector:$last_sector [run_dir].img
+	exec $sgdisk --change-name=1:GENODE [run_dir].img
+	exec $sgdisk --hybrid [run_dir].img
+
+	#
+	# Install bootloader
+	#
+	exec dd if=u-boot/mnt_reform2/flash.bin of=[run_dir].img conv=notrunc bs=1k seek=33 2>/dev/null
+
+	#
+	# Cleanup
+	#
+	exec rm -rf [run_dir]/ext2
+	exec rm -rf [run_dir].ext2
+	exec rm -rf [run_dir].empty
+
+	set size_image [expr [regsub {\s.*} [exec du -sk [run_dir].img] {}]]
+	puts "Created image file [run_dir].img (${size_image}kiB)"
+
+}
+

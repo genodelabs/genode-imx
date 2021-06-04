@@ -100,6 +100,10 @@ static Framebuffer::Driver & driver(Genode::Env & env)
 }
 
 
+/**
+ * Can be called already as side-effect of `lx_emul_start_kernel`,
+ * that's why the Driver object needs to be constructed already here.
+ */
 extern "C" void lx_emul_framebuffer_ready(void * base, unsigned long,
                                           unsigned xres, unsigned yres)
 {

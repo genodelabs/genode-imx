@@ -16,5 +16,5 @@
 
 void __percpu * __alloc_percpu(size_t size, size_t align)
 {
-	return lx_emul_alloc_aligned(size, align);
+	return lx_emul_mem_alloc_aligned(size, align);
 }

@@ -30,3 +30,11 @@ void * krealloc(const void * p,size_t new_size,gfp_t flags)
 
 	lx_emul_trace_and_stop(__func__);
 }
+
+
+size_t ksize(const void * objp)
+{
+	if (objp == NULL) { return 0; }
+
+	return __ksize(objp);
+}

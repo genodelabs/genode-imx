@@ -80,8 +80,8 @@ static int i2c_imx_xfer(struct i2c_adapter *adapter,
 	case 0: return 0;
 	case 1:
 		{
-			if (msgs[0].len != 2 || msgs[0].flags & I2C_M_RD) { break; }
-			lx_emul_i2c_write_byte(msgs[0].buf[0], msgs[0].buf[1]);
+			if (msgs[0].len < 2 || msgs[0].flags & I2C_M_RD) { break; }
+			lx_emul_i2c_write_bytes(msgs[0].len, msgs[0].buf);
 			return num;
 		}
 	case 2:

@@ -12,7 +12,6 @@
  */
 
 #include <lx_emul/init.h>
-#include <lx_emul/irq.h>
 #include <lx_emul/time.h>
 
 #include <asm/irq_regs.h>
@@ -37,8 +36,15 @@ extern int platform_bus_init(void);
 
 enum system_states system_state;
 
+static __initdata DECLARE_COMPLETION(kthreadd_done);
+
 static int kernel_init(void * args)
 {
+	struct task_struct *tsk = current;
+	set_task_comm(tsk, "init");
+
+	wait_for_completion(&kthreadd_done);
+
 	workqueue_init();
 
 	/* the following calls are from driver_init() of drivers/base/init.c */
@@ -69,6 +75,8 @@ static void timer_loop(void)
 
 int lx_emul_init_task_function(void * dtb)
 {
+	int pid;
+
 	/* Set dummy task registers used in IRQ and time handling */
 	static struct pt_regs regs;
 	set_irq_regs(&regs);
@@ -102,9 +110,13 @@ int lx_emul_init_task_function(void * dtb)
 
 	sched_clock_init();
 
+	kernel_thread(kernel_init, NULL, CLONE_FS);
+	pid = kernel_thread(kthreadd, NULL, CLONE_FS | CLONE_FILES);
+	kthreadd_task = find_task_by_pid_ns(pid, NULL);;
+
 	system_state = SYSTEM_SCHEDULING;
 
-	kthread_create(kernel_init, NULL, "init");
+	complete(&kthreadd_done);
 
 	lx_emul_task_schedule(false);
 

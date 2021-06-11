@@ -27,14 +27,14 @@ kmalloc_caches[NR_KMALLOC_TYPES][KMALLOC_SHIFT_HIGH + 1] = { NULL };
 
 void kfree(const void * x)
 {
-	lx_emul_free(x);
+	lx_emul_mem_free(x);
 }
 
 void * __kmalloc(size_t size, gfp_t flags)
 {
 	/* DMA memory is not implemented yet */
 	if (flags & GFP_DMA) { lx_emul_trace_and_stop(__func__); }
-	return lx_emul_alloc(size);
+	return lx_emul_mem_alloc(size);
 }
 
 
@@ -88,7 +88,7 @@ void * kmem_cache_alloc(struct kmem_cache * s, gfp_t flags)
 	/* DMA memory is not implemented yet */
 	if (flags & GFP_DMA) { lx_emul_trace_and_stop(__func__); }
 	if (!s)              { lx_emul_trace_and_stop(__func__); }
-	return lx_emul_alloc_aligned(s->size, s->align ? s->align : 32);
+	return lx_emul_mem_alloc_aligned(s->size, s->align ? s->align : 32);
 }
 
 
@@ -127,4 +127,10 @@ void __init kmem_cache_init(void)
 		kmalloc_caches[KMALLOC_NORMAL][i] =
 			kmem_cache_create("", sz, sz, GFP_KERNEL, NULL);
 	}
+}
+
+
+size_t __ksize(const void * object)
+{
+	return lx_emul_mem_size(object);
 }

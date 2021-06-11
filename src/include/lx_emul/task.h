@@ -17,12 +17,17 @@
 extern "C" {
 #endif
 
+enum { SWAPPER_PID, KIRQ_PID, FIRST_PID };
+
 struct task_struct;
 
 struct task_struct * lx_emul_task_get_current(void);
 
+struct task_struct * lx_emul_task_get(int pid);
+
 void lx_emul_task_create(struct task_struct * task,
                          const char * name,
+                         int pid,
                          int (* threadfn)(void * data),
                          void * data);
 
@@ -31,6 +36,8 @@ void lx_emul_task_unblock(struct task_struct * task);
 void lx_emul_task_priority(struct task_struct * task, unsigned long prio);
 
 void lx_emul_task_schedule(int block);
+
+void lx_emul_task_name(struct task_struct * task, const char * name);
 
 #ifdef __cplusplus
 }

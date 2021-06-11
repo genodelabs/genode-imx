@@ -20,5 +20,5 @@ void * __init memblock_alloc_try_nid(phys_addr_t size,
                                      phys_addr_t max_addr,
                                      int nid)
 {
-	return lx_emul_alloc_aligned(size, align);
+	return lx_emul_mem_alloc_aligned(size, align);
 }

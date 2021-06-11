@@ -38,6 +38,7 @@ class Lx_kit::Task : public Genode::List<Lx_kit::Task>::Element
 		Task(int        (* func) (void*),
 		     void        * arg,
 		     void        * task,
+		     int           pid,
 		     char const  * name,
 		     Scheduler   & scheduler,
 		     Type          type);
@@ -49,11 +50,13 @@ class Lx_kit::Task : public Genode::List<Lx_kit::Task>::Element
 		int    priority() const;
 		Name   name()     const;
 		void * lx_task()  const;
+		int    pid()      const;
 
 		void block();
 		void unblock();
 
 		void priority(int prio);
+		void name(const char * name);
 
 		bool runnable() const;
 
@@ -85,7 +88,8 @@ class Lx_kit::Task : public Genode::List<Lx_kit::Task>::Element
 		Type          _type;
 		Scheduler   & _scheduler;
 		void * const  _lx_task;        /* pointer of Linux task struct      */
-		Name const    _name;           /* name of task                      */
+		int const     _pid;            /* Linux process identifier          */
+		Name          _name;           /* name of task                      */
 		void        * _stack;          /* stack pointer                     */
 		jmp_buf       _env;            /* execution state                   */
 		jmp_buf       _saved_env;      /* saved state of thread calling run */

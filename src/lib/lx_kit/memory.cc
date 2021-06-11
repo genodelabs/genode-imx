@@ -84,3 +84,12 @@ void Lx_kit::Mem_allocator::free(const void * ptr)
 		return;
 	}
 }
+
+
+Genode::size_t Lx_kit::Mem_allocator::size(const void * ptr)
+{
+	if (!_mem.valid_addr((addr_t)ptr))
+		return 0;
+
+	return _mem.size_at(ptr);
+}

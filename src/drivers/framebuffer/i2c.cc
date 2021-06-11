@@ -33,8 +33,11 @@ extern "C" unsigned char lx_emul_i2c_read_byte(unsigned char addr)
 }
 
 
-extern "C" void lx_emul_i2c_write_byte(unsigned char addr, unsigned char byte)
+extern "C" void lx_emul_i2c_write_bytes(unsigned len, unsigned char * bytes)
 {
-	Transaction t(Message(Message::WRITE, addr, byte));
+	Message m(Message::WRITE);
+	for (unsigned i = 0; i < len; i++)
+		m.add(bytes[i]);
+	Transaction t(m);
 	i2c().transmit(t);
 }

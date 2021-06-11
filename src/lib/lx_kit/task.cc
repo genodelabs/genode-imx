@@ -44,12 +44,14 @@ static inline void * _alloc_stack(const char * name)
 Task::Task(int       (* func)(void*),
            void       * arg,
            void       * lx_task,
+           int          pid,
            char const * name,
            Scheduler  & scheduler,
            Type         type)
 : _type(type),
   _scheduler(scheduler),
   _lx_task(lx_task),
+  _pid(pid),
   _name(name),
   _stack(_alloc_stack(name)),
   _func(func),
@@ -71,6 +73,9 @@ Task::Type Task::type() const { return _type; }
 void * Task::lx_task() const { return _lx_task; }
 
 
+int Task::pid() const { return _pid; }
+
+
 int Task::priority() const { return _priority; }
 
 
@@ -80,6 +85,9 @@ void Task::priority(int prio)
 	_priority = prio;
 	_scheduler.add(*this);
 }
+
+
+void Task::name(const char * name) { _name = Task::Name(name); }
 
 
 Task::Name Task::name() const { return _name; }

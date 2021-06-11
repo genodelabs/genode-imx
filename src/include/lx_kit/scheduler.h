@@ -15,6 +15,7 @@
  */
 
 #include <util/list.h>
+#include <lx_kit/task.h>
 
 namespace Lx_kit {
 	class Scheduler;
@@ -39,8 +40,16 @@ class Lx_kit::Scheduler
 
 		Task & task(void * t);
 
+		template <typename FN>
+		void for_each_task(FN const & fn);
+
 	private:
 
 		Genode::List<Task> _present_list { };
 		Task             * _current      { nullptr };
 };
+
+
+template <typename FN>
+void Lx_kit::Scheduler::for_each_task(FN const & fn) {
+	for (Task * t = _present_list.first(); t; t = t->next()) { fn(*t); } }

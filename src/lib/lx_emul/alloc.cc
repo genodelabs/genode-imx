@@ -14,27 +14,33 @@
 #include <lx_emul/alloc.h>
 #include <lx_kit/env.h>
 
-extern "C" void * lx_emul_alloc_aligned(unsigned long size, unsigned long align)
+extern "C" void * lx_emul_mem_alloc_aligned(unsigned long size, unsigned long align)
 {
 	return Lx_kit::env().memory.alloc(size, align);
 };
 
 
-extern "C" void * lx_emul_alloc(unsigned long size)
+extern "C" void * lx_emul_mem_alloc(unsigned long size)
 {
 	/* always align memory objects to 32 bytes, like malloc, heap etc. */
 	return Lx_kit::env().memory.alloc(size, 32);
 };
 
 
-extern "C" void * lx_emul_alloc_dma(unsigned long size,
+extern "C" void * lx_emul_mem_alloc_dma(unsigned long size,
                                     void       ** dma_addr)
 {
 	return Lx_kit::env().memory.alloc_dma(size, dma_addr);
 };
 
 
-extern "C" void lx_emul_free(const void * ptr)
+extern "C" void lx_emul_mem_free(const void * ptr)
 {
 	Lx_kit::env().memory.free(ptr);
+};
+
+
+extern "C" unsigned long lx_emul_mem_size(const void * ptr)
+{
+	return Lx_kit::env().memory.size(ptr);
 };

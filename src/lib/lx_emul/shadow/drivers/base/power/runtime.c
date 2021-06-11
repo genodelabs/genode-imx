@@ -61,7 +61,7 @@ int pm_generic_runtime_suspend(struct device * dev)
 void pm_runtime_clean_up_links(struct device * dev) { }
 
 
-void pm_runtime_drop_link(struct device * dev) { }
+void pm_runtime_drop_link(struct device_link * link) { }
 
 
 void pm_runtime_new_link(struct device * dev) { }

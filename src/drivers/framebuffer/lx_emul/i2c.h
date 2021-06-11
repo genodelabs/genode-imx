@@ -19,8 +19,7 @@ extern "C" {
 #endif
 
 unsigned char lx_emul_i2c_read_byte(unsigned char addr);
-void          lx_emul_i2c_write_byte(unsigned char addr,
-                                     unsigned char byte);
+void          lx_emul_i2c_write_bytes(unsigned len, unsigned char * bytes);
 
 #ifdef __cplusplus
 }

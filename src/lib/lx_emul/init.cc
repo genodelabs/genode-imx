@@ -14,8 +14,9 @@
 #include <base/log.h>
 #include <lx_kit/env.h>
 #include <lx_kit/task.h>
-#include <lx_emul/init.h>
 #include <lx_emul/irq.h>
+#include <lx_emul/init.h>
+#include <lx_emul/task.h>
 
 #include <lx_emul/initcall_order.h>
 
@@ -44,10 +45,11 @@ void lx_emul_start_kernel(void * dtb)
 	using namespace Lx_kit;
 
 	new (env().heap) Task(lx_emul_init_task_function, dtb,
-	                      lx_emul_init_task_struct, "swapper",
+	                      lx_emul_init_task_struct, SWAPPER_PID, "swapper",
 	                      env().scheduler, Task::TIME_HANDLER);
 	new (env().heap) Task(lx_emul_irq_task_function, nullptr,
-	                      lx_emul_irq_task_struct, "kirqd",
+	                      lx_emul_irq_task_struct, KIRQ_PID, "kirqd",
 	                      env().scheduler, Task::IRQ_HANDLER);
+
 	env().scheduler.schedule();
 }

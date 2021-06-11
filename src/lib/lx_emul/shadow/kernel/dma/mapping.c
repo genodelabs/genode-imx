@@ -32,7 +32,7 @@ void * dma_alloc_attrs(struct device * dev,
 		lx_emul_trace_and_stop(__func__);
 	}
 
-	return lx_emul_alloc_dma(size, (void**)dma_handle);
+	return lx_emul_mem_alloc_dma(size, (void**)dma_handle);
 }
 
 
@@ -42,7 +42,7 @@ void dma_free_attrs(struct device * dev,
                     dma_addr_t      dma_handle,
                     unsigned long   attrs)
 {
-	lx_emul_free(cpu_addr);
+	lx_emul_mem_free(cpu_addr);
 }
 
 

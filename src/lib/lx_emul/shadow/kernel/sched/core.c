@@ -11,6 +11,10 @@
  * version 2.
  */
 
+#define CREATE_TRACE_POINTS
+#include <trace/events/sched.h>
+#undef CREATE_TRACE_POINTS
+
 #include <asm/preempt.h>
 #include <linux/preempt.h>
 #include <linux/sched.h>
@@ -42,6 +46,7 @@ int set_cpus_allowed_ptr(struct task_struct * p,
 static int
 try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
 {
+	if (!p) lx_emul_trace_and_stop(__func__);
 	if (!(p->state & state)) { return 0; }
 
 	if (p != lx_emul_task_get_current()) {
@@ -108,6 +113,43 @@ unsigned long nr_iowait_cpu(int cpu)
 void scheduler_tick(void)
 {
 	sched_clock_tick();
+}
+
+
+void __sched schedule_preempt_disabled(void)
+{
+	schedule();
+}
+
+
+int sched_setscheduler_nocheck(struct task_struct * p, int policy,
+                               const struct sched_param * param)
+{
+	return 0;
+}
+
+
+unsigned long wait_task_inactive(struct task_struct * p,long match_state)
+{
+	struct rq *rq = task_rq(p);
+
+	if (task_running(rq, p)) {
+		schedule();
+	}
+
+	if (task_running(rq, p)) {
+		return 0;
+	}
+
+	return 1;
+}
+
+
+int wake_up_state(struct task_struct * p, unsigned int state)
+{
+	p->state = TASK_RUNNING;
+	lx_emul_task_unblock(p);
+	return 0;
 }
 
 

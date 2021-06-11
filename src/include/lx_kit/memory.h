@@ -35,6 +35,7 @@ class Lx_kit::Mem_allocator
 
 		void * alloc(size_t size, size_t align);
 		void * alloc_dma(size_t size, void ** dma_attr);
+		size_t size(const void * ptr);
 		void   free(const void * ptr);
 
 	private:

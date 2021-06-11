@@ -72,6 +72,7 @@ install_config {
 
 			<device name="lcd" type="fsl,imx28-lcdif">
 				<io_mem address="0x30320000" size="0x10000"/>
+				<io_mem address="0x307f0000" size="0x3000"/>
 				<irq    number="37"/>
 				<clock name="lcdif_pixel_clk_root"
 				       parent="video_pll1_clk"
@@ -148,9 +149,6 @@ install_config {
 				<clock  name="dc_pixel_clk_root"
 				        parent="video_pll1_clk"
 				        rate="118800000"
-				        driver_name="pix2"/>
-				<clock  name="video2_pll2_clk"
-				        parent="27m_ref_clk"
 				        driver_name="pix"/>
 				<clock  name="video2_pll2_clk"
 				        parent="27m_ref_clk"
@@ -202,6 +200,7 @@ install_config {
 			<policy label="imx8mq_pwm_drv -> ">
 				<device name="pwm"/>
 			</policy>
+
 			<policy label="gpio_drv -> " info="yes">
 				<device name="gpio1"/>
 				<device name="gpio2"/>
@@ -209,6 +208,7 @@ install_config {
 				<device name="gpio4"/>
 				<device name="gpio5"/>
 			</policy>
+
 			<policy label="i2c_drv -> ">
 				<device name="i2c"/>
 			</policy>

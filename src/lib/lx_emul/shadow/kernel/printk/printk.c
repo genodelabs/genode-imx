@@ -33,7 +33,7 @@ asmlinkage int vprintk(const char * fmt, va_list args)
 
 
 asmlinkage int vprintk_emit(int facility, int level,
-                            const char * dict, size_t dictlen,
+                            const struct dev_printk_info *dev_info,
                             const char * fmt, va_list args)
 {
 	lx_emul_vprintf(fmt, args);

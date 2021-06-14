@@ -226,6 +226,5 @@ drivers/irqchip/irq-imx-irqsteer.c
 drivers/phy/freescale/phy-fsl-imx8-mipi-dphy.c
 drivers/phy/phy-core.c
 drivers/phy/phy-core-mipi-dphy.c
-drivers/video/backlight/backlight.c
 drivers/video/fbdev/core/fbcmap.c
 drivers/video/of_display_timing.c

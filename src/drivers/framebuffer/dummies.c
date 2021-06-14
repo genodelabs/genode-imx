@@ -320,6 +320,15 @@ struct mux_control * devm_mux_control_get(struct device * dev,const char * mux_n
 }
 
 
+#include <linux/backlight.h>
+
+struct backlight_device *devm_of_find_backlight(struct device *dev)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
+
 #include <linux/regulator/consumer.h>
 
 int devm_regulator_bulk_get(struct device * dev,int num_consumers,struct regulator_bulk_data * consumers)

@@ -1,4 +1,5 @@
-TARGET   = imx8mq_fb_drv
+DRIVER  := imx8mq
+TARGET   = $(DRIVER)_fb_drv
 REQUIRES = arm_v8a
 LIBS     = base blit
 INC_DIR  = $(PRG_DIR)
@@ -83,8 +84,8 @@ vpath % $(REP_DIR)/src/lib
 # Linux kernel definitions
 #
 
-LX_CONTRIB_DIR := $(call select_from_ports,mnt_reform2_linux)/linux
-LX_BUILD_DIR   := $(PRG_DIR)/lx_generated
+LX_CONTRIB_DIR  := $(call select_from_ports,mnt_reform2_linux)/linux
+LX_BUILD_DIR    := $(PRG_DIR)/lx_generated
 
 INC_DIR += $(LX_CONTRIB_DIR)/arch/arm64/include
 INC_DIR += $(LX_BUILD_DIR)/arch/arm64/include/generated
@@ -132,3 +133,35 @@ $(foreach file,$(LX_SRC),$(eval $(call CC_OPT_LX_RULES,$(file:%.c=%))))
 # Turn off some warnings
 CC_OPT_drivers/gpu/drm/drm_plane_helper    += -Wno-uninitialized
 CC_OPT_drivers/gpu/drm/imx/cdn-mhdp-imxdrv += -Wno-unused-variable
+
+
+#
+# Generate driver-specific device-tree binary data
+#
+# The rules below use the tool/dts/extract tool to generate a device tree
+# containing the driver parameters for a given board.
+#
+# The resulting dtb file is named <driver>-<board>.dtb
+#
+
+BOARDS                   := mnt_reform2
+DTS_TOOL                 := $(BASE_DIR)/../../tool/dts/extract
+DTS_PATH(mnt_reform2)    := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
+DTS_EXTRACT(mnt_reform2) := --select dcss --select edp_bridge --select lcdif
+
+CUSTOM_TARGET_DEPS += $(addprefix $(INSTALL_DIR)/$(DRIVER)-,$(addsuffix .dtb,$(BOARDS)))
+
+$(INSTALL_DIR)/%.dtb: %.dtb
+	$(VERBOSE)cp -f $< $@
+
+%.dtb: %.dts
+	$(VERBOSE)dtc -q -Idts $< > $@
+
+# dependencies of driver-specifc dts files from board's dts files
+$(foreach B,$(BOARDS),$(eval $(DRIVER)-$B.dts: $(LX_CONTRIB_DIR)/${DTS_PATH($B)}))
+
+$(DRIVER)-%.dts:
+	$(VERBOSE)$(CROSS_DEV_PREFIX)cpp -I$(LX_CONTRIB_DIR)/include \
+	          -x assembler-with-cpp -MMD -P $(LX_CONTRIB_DIR)/${DTS_PATH($*)} |\
+	          sed -s 's/interrupt-parent = <\&gpc>;/interrupt-parent = <\&gic>;/' | \
+	          $(DTS_TOOL) ${DTS_EXTRACT($*)} - > $@

@@ -289,8 +289,6 @@ install_config {
 
 </config>}
 
-exec dtc -q -I dts -O dtb [genode_dir]/repos/imx8mq/src/drivers/framebuffer/mnt_reform2_display.dts > bin/dtb
-
 build_boot_image {
 	test-framebuffer
 	imx8mq_platform_drv

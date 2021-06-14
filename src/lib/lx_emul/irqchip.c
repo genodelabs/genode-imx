@@ -114,7 +114,7 @@ static const struct irq_domain_ops dde_irqchip_data_domain_ops = {
 
 
 static const struct of_device_id dde_of_match[] = {
-	{ .compatible = "dde-irq-control", .data = (const void *) 4 },
+	{ .compatible = "arm,gic-v3", .data = (const void *) 4 },
 	{ /* END */ }
 };
 
@@ -134,7 +134,7 @@ static int __init dde_irqchip_init(struct device_node *node,
 
 struct of_device_id __irqchip_of_table[] = {
 	{
-		.compatible = "dde-irq-control",
+		.compatible = "arm,gic-v3",
 		.data       = dde_irqchip_init
 	}
 };

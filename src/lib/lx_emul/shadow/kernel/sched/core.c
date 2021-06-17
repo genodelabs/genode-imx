@@ -78,6 +78,8 @@ asmlinkage __visible void __sched schedule(void)
 }
 
 
+#ifdef CONFIG_DEBUG_PREEMPT
+
 void preempt_count_add(int val)
 {
 	current_thread_info()->preempt.count += val;
@@ -88,6 +90,8 @@ void preempt_count_sub(int val)
 {
 	current_thread_info()->preempt.count -= val;
 }
+
+#endif /* CONFIG_DEBUG_PREEMPT */
 
 
 asmlinkage __visible void __sched notrace preempt_schedule(void)

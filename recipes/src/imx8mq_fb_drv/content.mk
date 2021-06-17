@@ -1,9 +1,9 @@
 PORT_DIR := $(call port_dir,$(REP_DIR)/ports/mnt_reform2_linux)
 
-MIRROR_FROM_PORT_DIR := $(addprefix linux/,$(shell cat $(REP_DIR)/src/drivers/framebuffer/source.list)) \
-                        $(addprefix linux/,$(shell cat $(REP_DIR)/src/drivers/framebuffer/deps.list))
+MIRROR_FROM_PORT_DIR := $(addprefix linux/,$(shell cat $(REP_DIR)/src/drivers/framebuffer/imx8mq/source.list)) \
+                        $(addprefix linux/,$(shell cat $(REP_DIR)/src/drivers/framebuffer/imx8mq/deps.list))
 
-MIRROR_FROM_REP_DIR  := src/drivers/framebuffer \
+MIRROR_FROM_REP_DIR  := src/drivers/framebuffer/imx8mq \
                         src/include/lx_emul \
                         src/include/lx_kit \
                         src/include/spec/arm_64/lx_kit \

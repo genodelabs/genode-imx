@@ -11,7 +11,8 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_EMUL__CLOCK_H_
+#define _LX_EMUL__CLOCK_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,3 +30,4 @@ unsigned long lx_emul_clock_get_rate(struct clk * clk);
 }
 #endif
 
+#endif /* _LX_EMUL__CLOCK_H_ */

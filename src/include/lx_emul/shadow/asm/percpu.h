@@ -11,7 +11,8 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_EMUL__SHADOW__ASM__PERCPU_H_
+#define _LX_EMUL__SHADOW__ASM__PERCPU_H_
 
 #include_next <asm/percpu.h>
 
@@ -22,3 +23,5 @@ static inline unsigned long __dummy_cpu_offset(void)
 
 #undef  __my_cpu_offset
 #define __my_cpu_offset __dummy_cpu_offset()
+
+#endif /* _LX_EMUL__SHADOW__ASM__PERCPU_H_ */

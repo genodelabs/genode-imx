@@ -11,7 +11,8 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_EMUL__TIME_H_
+#define _LX_EMUL__TIME_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,3 +31,5 @@ void lx_emul_time_handle(void);
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* _LX_EMUL__TIME_H_ */

@@ -53,7 +53,7 @@ extern "C" void lx_emul_task_priority(struct task_struct * t,
 extern "C" void lx_emul_task_schedule(int block)
 {
 	Lx_kit::Task & task = Lx_kit::env().scheduler.current();
-	if (block) { task.block(); }
+	if (block) task.block();
 	task.schedule();
 }
 

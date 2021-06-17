@@ -24,13 +24,15 @@
 namespace Lx_kit {
 	class Scheduler;
 	class Task;
+
+	using namespace Genode;
 }
 
 class Lx_kit::Task : public Genode::List<Lx_kit::Task>::Element
 {
 	public:
 
-		using Name = Genode::String<64>;
+		using Name = String<64>;
 
 		enum Type  { NORMAL, IRQ_HANDLER, TIME_HANDLER };
 		enum State { INIT, RUNNING, BLOCKED };

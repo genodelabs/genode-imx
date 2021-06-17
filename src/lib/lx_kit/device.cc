@@ -85,7 +85,9 @@ bool Device::io_mem(addr_t phys_addr, size_t size)
 {
 	bool ret = false;
 	_for_each_io_mem([&] (Io_mem & io) {
-		if (io.match(phys_addr, size)) { ret = true; } });
+		if (io.match(phys_addr, size))
+			ret = true;
+	});
 	return ret;
 }
 
@@ -94,12 +96,13 @@ void * Device::io_mem_local_addr(addr_t phys_addr, size_t size)
 {
 	void * ret = nullptr;
 	_for_each_io_mem([&] (Io_mem & io) {
-		if (!io.match(phys_addr, size)) { return; }
+		if (!io.match(phys_addr, size))
+			return;
 
 		enable();
 
-		if (!io.io_mem.constructed()) {
-			io.io_mem.construct(*_pdev, io.idx); }
+		if (!io.io_mem.constructed())
+			io.io_mem.construct(*_pdev, io.idx);
 
 		ret = (void*)((addr_t)io.io_mem->local_addr<void>()
 		              + (phys_addr - io.addr));
@@ -113,11 +116,14 @@ bool Device::irq_unmask(unsigned number)
 	bool ret = false;
 
 	_for_each_irq([&] (Irq & irq) {
-		if (irq.number != number) { return; }
+		if (irq.number != number)
+			return;
 
 		enable();
 
-		if (irq.handler.constructed()) { return; }
+		if (irq.handler.constructed())
+			return;
+
 		irq.handler.construct(*_pdev, irq.idx, number);
 		ret = true;
 	});
@@ -128,10 +134,12 @@ bool Device::irq_unmask(unsigned number)
 
 void Device::irq_mask(unsigned number)
 {
-	if (!_pdev.constructed()) { return; }
+	if (!_pdev.constructed())
+		return;
 
 	_for_each_irq([&] (Irq & irq) {
-		if (irq.number != number) { return; }
+		if (irq.number != number)
+			return;
 		irq.handler.destruct();
 	});
 
@@ -140,10 +148,12 @@ void Device::irq_mask(unsigned number)
 
 void Device::irq_ack(unsigned number)
 {
-	if (!_pdev.constructed()) { return; }
+	if (!_pdev.constructed())
+		return;
 
 	_for_each_irq([&] (Irq & irq) {
-		if (irq.number != number) { return; }
+		if (irq.number != number)
+			return;
 		irq.handler->ack();
 	});
 }
@@ -151,19 +161,21 @@ void Device::irq_ack(unsigned number)
 
 void Device::enable()
 {
-	if (_pdev.constructed()) { return; }
-	
+	if (_pdev.constructed())
+		return;
+
 	_pdev.construct(_platform, _type);
 
 	_platform.update();
 	_platform.with_xml([&] (Xml_node & xml) {
 		xml.for_each_sub_node("device", [&] (Xml_node node) {
-			if (_name != node.attribute_value("name", Device::Name())) {
-				return; }
+			if (_name != node.attribute_value("name", Device::Name()))
+				return;
 
 			node.for_each_sub_node("clock", [&] (Xml_node node) {
 				clk * c = clock(node.attribute_value("name", Device::Name()).string());
-				if (!c) { return; }
+				if (!c)
+					return;
 				c->rate = node.attribute_value("rate", 0UL);
 			});
 		});

@@ -28,7 +28,8 @@ Lx_kit::Mem_allocator::Mem_allocator(Genode::Env          & env,
 
 void * Lx_kit::Mem_allocator::alloc(size_t size, size_t align)
 {
-	if (!size) { return nullptr; }
+	if (!size)
+		return nullptr;
 
 	void * out_addr = nullptr;
 	if (_mem.alloc_aligned(size, &out_addr, log2(align)).error()) {
@@ -48,7 +49,9 @@ void * Lx_kit::Mem_allocator::alloc(size_t size, size_t align)
 		error("memory allocation failed for ", size, " align ", align);
 		backtrace();
 	}
-	else { memset(out_addr, 0, size); }
+	else
+		memset(out_addr, 0, size);
+
 	return out_addr;
 }
 
@@ -56,7 +59,8 @@ void * Lx_kit::Mem_allocator::alloc(size_t size, size_t align)
 void * Lx_kit::Mem_allocator::alloc_dma(size_t  size,
                                         void ** dma_addr)
 {
-	if (!size) { return nullptr; }
+	if (!size)
+		return nullptr;
 
 	Ram_dataspace_capability cap = _platform.alloc_dma_buffer(size, UNCACHED);
 	Dma_buffer & db = *new (_heap)
@@ -77,7 +81,8 @@ void Lx_kit::Mem_allocator::free(const void * ptr)
 	addr_t addr = (addr_t) ptr;
 	for (Dma_buffer * b = _dma_buffers.first(); b; b = b->next()) {
 
-		if (!(b->addr <= addr && (b->addr+b->size) >= addr)) { continue; }
+		if (!(b->addr <= addr && (b->addr+b->size) >= addr))
+			continue;
 
 		_env.rm().detach(b->addr);
 		_platform.free_dma_buffer(b->cap);

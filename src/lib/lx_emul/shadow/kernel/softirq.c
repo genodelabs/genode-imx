@@ -50,7 +50,8 @@ void open_softirq(int nr, void (* action)(struct softirq_action *))
 
 void raise_softirq(unsigned int nr)
 {
-	if (nr >= NR_SOFTIRQS || !actions[nr].action) { return; }
+	if (nr >= NR_SOFTIRQS || !actions[nr].action)
+		return;
 
 	actions[nr].action(&actions[nr]);
 }

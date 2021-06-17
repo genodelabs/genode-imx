@@ -11,7 +11,8 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_KIT__DEVICE_H_
+#define _LX_KIT__DEVICE_H_
 
 #include <base/env.h>
 #include <base/heap.h>
@@ -131,15 +132,15 @@ class Lx_kit::Device : List<Device>::Element
 
 		template <typename FN>
 		void _for_each_io_mem(FN const & fn) {
-			for (Io_mem * i = _io_mems.first(); i; i = i->next()) { fn(*i); } }
+			for (Io_mem * i = _io_mems.first(); i; i = i->next()) fn(*i); }
 
 		template <typename FN>
 		void _for_each_irq(FN const & fn) {
-			for (Irq * i = _irqs.first(); i; i = i->next()) { fn(*i); } }
+			for (Irq * i = _irqs.first(); i; i = i->next()) fn(*i); }
 
 		template <typename FN>
 		void _for_each_clock(FN const & fn) {
-			for (Clock * c = _clocks.first(); c; c = c->next()) { fn(*c); } }
+			for (Clock * c = _clocks.first(); c; c = c->next()) fn(*c); }
 };
 
 
@@ -149,7 +150,7 @@ class Lx_kit::Device_list : List<Device>
 
 		template <typename FN>
 		void for_each(FN const & fn) {
-			for (Device * d = first(); d; d = d->next()) { fn(*d); } }
+			for (Device * d = first(); d; d = d->next()) fn(*d); }
 
 		Device_list(Heap & heap, Platform::Connection & platform);
 
@@ -157,3 +158,5 @@ class Lx_kit::Device_list : List<Device>
 
 		Platform::Connection & _platform;
 };
+
+#endif /* _LX_KIT__DEVICE_H_ */

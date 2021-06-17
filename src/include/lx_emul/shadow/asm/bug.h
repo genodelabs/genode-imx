@@ -11,9 +11,12 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_EMUL__SHADOW__ASM__BUG_H_
+#define _LX_EMUL__SHADOW__ASM__BUG_H_
 
 #include_next <asm/bug.h>
 
 #undef  __WARN_FLAGS
-#define __WARN_FLAGS(flags) 
+#define __WARN_FLAGS(flags)
+
+#endif /* _LX_EMUL__SHADOW__ASM__BUG_H_ */

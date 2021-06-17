@@ -22,9 +22,9 @@ unsigned long clk_get_rate(struct clk * clk)
 
 int clk_set_rate(struct clk * clk,unsigned long rate)
 {
-	if (lx_emul_clock_get_rate(clk) != rate) {
+	if (lx_emul_clock_get_rate(clk) != rate)
 		printk("Error: cannot change clock rate dynamically to %ld\n", rate);
-	}
+
 	return 0;
 }
 

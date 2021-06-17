@@ -28,7 +28,7 @@ bool Task::runnable() const
 	case RUNNING: return true;
 	case BLOCKED: return false;
 	}
-	Genode::error("Invalid task state?!");
+	error("Invalid task state?!");
 	return false;
 }
 
@@ -95,13 +95,13 @@ Task::Name Task::name() const { return _name; }
 
 void Task::block()
 {
-	if (_state == RUNNING) { _state = BLOCKED; }
+	if (_state == RUNNING) _state = BLOCKED;
 }
 
 
 void Task::unblock()
 {
-	if (_state == BLOCKED) { _state = RUNNING; }
+	if (_state == BLOCKED) _state = RUNNING;
 }
 
 
@@ -111,7 +111,8 @@ void Task::run()
 	 * Save the execution environment. The scheduled task returns to this point
 	 * after execution, i.e., at the next preemption point.
 	 */
-	if (_setjmp(_saved_env)) { return; }
+	if (_setjmp(_saved_env))
+		return;
 
 	if (_state == INIT) {
 		/* setup execution environment and call task's function */
@@ -125,8 +126,8 @@ void Task::run()
 	}
 
 	/* never reached */
-	Genode::error("unexpected return of task");
-	Genode::sleep_forever();
+	error("unexpected return of task");
+	sleep_forever();
 }
 
 
@@ -136,7 +137,8 @@ void Task::schedule()
 	 * Save the execution environment. The task will resume from here on next
 	 * schedule.
 	 */
-	if (_setjmp(_env)) { return; }
+	if (_setjmp(_env))
+		return;
 
 	/* return to thread calling run() */
 	_longjmp(_saved_env, 1);

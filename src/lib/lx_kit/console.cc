@@ -74,19 +74,23 @@ class Lx_kit::Format_command
 		explicit Format_command(const char *format)
 		{
 			/* check for command begin and eat the character */
-			if (format[consumed] != '%') return;
-			if (!format[++consumed]) return;
+			if (format[consumed] != '%')
+				return;
+			if (!format[++consumed])
+				return;
 
 			/* check for %$x syntax */
 			prefix = (format[consumed] == '#') || (format[consumed] == '.');
-			if (prefix && !format[++consumed]) return;
+			if (prefix && !format[++consumed])
+				return;
 
 			/* heading zero indicates zero-padding */
 			zeropad = (format[consumed] == '0');
 
 			/* read decimal padding value */
 			padding = decode_decimal(format, &consumed);
-			if (!format[consumed]) return;
+			if (!format[consumed])
+				return;
 
 			/* decode length */
 			switch (format[consumed]) {
@@ -113,10 +117,12 @@ class Lx_kit::Format_command
 					length = LONG;
 					break;
 
-				default: break;
+				default:
+					break;
 			}
 
-			if (!format[consumed]) return;
+			if (!format[consumed])
+				return;
 
 			/* decode type */
 			switch (format[consumed]) {
@@ -173,7 +179,7 @@ void Lx_kit::Console::_flush()
 		return;
 
 	_buf[_idx] = 0;
-	Genode::log(Genode::Cstring(_buf));
+	log(Cstring(_buf));
 	_idx = 0;
 }
 
@@ -227,7 +233,7 @@ void Lx_kit::Console::vprintf(const char *format, va_list list)
 
 				case Format_command::SIZE_T:
 
-					numeric_arg = va_arg(list, Genode::size_t);
+					numeric_arg = va_arg(list, size_t);
 					break;
 
 				case Format_command::DEFAULT:
@@ -330,4 +336,3 @@ void Lx_kit::Console::vprintf(const char *format, va_list list)
 		format += cmd.consumed;
 	}
 }
-

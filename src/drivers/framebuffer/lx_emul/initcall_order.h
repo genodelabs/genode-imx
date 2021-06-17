@@ -4,7 +4,8 @@
  * \date   2021-06-09
  */
 
-#pragma once
+#ifndef _LX_EMUL__INITCALL_ORDER_H_
+#define _LX_EMUL__INITCALL_ORDER_H_
 
 static const char * lx_emul_initcall_order[] = {
 	"__initcall_start",
@@ -873,3 +874,5 @@ static const char * lx_emul_initcall_order[] = {
 	"__initcall_kgdboc_earlycon_late_init",
 	"END_OF_INITCALL_ORDER_ARRAY_DUMMY_ENTRY"
 };
+
+#endif /* _LX_EMUL__INITCALL_ORDER_H_ */

@@ -11,7 +11,8 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_EMUL__TASK_H_
+#define _LX_EMUL__TASK_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,3 +44,4 @@ void lx_emul_task_name(struct task_struct * task, const char * name);
 }
 #endif
 
+#endif /* _LX_EMUL__TASK_H_ */

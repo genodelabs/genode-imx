@@ -49,7 +49,9 @@ void Scheduler::add(Task & task)
 	Task * next = _present_list.first();
 
 	for (; next; prev = next, next = prev->next()) {
-		if (next->priority() >= task.priority()) { break; } }
+		if (next->priority() >= task.priority())
+			break;
+	}
 	_present_list.insert(&task, prev);
 }
 
@@ -63,7 +65,7 @@ void Scheduler::remove(Task & task)
 void Scheduler::unblock_irq_handler()
 {
 	for (Task * t = _present_list.first(); t; t = t->next()) {
-		if (t->type() == Task::IRQ_HANDLER) { t->unblock(); }
+		if (t->type() == Task::IRQ_HANDLER) t->unblock();
 	}
 }
 
@@ -71,7 +73,7 @@ void Scheduler::unblock_irq_handler()
 void Scheduler::unblock_time_handler()
 {
 	for (Task * t = _present_list.first(); t; t = t->next()) {
-		if (t->type() == Task::TIME_HANDLER) { t->unblock(); }
+		if (t->type() == Task::TIME_HANDLER) t->unblock();
 	}
 }
 
@@ -79,7 +81,8 @@ void Scheduler::unblock_time_handler()
 Task & Scheduler::task(void * lx_task)
 {
 	for (Task * t = _present_list.first(); t; t = t->next()) {
-		if (t->lx_task() == lx_task) return *t;
+		if (t->lx_task() == lx_task)
+			return *t;
 	}
 	error("Lx_kit::Scheduler cannot find task ", lx_task);
 	sleep_forever();
@@ -105,17 +108,20 @@ void Scheduler::schedule()
 
 		for (Task * t = _present_list.first(); t; t = t->next()) {
 
-			if (!t->runnable()) { continue; }
+			if (!t->runnable())
+				continue;
 
 			/* update current before running task */
 			_current = t;
 			t->run();
 			at_least_one = true;
 
-			if (!t->runnable()) { break; }
+			if (!t->runnable())
+				break;
 		}
 
-		if (!at_least_one) { break; }
+		if (!at_least_one)
+			break;
 	}
 
 	/* clear current as no task is running */

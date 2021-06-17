@@ -11,8 +11,8 @@
  * version 2.
  */
 
-
-#pragma once
+#ifndef _LX_EMUL__SHADOW__LINUX__COMPILER_GCC_H_
+#define _LX_EMUL__SHADOW__LINUX__COMPILER_GCC_H_
 
 #include_next <linux/compiler-gcc.h>
 
@@ -24,3 +24,5 @@
 #undef  asm_volatile_goto
 #define asm_volatile_goto(x...)	asm volatile("invalid use of asm_volatile_goto")
 #endif
+
+#endif /* _LX_EMUL__SHADOW__LINUX__COMPILER_GCC_H_ */

@@ -47,10 +47,11 @@ static int
 try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
 {
 	if (!p) lx_emul_trace_and_stop(__func__);
-	if (!(p->state & state)) { return 0; }
+	if (!(p->state & state))
+		return 0;
 
-	if (p != lx_emul_task_get_current()) {
-		lx_emul_task_unblock(p); }
+	if (p != lx_emul_task_get_current())
+		lx_emul_task_unblock(p);
 
 	p->state = TASK_RUNNING;
 	return 1;
@@ -96,14 +97,18 @@ void preempt_count_sub(int val)
 
 asmlinkage __visible void __sched notrace preempt_schedule(void)
 {
-	if (likely(!preemptible())) return;
+	if (likely(!preemptible()))
+		return;
+
 	schedule();
 }
 
 
 asmlinkage __visible void __sched notrace preempt_schedule_notrace(void)
 {
-	if (likely(!preemptible())) return;
+	if (likely(!preemptible()))
+		return;
+
 	schedule();
 }
 
@@ -137,13 +142,11 @@ unsigned long wait_task_inactive(struct task_struct * p,long match_state)
 {
 	struct rq *rq = task_rq(p);
 
-	if (task_running(rq, p)) {
+	if (task_running(rq, p))
 		schedule();
-	}
 
-	if (task_running(rq, p)) {
+	if (task_running(rq, p))
 		return 0;
-	}
 
 	return 1;
 }

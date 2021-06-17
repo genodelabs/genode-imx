@@ -14,11 +14,16 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_KIT__CONSOLE_H_
+#define _LX_KIT__CONSOLE_H_
 
 #include <stdarg.h>
 
-namespace Lx_kit { class Console; }
+namespace Lx_kit {
+	class Console;
+
+	using namespace Genode;
+}
 
 
 class Lx_kit::Console
@@ -39,8 +44,9 @@ class Lx_kit::Console
 		 */
 		static inline char _ascii(int digit, int uppercase = 0)
 		{
-			if (digit > 9) {
-				return digit + (uppercase ? 'A' : 'a') - 10; }
+			if (digit > 9)
+				return digit + (uppercase ? 'A' : 'a') - 10;
+
 			return digit + '0';
 		}
 
@@ -122,3 +128,5 @@ class Lx_kit::Console
 		void _out_string(const char *str);
 		void _flush();
 };
+
+#endif /* _LX_KIT__CONSOLE_H_ */

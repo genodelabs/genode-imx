@@ -20,6 +20,8 @@
 namespace Lx_kit {
 	class Scheduler;
 	class Task;
+
+	using namespace Genode;
 }
 
 
@@ -45,11 +47,14 @@ class Lx_kit::Scheduler
 
 	private:
 
-		Genode::List<Task> _present_list { };
-		Task             * _current      { nullptr };
+		List<Task> _present_list { };
+		Task     * _current      { nullptr };
 };
 
 
 template <typename FN>
-void Lx_kit::Scheduler::for_each_task(FN const & fn) {
-	for (Task * t = _present_list.first(); t; t = t->next()) { fn(*t); } }
+void Lx_kit::Scheduler::for_each_task(FN const & fn)
+{
+	for (Task * t = _present_list.first(); t; t = t->next())
+		fn(*t);
+}

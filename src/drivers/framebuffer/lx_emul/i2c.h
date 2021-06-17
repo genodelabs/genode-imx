@@ -11,8 +11,8 @@
  * version 2.
  */
 
-
-#pragma once
+#ifndef _LX_EMUL__I2C_H_
+#define _LX_EMUL__I2C_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,3 +25,4 @@ void          lx_emul_i2c_write_bytes(unsigned len, unsigned char * bytes);
 }
 #endif
 
+#endif /* _LX_EMUL__I2C_H_ */

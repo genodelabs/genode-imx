@@ -11,8 +11,8 @@
  * version 2.
  */
 
-
-#pragma once
+#ifndef _LX_EMUL__SHADOW__LINUX__INIT_H_
+#define _LX_EMUL__SHADOW__LINUX__INIT_H_
 
 #include_next <linux/init.h>
 #include      <lx_emul/init.h>
@@ -31,3 +31,5 @@
 	static void __initcall_##fn##id(void)__attribute__((constructor)); \
 	static void __initcall_##fn##id() { \
 			lx_emul_register_initcall(fn, __func__); };
+
+#endif /* _LX_EMUL__SHADOW__LINUX__INIT_H_ */

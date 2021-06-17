@@ -11,7 +11,8 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_EMUL__IO_MEM_H_
+#define _LX_EMUL__IO_MEM_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -22,3 +23,5 @@ void * lx_emul_io_mem_map(unsigned long phys_addr, unsigned long size);
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* _LX_EMUL__IO_MEM_H_ */

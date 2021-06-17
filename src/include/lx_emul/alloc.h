@@ -11,7 +11,8 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_EMUL__ALLOC_H_
+#define _LX_EMUL__ALLOC_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,3 +27,5 @@ unsigned long lx_emul_mem_size(const void * ptr);
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* _LX_EMUL__ALLOC_H_ */

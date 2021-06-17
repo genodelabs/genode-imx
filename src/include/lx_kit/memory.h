@@ -11,7 +11,8 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_KIT__MEMORY_H_
+#define _LX_KIT__MEMORY_H_
 
 #include <base/env.h>
 #include <base/heap.h>
@@ -29,7 +30,7 @@ class Lx_kit::Mem_allocator
 {
 	public:
 
-		Mem_allocator(Genode::Env          & env,
+		Mem_allocator(Env                  & env,
 		              Heap                 & heap,
 		              Platform::Connection & platform);
 
@@ -48,9 +49,11 @@ class Lx_kit::Mem_allocator
 			addr_t                   dma_addr;
 		};
 
-		Genode::Env          & _env;
+		Env                  & _env;
 		Heap                 & _heap;
 		Platform::Connection & _platform;
 		Allocator_avl          _mem;
 		List<Dma_buffer>       _dma_buffers {};
 };
+
+#endif /* _LX_KIT__MEMORY_H_ */

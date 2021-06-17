@@ -67,7 +67,9 @@ void __lockfunc _raw_spin_unlock_irq(raw_spinlock_t * lock)
 int __lockfunc _raw_spin_trylock(raw_spinlock_t * lock)
 {
 
-	if (atomic_read(&lock->raw_lock.val)) { return 0; }
+	if (atomic_read(&lock->raw_lock.val))
+		return 0;
+
 	_raw_spin_lock(lock);
 	return 1;
 }

@@ -11,7 +11,8 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_KIT__ENV_H_
+#define _LX_KIT__ENV_H_
 
 #include <base/env.h>
 #include <platform_session/connection.h>
@@ -52,3 +53,5 @@ struct Lx_kit::Env
 
 	Env(Genode::Env & env) : env(env) { }
 };
+
+#endif /* _LX_KIT__ENV_H_ */

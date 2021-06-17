@@ -11,7 +11,8 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_EMUL__IRQ_H_
+#define _LX_EMUL__IRQ_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,3 +36,4 @@ unsigned int lx_emul_irq_last(void);
 }
 #endif
 
+#endif /* _LX_EMUL__IRQ_H_ */

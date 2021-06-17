@@ -11,8 +11,8 @@
  * version 2.
  */
 
-
-#pragma once
+#ifndef _LX_EMUL__FB_H_
+#define _LX_EMUL__FB_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,3 +24,5 @@ void lx_emul_framebuffer_ready(void * base, unsigned long size,
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* _LX_EMUL__FB_H_ */

@@ -28,14 +28,13 @@ void Lx_kit::Initcalls::execute_in_order()
 	unsigned min = ~0U;
 	unsigned max = 0;
 	for (E * entry = _call_list.first(); entry; entry = entry->next()) {
-		if (entry->prio < min) { min = entry->prio; }
-		if (entry->prio > max) { max = entry->prio; }
+		if (entry->prio < min) min = entry->prio;
+		if (entry->prio > max) max = entry->prio;
 	}
 
 	for (unsigned i = min; i <= max; i++) {
 		for (E * entry = _call_list.first(); entry; entry = entry->next()) {
-			if (entry->prio == i) {
-			 	entry->call(); }
+			if (entry->prio == i) entry->call();
 		}
 	}
 }

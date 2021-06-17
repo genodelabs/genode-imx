@@ -11,14 +11,16 @@
  * version 2.
  */
 
-
-#pragma once
+#ifndef _LX_KIT__INIT_H_
+#define _LX_KIT__INIT_H_
 
 #include <base/env.h>
 #include <base/heap.h>
 
 namespace Lx_kit {
-	void initialize(Genode::Env & env);
+	using namespace Genode;
+
+	void initialize(Env & env);
 	class Initcalls;
 }
 
@@ -27,7 +29,7 @@ class Lx_kit::Initcalls
 {
 	private:
 
-		struct E : Genode::List<E>::Element
+		struct E : List<E>::Element
 		{
 			unsigned int prio;
 			int (* call) (void);
@@ -35,13 +37,15 @@ class Lx_kit::Initcalls
 			E(unsigned int p, int (*fn)(void)) : prio(p), call(fn) {}
 		};
 
-		Genode::Heap  & _heap;
-		Genode::List<E> _call_list {};
+		Heap  & _heap;
+		List<E> _call_list {};
 
 	public:
 
 		void add(int (*initcall)(void), unsigned int prio);
 		void execute_in_order();
 
-		Initcalls(Genode::Heap & heap) : _heap(heap) {}
+		Initcalls(Heap & heap) : _heap(heap) {}
 };
+
+#endif /* _LX_KIT__INIT_H_ */

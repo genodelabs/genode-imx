@@ -11,7 +11,8 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_EMUL__SHADOW__ASM__CURRENT_H_
+#define _LX_EMUL__SHADOW__ASM__CURRENT_H_
 
 #include <lx_emul/task.h>
 
@@ -20,3 +21,5 @@
 #define current lx_emul_task_get_current()
 
 #endif /* __ASSEMBLY__ */
+
+#endif /* _LX_EMUL__SHADOW__ASM__CURRENT_H_ */

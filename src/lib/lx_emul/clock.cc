@@ -26,9 +26,10 @@ struct clk * lx_emul_clock_get(const struct device_node * node,
 	struct clk * ret = nullptr;
 
 	env().devices.for_each([&] (Device & d) {
-		if (!of_device_is_compatible(node, d.compatible())) { return; }
+		if (!of_device_is_compatible(node, d.compatible()))
+			return;
 		ret = name ? d.clock(name) : d.clock(0U);
-		if (!ret) { warning("No clock ", name, " found for device ", d.name()); }
+		if (!ret) warning("No clock ", name, " found for device ", d.name());
 	});
 
 	return ret;
@@ -37,7 +38,8 @@ struct clk * lx_emul_clock_get(const struct device_node * node,
 
 unsigned long lx_emul_clock_get_rate(struct clk * clk)
 {
-	if (!clk) { return 0; }
+	if (!clk)
+		return 0;
 
 	return clk->rate;
 }

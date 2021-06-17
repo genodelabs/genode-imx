@@ -11,8 +11,8 @@
  * version 2.
  */
 
-
-#pragma once
+#ifndef _LX_EMUL__LOG_H_
+#define _LX_EMUL__LOG_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,4 +24,4 @@ void lx_emul_vprintf(char const *, va_list);
 }
 #endif
 
-
+#endif /* _LX_EMUL__LOG_H_ */

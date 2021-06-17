@@ -19,11 +19,13 @@
 
 extern "C" void lx_emul_trace_and_stop(const char * func)
 {
-	Genode::error("Function ", func, " not implemented yet!");
-	Genode::log("Backtrace follows:");
-	Genode::backtrace();
-	Genode::log("Will sleep forever...");
-	Genode::sleep_forever();
+	using namespace Genode;
+
+	error("Function ", func, " not implemented yet!");
+	log("Backtrace follows:");
+	backtrace();
+	log("Will sleep forever...");
+	sleep_forever();
 }
 
 

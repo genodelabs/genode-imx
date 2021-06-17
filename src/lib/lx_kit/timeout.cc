@@ -15,7 +15,7 @@
 
 void Lx_kit::Timeout::start(unsigned long us)
 {
-	_timeout.schedule(Genode::Microseconds(us));
+	_timeout.schedule(Microseconds(us));
 }
 
 

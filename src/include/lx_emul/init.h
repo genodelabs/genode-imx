@@ -11,8 +11,8 @@
  * version 2.
  */
 
-
-#pragma once
+#ifndef _LX_EMUL__INIT_H_
+#define _LX_EMUL__INIT_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,3 +31,5 @@ extern void * lx_emul_init_task_struct;
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* _LX_EMUL__INIT_H_ */

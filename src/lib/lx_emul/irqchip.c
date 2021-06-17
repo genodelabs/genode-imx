@@ -46,7 +46,8 @@ static void dde_irq_eoi(struct irq_data *d)
 
 static int dde_irq_set_type(struct irq_data *d, unsigned int type)
 {
-	if (type != IRQ_TYPE_LEVEL_HIGH) { lx_emul_trace_and_stop(__func__); }
+	if (type != IRQ_TYPE_LEVEL_HIGH)
+		lx_emul_trace_and_stop(__func__);
 	return 0;
 }
 
@@ -67,9 +68,8 @@ static int dde_domain_translate(struct irq_domain * d,
                                   unsigned int      * type)
 {
 	if (is_of_node(fwspec->fwnode)) {
-		if (fwspec->param_count != 3 || fwspec->param[0] != 0) {
+		if (fwspec->param_count != 3 || fwspec->param[0] != 0)
 			return -EINVAL;
-		}
 
 		*hwirq = fwspec->param[1] + 32;
 		*type  = fwspec->param[2] & IRQ_TYPE_SENSE_MASK;
@@ -126,7 +126,8 @@ static int __init dde_irqchip_init(struct device_node *node,
 {
 	dde_irq_domain = irq_domain_create_tree(&node->fwnode,
 	                                        &dde_irqchip_data_domain_ops, NULL);
-	if (!dde_irq_domain) { return -ENOMEM; }
+	if (!dde_irq_domain)
+		return -ENOMEM;
 
 	irq_set_default_host(dde_irq_domain);
 	return 0;
@@ -152,7 +153,8 @@ int lx_emul_irq_task_function(void * data)
 	for (;;) {
 		lx_emul_task_schedule(true);
 
-		if (!dde_irq_domain) { continue; }
+		if (!dde_irq_domain)
+			continue;
 
 		irq = irq_find_mapping(dde_irq_domain, lx_emul_irq_last());
 

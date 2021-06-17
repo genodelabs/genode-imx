@@ -11,13 +11,16 @@
  * version 2.
  */
 
-#pragma once
+#ifndef _LX_KIT__TIMEOUT_H_
+#define _LX_KIT__TIMEOUT_H_
 
 #include <timer_session/connection.h>
 
 namespace Lx_kit {
 	class Scheduler;
 	class Timeout;
+
+	using namespace Genode;
 }
 
 
@@ -33,7 +36,7 @@ class Lx_kit::Timeout
 
 	private:
 
-		void _handle(Genode::Duration);
+		void _handle(Duration);
 
 		using One_shot = Timer::One_shot_timeout<Timeout>;
 
@@ -41,3 +44,4 @@ class Lx_kit::Timeout
 		One_shot            _timeout;
 };
 
+#endif /* _LX_KIT__TIMEOUT_H_ */

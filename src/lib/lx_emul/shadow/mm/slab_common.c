@@ -19,9 +19,8 @@
 
 void * krealloc(const void * p,size_t new_size,gfp_t flags)
 {
-	if (!p) {
+	if (!p)
 		return kmalloc(new_size, flags);
-	}
 
 	if (!new_size) {
 		kfree(p);
@@ -34,7 +33,8 @@ void * krealloc(const void * p,size_t new_size,gfp_t flags)
 
 size_t ksize(const void * objp)
 {
-	if (objp == NULL) { return 0; }
+	if (objp == NULL)
+		return 0;
 
 	return __ksize(objp);
 }

@@ -484,10 +484,6 @@ void irq_add_debugfs_entry(unsigned int irq,struct irq_desc * desc)
 }
 
 
-unsigned long irq_err_count = 0;
-
-
-
 extern void irq_pm_install_action(struct irq_desc * desc,struct irqaction * action);
 void irq_pm_install_action(struct irq_desc * desc,struct irqaction * action)
 {

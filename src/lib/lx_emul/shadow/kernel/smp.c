@@ -14,3 +14,5 @@
 #include <linux/cpumask.h>
 
 unsigned int nr_cpu_ids = 1;
+
+unsigned long irq_err_count = 0;

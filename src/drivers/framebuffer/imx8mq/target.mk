@@ -121,6 +121,11 @@ SRC_S   += $(shell grep ".*\.S" $(PRG_DIR)/source.list)
 SRC_C   += $(LX_SRC)
 SRC_S   += $(LX_ASM:$(LX_CONTRIB_DIR)/%=%)
 
+#
+# Create symbol alias for jiffies, sharing the value of jiffies_64
+#
+LD_OPT += --defsym=jiffies=jiffies_64
+
 vpath %.c $(LX_CONTRIB_DIR)
 vpath %.S $(LX_CONTRIB_DIR)
 

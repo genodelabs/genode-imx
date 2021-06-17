@@ -108,8 +108,10 @@ void * Device::io_mem_local_addr(addr_t phys_addr, size_t size)
 }
 
 
-void Device::irq_unmask(unsigned number)
+bool Device::irq_unmask(unsigned number)
 {
+	bool ret = false;
+
 	_for_each_irq([&] (Irq & irq) {
 		if (irq.number != number) { return; }
 
@@ -117,7 +119,10 @@ void Device::irq_unmask(unsigned number)
 
 		if (irq.handler.constructed()) { return; }
 		irq.handler.construct(*_pdev, irq.idx, number);
+		ret = true;
 	});
+
+	return ret;
 }
 
 
@@ -129,6 +134,7 @@ void Device::irq_mask(unsigned number)
 		if (irq.number != number) { return; }
 		irq.handler.destruct();
 	});
+
 }
 
 

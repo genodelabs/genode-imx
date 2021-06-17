@@ -16,8 +16,12 @@
 
 extern "C" void lx_emul_irq_unmask(unsigned int irq)
 {
+	bool found = false;
 	Lx_kit::env().devices.for_each([&] (Lx_kit::Device & d) {
-		d.irq_unmask(irq); });
+		if (d.irq_unmask(irq)) found = true; });
+
+	if (!found)
+		Genode::error("irq ", irq, " unavailable");
 }
 
 

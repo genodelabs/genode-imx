@@ -52,25 +52,11 @@ struct kmem_cache * kmem_cache_create(const char * name,
 }
 
 
-void * kmem_cache_alloc_trace(struct kmem_cache * s,
-                              gfp_t               gfpflags,
-                              size_t              size)
-{
-	return __kmalloc(size, gfpflags);
-}
-
-
 void * __kmalloc_track_caller(size_t        size,
                               gfp_t         gfpflags,
                               unsigned long caller)
 {
 	return __kmalloc(size, gfpflags);
-}
-
-
-void * __kmalloc_node(size_t size, gfp_t flags, int node)
-{
-	return __kmalloc(size, flags);
 }
 
 
@@ -83,25 +69,7 @@ void * __kmalloc_node_track_caller(size_t        size,
 }
 
 
-void * kmem_cache_alloc(struct kmem_cache * s, gfp_t flags)
-{
-	/* DMA memory is not implemented yet */
-	if (flags & GFP_DMA) { lx_emul_trace_and_stop(__func__); }
-	if (!s)              { lx_emul_trace_and_stop(__func__); }
-	return lx_emul_mem_alloc_aligned(s->size, s->align ? s->align : 32);
-}
-
-
 void * kmem_cache_alloc_node(struct kmem_cache * s, gfp_t gfpflags, int node)
-{
-	return kmem_cache_alloc(s, gfpflags);
-}
-
-
-void * kmem_cache_alloc_node_trace(struct kmem_cache * s,
-                                   gfp_t gfpflags,
-                                   int node,
-                                   size_t size)
 {
 	return kmem_cache_alloc(s, gfpflags);
 }
@@ -134,3 +102,43 @@ size_t __ksize(const void * object)
 {
 	return lx_emul_mem_size(object);
 }
+
+
+#ifdef CONFIG_NUMA
+
+void * __kmalloc_node(size_t size, gfp_t flags, int node)
+{
+	return __kmalloc(size, flags);
+}
+
+
+void * kmem_cache_alloc(struct kmem_cache * s, gfp_t flags)
+{
+	/* DMA memory is not implemented yet */
+	if (flags & GFP_DMA) { lx_emul_trace_and_stop(__func__); }
+	if (!s)              { lx_emul_trace_and_stop(__func__); }
+	return lx_emul_mem_alloc_aligned(s->size, s->align ? s->align : 32);
+}
+
+#endif /* CONFIG_NUMA */
+
+
+#ifdef CONFIG_TRACING
+
+void * kmem_cache_alloc_node_trace(struct kmem_cache * s,
+                                   gfp_t gfpflags,
+                                   int node,
+                                   size_t size)
+{
+	return kmem_cache_alloc(s, gfpflags);
+}
+
+
+void * kmem_cache_alloc_trace(struct kmem_cache * s,
+                              gfp_t               gfpflags,
+                              size_t              size)
+{
+	return __kmalloc(size, gfpflags);
+}
+
+#endif /* CONFIG_TRACING */

@@ -52,7 +52,7 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
 	if (p != lx_emul_task_get_current()) {
 		lx_emul_task_unblock(p); }
 
-	p->state = TASK_WAKING;
+	p->state = TASK_RUNNING;
 	return 1;
 }
 

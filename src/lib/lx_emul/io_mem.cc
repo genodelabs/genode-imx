@@ -18,6 +18,7 @@ void * lx_emul_io_mem_map(unsigned long phys_addr,
                           unsigned long size)
 {
 	using namespace Lx_kit;
+	using namespace Genode;
 
 	void * ret = nullptr;
 	env().devices.for_each([&] (Device & d) {
@@ -25,5 +26,9 @@ void * lx_emul_io_mem_map(unsigned long phys_addr,
 			ret = d.io_mem_local_addr(phys_addr, size);
 		}
 	});
+
+	if (!ret)
+		error("memory-mapped I/O resource ", Hex(phys_addr),
+		      " (size=", Hex(size), ") unavailable");
 	return ret;
 }

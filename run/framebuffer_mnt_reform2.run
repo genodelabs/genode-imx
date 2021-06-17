@@ -1,17 +1,15 @@
 assert_spec arm_v8a
 
-set dtc [ installed_command dtc]
-
 create_boot_directory
 import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/src/init
 
 build {
-	drivers/platform
-	drivers/framebuffer
-	drivers/pwm
-	drivers/gpio
-	drivers/i2c
+	drivers/platform/imx8mq
+	drivers/framebuffer/imx8mq
+	drivers/pwm/imx8mq
+	drivers/gpio/imx/spec/arm_v8
+	drivers/i2c/imx8q_evk
 	test/framebuffer
 }
 
@@ -269,6 +267,7 @@ install_config {
 		<binary name="imx8mq_fb_drv"/>
 		<resource name="RAM" quantum="40M"/>
 		<route>
+			<service name="ROM" label="dtb"> <parent label="imx8mq-mnt_reform2.dtb"/> </service>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>
 			<service name="PD">       <parent/> </service>
@@ -296,7 +295,7 @@ build_boot_image {
 	imx8mq_pwm_drv
 	imx_gpio_drv
 	imx8q_evk_i2c_drv
-	dtb
+	imx8mq-mnt_reform2.dtb
 }
 
 run_genode_until forever

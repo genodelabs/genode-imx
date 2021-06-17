@@ -19,15 +19,11 @@
 struct cpumask __cpu_online_mask   = { .bits[0] = 1 };
 struct cpumask __cpu_possible_mask = { .bits[0] = 1 };
 
-
+#ifdef CONFIG_HOTPLUG_CPU
 void cpus_read_lock(void) { }
-
-
 void cpus_read_unlock(void) { }
-
-
 void lockdep_assert_cpus_held(void) { }
-
+#endif /* CONFIG_HOTPLUG_CPU */
 
 #define MASK_DECLARE_1(x) [x+1][0] = (1UL << (x))
 #define MASK_DECLARE_2(x) MASK_DECLARE_1(x), MASK_DECLARE_1(x+1)

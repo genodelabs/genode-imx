@@ -88,8 +88,13 @@ void Lx_kit::Mem_allocator::free(const void * ptr)
 
 Genode::size_t Lx_kit::Mem_allocator::size(const void * ptr)
 {
-	if (!_mem.valid_addr((addr_t)ptr))
+	if (!ptr)
 		return 0;
+
+	if (!_mem.valid_addr((addr_t)ptr)) {
+		warning("Lx_kit::Mem_allocator::size called with invalid ptr ", ptr);
+		return 0;
+	}
 
 	return _mem.size_at(ptr);
 }

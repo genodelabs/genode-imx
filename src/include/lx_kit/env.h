@@ -40,16 +40,17 @@ namespace Lx_kit {
 struct Lx_kit::Env
 {
 	Genode::Env        & env;
-	Genode::Heap         heap      { env.ram(), env.rm() };
-	Initcalls            initcalls { heap                };
-	Console              console   { };
-	Platform::Connection platform  { env };
-	Timer::Connection    timer     { env };
-	Mem_allocator        memory    { env, heap, platform };
-	Scheduler            scheduler { };
-	Device_list          devices   { heap, platform      };
-	Lx_kit::Timeout      timeout   { timer, scheduler    };
-	unsigned int         last_irq  { 0 };
+	Genode::Heap         heap            { env.ram(), env.rm() };
+	Initcalls            initcalls       { heap                };
+	Console              console         { };
+	Platform::Connection platform        { env };
+	Timer::Connection    timer           { env };
+	Mem_allocator        memory          { env, heap, platform, CACHED   };
+	Mem_allocator        uncached_memory { env, heap, platform, UNCACHED };
+	Scheduler            scheduler       { };
+	Device_list          devices         { heap, platform   };
+	Lx_kit::Timeout      timeout         { timer, scheduler };
+	unsigned int         last_irq        { 0 };
 
 	Env(Genode::Env & env) : env(env) { }
 };

@@ -22,17 +22,16 @@ void * dma_alloc_attrs(struct device * dev,
                        gfp_t           flag,
                        unsigned long   attrs)
 {
+	void * addr;
+
 	if (dev && dev->dma_mem) {
-		printk("We do not support device DMA memory yet!");
+		printk("We do not support device DMA memory yet!\n");
 		lx_emul_trace_and_stop(__func__);
 	}
 
-	if (size < 4096) {
-		printk("We do not support DMA memory smaller than page size yet!");
-		lx_emul_trace_and_stop(__func__);
-	}
-
-	return lx_emul_mem_alloc_dma(size, (void**)dma_handle);
+	addr = lx_emul_mem_alloc_uncached(size);
+	*dma_handle = lx_emul_mem_dma_addr(addr);
+	return addr;
 }
 
 
@@ -67,4 +66,42 @@ int dma_set_coherent_mask(struct device *dev, u64 mask)
 
 	dev->coherent_dma_mask = mask;
 	return 0;
+}
+
+
+int dma_map_sg_attrs(struct device         * dev,
+                     struct scatterlist    * sgl,
+                     int                     nents,
+                     enum dma_data_direction dir,
+                     unsigned long           attrs)
+{
+	int i;
+	struct scatterlist *sg;
+
+	for_each_sg(sgl, sg, nents, i) {
+		sg->dma_address = lx_emul_mem_dma_addr(page_address(sg_page(sg))) + sg->offset;
+		if (!sg->dma_address)
+			return 0;
+		sg_dma_len(sg) = sg->length;
+		lx_emul_mem_cache_clean_invalidate(page_address(sg_page(sg))
+		                                   + sg->offset, sg->length);
+	}
+
+	return nents;
+}
+
+
+void dma_unmap_sg_attrs(struct device         * dev,
+                        struct scatterlist    * sgl,
+                        int                     nents,
+                        enum dma_data_direction dir,
+                        unsigned long           attrs)
+{
+	int i;
+	struct scatterlist *sg;
+
+	for_each_sg(sgl, sg, nents, i) {
+		lx_emul_mem_cache_invalidate(page_address(sg_page(sg)) + sg->offset,
+		                             sg->length);
+	}
 }

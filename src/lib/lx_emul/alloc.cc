@@ -11,6 +11,8 @@
  * version 2.
  */
 
+#include <base/log.h>
+#include <cpu/cache.h>
 #include <lx_emul/alloc.h>
 #include <lx_kit/env.h>
 
@@ -27,20 +29,57 @@ extern "C" void * lx_emul_mem_alloc(unsigned long size)
 };
 
 
-extern "C" void * lx_emul_mem_alloc_dma(unsigned long size,
-                                    void       ** dma_addr)
+extern "C" void * lx_emul_mem_alloc_uncached(unsigned long size)
 {
-	return Lx_kit::env().memory.alloc_dma(size, dma_addr);
+	/* always align memory objects to 32 bytes, like malloc, heap etc. */
+	return Lx_kit::env().uncached_memory.alloc(size, 32);
 };
+
+
+extern "C" void * lx_emul_mem_dma_addr(void * addr) {
+	void * ret = Lx_kit::env().memory.dma_addr(addr);
+	if (ret)
+		return ret;
+	if (!(ret = Lx_kit::env().uncached_memory.dma_addr(addr)))
+		Genode::error(__func__, " called with invalid addr ", addr);
+	return ret;
+}
 
 
 extern "C" void lx_emul_mem_free(const void * ptr)
 {
-	Lx_kit::env().memory.free(ptr);
+	if (!ptr)
+		return;
+	if (Lx_kit::env().memory.free(ptr))
+		return;
+	if (Lx_kit::env().uncached_memory.free(ptr))
+		return;
+	Genode::error(__func__, " called with invalid ptr ", ptr);
 };
 
 
 extern "C" unsigned long lx_emul_mem_size(const void * ptr)
 {
-	return Lx_kit::env().memory.size(ptr);
+	unsigned long ret = 0;
+	if (!ptr)
+		return ret;
+	if ((ret = Lx_kit::env().memory.size(ptr)))
+		return ret;
+	if (!(ret = Lx_kit::env().uncached_memory.size(ptr)))
+		Genode::error(__func__, " called with invalid ptr ", ptr);
+	return ret;
 };
+
+
+extern "C" void lx_emul_mem_cache_clean_invalidate(const void * addr,
+                                                   unsigned long size)
+{
+	Genode::cache_clean_invalidate_data((Genode::addr_t)addr, size);
+}
+
+
+extern "C" void lx_emul_mem_cache_invalidate(const void * addr,
+                                             unsigned long size)
+{
+	Genode::cache_invalidate_data((Genode::addr_t)addr, size);
+}

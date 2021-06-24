@@ -14,10 +14,11 @@
 #ifndef _LX_KIT__MEMORY_H_
 #define _LX_KIT__MEMORY_H_
 
+#include <base/allocator_avl.h>
+#include <base/cache.h>
 #include <base/env.h>
 #include <base/heap.h>
-#include <base/allocator_avl.h>
-#include <util/list.h>
+#include <base/registry.h>
 
 namespace Platform { class Connection; };
 namespace Lx_kit {
@@ -32,28 +33,35 @@ class Lx_kit::Mem_allocator
 
 		Mem_allocator(Env                  & env,
 		              Heap                 & heap,
-		              Platform::Connection & platform);
+		              Platform::Connection & platform,
+		              Cache                  cache_attr);
 
 		void * alloc(size_t size, size_t align);
-		void * alloc_dma(size_t size, void ** dma_attr);
+		void * dma_addr(void * addr);
 		size_t size(const void * ptr);
-		void   free(const void * ptr);
+		bool   free(const void * ptr);
 
 	private:
 
-		struct Dma_buffer : List<Dma_buffer>::Element
+		struct Buffer
 		{
-			addr_t                   addr;
 			size_t                   size;
 			Ram_dataspace_capability cap;
-			addr_t                   dma_addr;
+			addr_t                   addr;
+
+			Buffer(size_t size, Ram_dataspace_capability cap, addr_t addr)
+			: size(size), cap(cap), addr(addr) {}
 		};
+
+		using Buffer_element  = Registered_no_delete<Buffer>;
+		using Buffer_registry = Registry<Buffer_element>;
 
 		Env                  & _env;
 		Heap                 & _heap;
 		Platform::Connection & _platform;
+		Cache                  _cache_attr;
 		Allocator_avl          _mem;
-		List<Dma_buffer>       _dma_buffers {};
+		Buffer_registry        _buffers {};
 };
 
 #endif /* _LX_KIT__MEMORY_H_ */

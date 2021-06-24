@@ -22,8 +22,11 @@
 
 Lx_kit::Mem_allocator::Mem_allocator(Genode::Env          & env,
                                      Heap                 & heap,
-                                     Platform::Connection & platform)
-: _env(env), _heap(heap), _platform(platform), _mem(&heap) {}
+                                     Platform::Connection & platform,
+                                     Cache                  cache_attr)
+:
+	_env(env), _heap(heap), _platform(platform),
+	_cache_attr(cache_attr), _mem(&heap) {}
 
 
 void * Lx_kit::Mem_allocator::alloc(size_t size, size_t align)
@@ -32,16 +35,24 @@ void * Lx_kit::Mem_allocator::alloc(size_t size, size_t align)
 		return nullptr;
 
 	void * out_addr = nullptr;
+
 	if (_mem.alloc_aligned(size, &out_addr, log2(align)).error()) {
-		size_t                   ds_size = align_addr(size, 12);
-		Ram_dataspace_capability ds_cap  = _env.ram().alloc(ds_size);
+
+		/* allocation failed, so we request a new DMA-capable dataspace */
+		size_t ds_size = align_addr(size, 12);
+		Ram_dataspace_capability ds_cap =
+			_platform.alloc_dma_buffer(ds_size, _cache_attr);
+
 		try {
-			void * addr = _env.rm().attach(ds_cap);
-			_mem.add_range((addr_t)addr, ds_size);
+			addr_t addr = (addr_t) _env.rm().attach(ds_cap);
+			_mem.add_range(addr, ds_size);
+			new (_heap) Buffer_element(_buffers, ds_size, ds_cap, addr);
 		} catch (Out_of_caps) {
-			_env.ram().free(ds_cap);
+			_platform.free_dma_buffer(ds_cap);
 			throw;
 		}
+
+		/* re-try allocation */
 		_mem.alloc_aligned(size, &out_addr, log2(align));
 	}
 
@@ -56,50 +67,32 @@ void * Lx_kit::Mem_allocator::alloc(size_t size, size_t align)
 }
 
 
-void * Lx_kit::Mem_allocator::alloc_dma(size_t  size,
-                                        void ** dma_addr)
+void * Lx_kit::Mem_allocator::dma_addr(void * addr)
 {
-	if (!size)
-		return nullptr;
+	void * ret = nullptr;
 
-	Ram_dataspace_capability cap = _platform.alloc_dma_buffer(size, UNCACHED);
-	Dma_buffer & db = *new (_heap)
-		Dma_buffer{{}, _env.rm().attach(cap), size, cap, _platform.dma_addr(cap)};
-	_dma_buffers.insert(&db);
-	*dma_addr = (void*)db.dma_addr;
-	return (void*) db.addr;
+	_buffers.for_each([&] (Buffer & b) {
+		if (b.addr > (addr_t)addr || (b.addr+b.size) <= (addr_t)addr)
+			return;
+
+		ret = (void*)_platform.dma_addr(b.cap);
+	});
+
+	return ret;
 }
 
 
-void Lx_kit::Mem_allocator::free(const void * ptr)
+bool Lx_kit::Mem_allocator::free(const void * ptr)
 {
-	if (_mem.valid_addr((addr_t)ptr)) {
-		_mem.free(const_cast<void*>(ptr));
-		return;
-	}
+	if (!_mem.valid_addr((addr_t)ptr))
+		return false;
 
-	addr_t addr = (addr_t) ptr;
-	for (Dma_buffer * b = _dma_buffers.first(); b; b = b->next()) {
-
-		if (!(b->addr <= addr && (b->addr+b->size) >= addr))
-			continue;
-
-		_env.rm().detach(b->addr);
-		_platform.free_dma_buffer(b->cap);
-		return;
-	}
+	_mem.free(const_cast<void*>(ptr));
+	return true;
 }
 
 
 Genode::size_t Lx_kit::Mem_allocator::size(const void * ptr)
 {
-	if (!ptr)
-		return 0;
-
-	if (!_mem.valid_addr((addr_t)ptr)) {
-		warning("Lx_kit::Mem_allocator::size called with invalid ptr ", ptr);
-		return 0;
-	}
-
-	return _mem.size_at(ptr);
+	return ptr ? _mem.size_at(ptr) : 0;
 }

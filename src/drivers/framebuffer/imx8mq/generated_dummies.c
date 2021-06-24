@@ -705,14 +705,6 @@ int dma_get_sgtable_attrs(struct device * dev,struct sg_table * sgt,void * cpu_a
 
 #include <linux/dma-mapping.h>
 
-int dma_map_sg_attrs(struct device * dev,struct scatterlist * sg,int nents,enum dma_data_direction dir,unsigned long attrs)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/dma-mapping.h>
-
 int dma_mmap_attrs(struct device * dev,struct vm_area_struct * vma,void * cpu_addr,dma_addr_t dma_addr,size_t size,unsigned long attrs)
 {
 	lx_emul_trace_and_stop(__func__);
@@ -722,14 +714,6 @@ int dma_mmap_attrs(struct device * dev,struct vm_area_struct * vma,void * cpu_ad
 #include <linux/dma-resv.h>
 
 void dma_resv_fini(struct dma_resv * obj)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/dma-mapping.h>
-
-void dma_unmap_sg_attrs(struct device * dev,struct scatterlist * sg,int nents,enum dma_data_direction dir,unsigned long attrs)
 {
 	lx_emul_trace_and_stop(__func__);
 }

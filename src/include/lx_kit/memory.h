@@ -31,27 +31,33 @@ class Lx_kit::Mem_allocator
 {
 	public:
 
-		Mem_allocator(Env                  & env,
-		              Heap                 & heap,
-		              Platform::Connection & platform,
-		              Cache                  cache_attr);
-
-		void * alloc(size_t size, size_t align);
-		void * dma_addr(void * addr);
-		size_t size(const void * ptr);
-		bool   free(const void * ptr);
-
-	private:
-
 		struct Buffer
 		{
 			size_t                   size;
 			Ram_dataspace_capability cap;
 			addr_t                   addr;
+			addr_t                   dma_addr;
 
-			Buffer(size_t size, Ram_dataspace_capability cap, addr_t addr)
-			: size(size), cap(cap), addr(addr) {}
+			Buffer(size_t                   size,
+			       Ram_dataspace_capability cap,
+			       addr_t                   addr,
+			       addr_t                   dma_addr)
+			: size(size), cap(cap), addr(addr), dma_addr(dma_addr) {}
 		};
+
+		Mem_allocator(Env                  & env,
+		              Heap                 & heap,
+		              Platform::Connection & platform,
+		              Cache                  cache_attr);
+
+		Buffer alloc_buffer(size_t size);
+		void * alloc(size_t size, size_t align);
+		addr_t dma_addr(void * addr);
+		size_t size(const void * ptr);
+		void   free(Buffer buffer);
+		bool   free(const void * ptr);
+
+	private:
 
 		using Buffer_element  = Registered_no_delete<Buffer>;
 		using Buffer_registry = Registry<Buffer_element>;

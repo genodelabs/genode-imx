@@ -36,8 +36,8 @@ extern "C" void * lx_emul_mem_alloc_uncached(unsigned long size)
 };
 
 
-extern "C" void * lx_emul_mem_dma_addr(void * addr) {
-	void * ret = Lx_kit::env().memory.dma_addr(addr);
+extern "C" unsigned long lx_emul_mem_dma_addr(void * addr) {
+	unsigned long ret = Lx_kit::env().memory.dma_addr(addr);
 	if (ret)
 		return ret;
 	if (!(ret = Lx_kit::env().uncached_memory.dma_addr(addr)))

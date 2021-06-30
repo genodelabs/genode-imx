@@ -29,6 +29,25 @@ Lx_kit::Mem_allocator::Mem_allocator(Genode::Env          & env,
 	_cache_attr(cache_attr), _mem(&heap) {}
 
 
+Lx_kit::Mem_allocator::Buffer Lx_kit::Mem_allocator::alloc_buffer(size_t size)
+{
+	Ram_dataspace_capability ds_cap;
+
+	try {
+		size_t ds_size  = align_addr(size, 12);
+		ds_cap          = _platform.alloc_dma_buffer(ds_size, _cache_attr);
+		addr_t addr     = (addr_t) _env.rm().attach(ds_cap);
+		addr_t dma_addr = _platform.dma_addr(ds_cap);
+
+		return *new (_heap)
+			Buffer_element(_buffers, ds_size, ds_cap, addr, dma_addr);
+	} catch (Out_of_caps) {
+		_platform.free_dma_buffer(ds_cap);
+		throw;
+	}
+}
+
+
 void * Lx_kit::Mem_allocator::alloc(size_t size, size_t align)
 {
 	if (!size)
@@ -38,19 +57,8 @@ void * Lx_kit::Mem_allocator::alloc(size_t size, size_t align)
 
 	if (_mem.alloc_aligned(size, &out_addr, log2(align)).error()) {
 
-		/* allocation failed, so we request a new DMA-capable dataspace */
-		size_t ds_size = align_addr(size, 12);
-		Ram_dataspace_capability ds_cap =
-			_platform.alloc_dma_buffer(ds_size, _cache_attr);
-
-		try {
-			addr_t addr = (addr_t) _env.rm().attach(ds_cap);
-			_mem.add_range(addr, ds_size);
-			new (_heap) Buffer_element(_buffers, ds_size, ds_cap, addr);
-		} catch (Out_of_caps) {
-			_platform.free_dma_buffer(ds_cap);
-			throw;
-		}
+		Buffer buffer = alloc_buffer(size);
+		_mem.add_range(buffer.addr, buffer.size);
 
 		/* re-try allocation */
 		_mem.alloc_aligned(size, &out_addr, log2(align));
@@ -67,15 +75,17 @@ void * Lx_kit::Mem_allocator::alloc(size_t size, size_t align)
 }
 
 
-void * Lx_kit::Mem_allocator::dma_addr(void * addr)
+Genode::addr_t Lx_kit::Mem_allocator::dma_addr(void * addr)
 {
-	void * ret = nullptr;
+	addr_t ret = 0UL;
 
 	_buffers.for_each([&] (Buffer & b) {
 		if (b.addr > (addr_t)addr || (b.addr+b.size) <= (addr_t)addr)
 			return;
 
-		ret = (void*)_platform.dma_addr(b.cap);
+		/* byte offset of 'addr' from start of block */
+		addr_t const offset = (addr_t)addr - b.addr;
+		ret = b.dma_addr + offset;
 	});
 
 	return ret;
@@ -89,6 +99,15 @@ bool Lx_kit::Mem_allocator::free(const void * ptr)
 
 	_mem.free(const_cast<void*>(ptr));
 	return true;
+}
+
+
+void Lx_kit::Mem_allocator::free(Buffer buffer)
+{
+	_buffers.for_each([&] (Buffer & b) {
+		if (b.addr == buffer.addr && b.size == buffer.size)
+			destroy(_heap, &b);
+	});
 }
 
 

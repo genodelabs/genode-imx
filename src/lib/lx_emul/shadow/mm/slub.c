@@ -69,12 +69,6 @@ void * __kmalloc_node_track_caller(size_t        size,
 }
 
 
-void * kmem_cache_alloc_node(struct kmem_cache * s, gfp_t gfpflags, int node)
-{
-	return kmem_cache_alloc(s, gfpflags);
-}
-
-
 static inline unsigned int kmem_cache_array_size_per_idx(unsigned idx)
 {
 	switch (idx) {
@@ -98,6 +92,14 @@ void __init kmem_cache_init(void)
 }
 
 
+void * kmem_cache_alloc(struct kmem_cache * s, gfp_t flags)
+{
+	if (!s)
+		lx_emul_trace_and_stop(__func__);
+	return lx_emul_mem_alloc_aligned(s->size, s->align ? s->align : 32);
+}
+
+
 size_t __ksize(const void * object)
 {
 	return lx_emul_mem_size(object);
@@ -112,12 +114,9 @@ void * __kmalloc_node(size_t size, gfp_t flags, int node)
 }
 
 
-void * kmem_cache_alloc(struct kmem_cache * s, gfp_t flags)
+void * kmem_cache_alloc_node(struct kmem_cache * s, gfp_t gfpflags, int node)
 {
-	/* DMA memory is not implemented yet */
-	if (flags & GFP_DMA) lx_emul_trace_and_stop(__func__);
-	if (!s)              lx_emul_trace_and_stop(__func__);
-	return lx_emul_mem_alloc_aligned(s->size, s->align ? s->align : 32);
+	return kmem_cache_alloc(s, gfpflags);
 }
 
 #endif /* CONFIG_NUMA */

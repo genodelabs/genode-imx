@@ -13,6 +13,7 @@
 
 #include <lx_emul/init.h>
 #include <lx_emul/time.h>
+#include <lx_user/init.h>
 
 #include <asm/irq_regs.h>
 #include <linux/cpu.h>
@@ -57,6 +58,8 @@ static int kernel_init(void * args)
 	lx_emul_initcalls();
 
 	system_state = SYSTEM_RUNNING;
+
+	lx_user_init();
 	lx_emul_task_schedule(true);
 	return 0;
 }

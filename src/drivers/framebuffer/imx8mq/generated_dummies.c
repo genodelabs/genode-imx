@@ -1589,14 +1589,6 @@ void put_unused_fd(unsigned int fd)
 }
 
 
-#include <linux/interrupt.h>
-
-void raise_softirq_irqoff(unsigned int nr)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/reboot.h>
 
 enum reboot_mode reboot_mode;

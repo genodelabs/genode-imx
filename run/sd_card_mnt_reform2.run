@@ -1,0 +1,95 @@
+assert_spec arm_v8a
+
+create_boot_directory
+import_from_depot [depot_user]/src/[base_src] \
+                  [depot_user]/src/imx8mq_sd_card_drv \
+                  [depot_user]/src/init \
+                  [depot_user]/src/platform_drv
+
+build { app/block_tester }
+
+install_config {
+<config>
+	<parent-provides>
+		<service name="ROM"/>
+		<service name="IRQ"/>
+		<service name="IO_MEM"/>
+		<service name="PD"/>
+		<service name="RM"/>
+		<service name="CPU"/>
+		<service name="LOG"/>
+	</parent-provides>
+	<default caps="100"/>
+
+	<start name="imx8mq_platform_drv">
+		<resource name="RAM" quantum="1M"/>
+		<provides><service name="Platform"/></provides>
+		<config>
+			<device name="usdhc2" type="fsl,imx7d-usdhc">
+				<io_mem address="0x30b50000" size="0x10000"/>
+				<irq    number="55"/>
+				<clock  name="ipg_clk_root"
+				        driver_name="ipg"/>
+				<clock  name="nand_usdhc_bus_clk_root"
+				        driver_name="ahb"/>
+				<clock  name="usdhc2_clk_root"
+				        rate="200000000"
+				        driver_name="per"/>
+				<clock  name="usdhc2_gate"/>
+			</device>
+			<policy label="sd_card_drv -> " info="yes">
+				<device name="usdhc2"/>
+			</policy>
+		</config>
+		<route>
+			<any-service> <parent/> </any-service>
+		</route>
+	</start>
+
+	<start name="timer">
+		<resource name="RAM" quantum="1M"/>
+		<provides><service name="Timer"/></provides>
+		<route> <any-service> <parent/> </any-service> </route>
+	</start>
+
+	<start name="sd_card_drv" caps="300">
+		<binary name="imx8mq_sd_card_drv"/>
+		<resource name="RAM" quantum="16M"/>
+		<provides><service name="Block"/></provides>
+		<route>
+			<service name="ROM" label="dtb">
+				<parent label="imx8mq_sd_card_drv-mnt_reform2.dtb"/>
+			</service>
+			<service name="ROM"> <parent/> </service>
+			<service name="PD">  <parent/> </service>
+			<service name="RM">  <parent/> </service>
+			<service name="CPU"> <parent/> </service>
+			<service name="LOG"> <parent/> </service>
+			<any-service> <any-child/> </any-service>
+		</route>
+	</start>
+
+	<start name="block_tester">
+		<resource name="RAM" quantum="64M" />
+		<config verbose="no" report="no" log="yes" stop_on_error="no">
+			<tests>
+				<sequential length="256M" size="1M" io_buffer="8M" batch="4"/>
+				<sequential start="2097152" write="yes" length="256M" size="1M" io_buffer="8M" batch="4"/>
+			</tests>
+		</config>
+		<route>
+			<service name="ROM"> <parent/> </service>
+			<service name="PD">  <parent/> </service>
+			<service name="RM">  <parent/> </service>
+			<service name="CPU"> <parent/> </service>
+			<service name="LOG"> <parent/> </service>
+			<any-service> <any-child/> </any-service>
+		</route>
+	</start>
+</config> }
+
+build_boot_image { block_tester }
+
+run_genode_until forever
+
+# vi: set ft=tcl :

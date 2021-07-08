@@ -3,3 +3,4 @@ os
 platform_session
 timer_session
 block_session
+genode_c_api

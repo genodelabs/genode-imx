@@ -15,6 +15,7 @@
 #include <base/log.h>
 #include <os/backtrace.h>
 #include <platform_session/connection.h>
+#include <util/touch.h>
 
 /* local includes */
 #include <lx_kit/memory.h>
@@ -38,6 +39,10 @@ Lx_kit::Mem_allocator::Buffer Lx_kit::Mem_allocator::alloc_buffer(size_t size)
 		ds_cap          = _platform.alloc_dma_buffer(ds_size, _cache_attr);
 		addr_t addr     = (addr_t) _env.rm().attach(ds_cap);
 		addr_t dma_addr = _platform.dma_addr(ds_cap);
+
+		/* map eager by touching all pages once */
+		for (size_t sz = 0; sz < ds_size; sz += 4096) {
+			touch_read((unsigned char const volatile*)((addr_t)addr+sz)); }
 
 		return *new (_heap)
 			Buffer_element(_buffers, ds_size, ds_cap, addr, dma_addr);

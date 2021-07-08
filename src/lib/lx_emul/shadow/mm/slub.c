@@ -52,6 +52,12 @@ struct kmem_cache * kmem_cache_create(const char * name,
 }
 
 
+void kmem_cache_free(struct kmem_cache * s, void * x)
+{
+	lx_emul_mem_free(x);
+}
+
+
 void * __kmalloc_track_caller(size_t        size,
                               gfp_t         gfpflags,
                               unsigned long caller)

@@ -1187,14 +1187,6 @@ void kmem_cache_destroy(struct kmem_cache * s)
 }
 
 
-#include <linux/slab.h>
-
-void kmem_cache_free(struct kmem_cache * s,void * x)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/kmsg_dump.h>
 
 void kmsg_dump(enum kmsg_dump_reason reason)

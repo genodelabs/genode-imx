@@ -18,6 +18,8 @@
 
 struct cpumask __cpu_online_mask   = { .bits[0] = 1 };
 struct cpumask __cpu_possible_mask = { .bits[0] = 1 };
+struct cpumask __cpu_present_mask  = { .bits[0] = 1 };
+
 
 #ifdef CONFIG_HOTPLUG_CPU
 void cpus_read_lock(void) { }

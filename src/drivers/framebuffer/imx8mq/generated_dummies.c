@@ -71,14 +71,6 @@ void __hwspin_unlock(struct hwspinlock * hwlock,int mode,unsigned long * flags)
 }
 
 
-#include <linux/bottom_half.h>
-
-void __local_bh_enable_ip(unsigned long ip,unsigned int cnt)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 extern void __memcpy_fromio(void * to,const volatile void __iomem * from,size_t count);
 void __memcpy_fromio(void * to,const volatile void __iomem * from,size_t count)
 {

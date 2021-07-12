@@ -75,6 +75,11 @@ int default_wake_function(wait_queue_entry_t *curr,
 
 asmlinkage __visible void __sched schedule(void)
 {
+	if (preempt_count()) {
+		printk("schedule: unexpected preempt_count=%d\n", preempt_count());
+		lx_emul_trace_and_stop("abort");
+	}
+
 	lx_emul_task_schedule(current->state != TASK_RUNNING);
 }
 
@@ -127,7 +132,7 @@ void scheduler_tick(void)
 
 void __sched schedule_preempt_disabled(void)
 {
-	schedule();
+	lx_emul_task_schedule(current->state != TASK_RUNNING);
 }
 
 

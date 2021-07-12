@@ -40,6 +40,8 @@ pid_t kernel_thread(int (* fn)(void *),void * arg,unsigned long flags)
 		.signal = {{0}}
 	}};
 
+	task->thread_info.preempt_count = 0;
+
 	lx_emul_task_create(task, "kthread", task->pid, fn, arg);
 	return task->pid;
 }

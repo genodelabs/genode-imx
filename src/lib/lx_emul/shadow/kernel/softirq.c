@@ -12,6 +12,7 @@
  */
 
 #include <linux/interrupt.h>
+#include <linux/bottom_half.h>
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/irq.h>
@@ -60,4 +61,14 @@ inline void raise_softirq_irqoff(unsigned int nr)
 void raise_softirq(unsigned int nr)
 {
 	raise_softirq_irqoff(nr);
+}
+
+
+void __local_bh_enable_ip(unsigned long ip,unsigned int cnt)
+{
+	/*
+	 * Called by write_unlock_bh, which reverts preempt_cnt by the
+	 * value SOFTIRQ_LOCK_OFFSET.
+	 */
+	__preempt_count_sub(cnt);
 }

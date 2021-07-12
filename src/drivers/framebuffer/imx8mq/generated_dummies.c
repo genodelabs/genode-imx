@@ -1435,6 +1435,14 @@ void perf_trace_run_bpf_submit(void * raw_data,int size,int rctx,struct trace_ev
 }
 
 
+#include <asm/pgtable.h>
+
+pgprot_t pgprot_writecombine(pgprot_t prot)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/initrd.h>
 
 unsigned long phys_initrd_size;

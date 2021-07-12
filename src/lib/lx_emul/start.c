@@ -12,6 +12,7 @@
  */
 
 #include <lx_emul/init.h>
+#include <lx_emul/page_virt.h>
 #include <lx_emul/time.h>
 #include <lx_user/init.h>
 
@@ -83,6 +84,9 @@ int lx_emul_init_task_function(void * dtb)
 	/* Set dummy task registers used in IRQ and time handling */
 	static struct pt_regs regs;
 	set_irq_regs(&regs);
+
+	/* Run emulation library self-tests before starting kernel */
+	lx_emul_associate_page_selftest();
 
 	/**
 	 * Here we do the minimum normally done start_kernel() of init/main.c

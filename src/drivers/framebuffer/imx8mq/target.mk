@@ -28,6 +28,7 @@ SRC_CC  += lx_emul/init.cc
 SRC_CC  += lx_emul/io_mem.cc
 SRC_CC  += lx_emul/irq.cc
 SRC_CC  += lx_emul/log.cc
+SRC_CC  += lx_emul/page_virt.cc
 SRC_CC  += lx_emul/task.cc
 SRC_CC  += lx_emul/time.cc
 
@@ -62,6 +63,7 @@ SRC_C   += lx_emul/shadow/mm/memblock.c
 SRC_C   += lx_emul/shadow/mm/percpu.c
 SRC_C   += lx_emul/shadow/mm/slab_common.c
 SRC_C   += lx_emul/shadow/mm/slub.c
+SRC_C   += lx_emul/virt_to_page.c
 
 SRC_CC  += lx_kit/console.cc
 SRC_CC  += lx_kit/device.cc

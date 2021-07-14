@@ -9,6 +9,7 @@ SRC_CC  += reset.cc
 SRC_C    = dummies.c
 SRC_C   += fb.c
 SRC_C   += i2c_imx.c
+SRC_C   += lx_user.c
 SRC_C   += reset_core.c
 SRC_C   += $(notdir $(wildcard $(PRG_DIR)/generated_dummies.c))
 

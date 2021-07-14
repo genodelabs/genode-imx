@@ -6,6 +6,7 @@ MIRROR_FROM_PORT_DIR := $(addprefix linux/,$(shell cat $(REP_DIR)/src/drivers/fr
 MIRROR_FROM_REP_DIR  := src/drivers/framebuffer/imx8mq \
                         src/include/lx_emul \
                         src/include/lx_kit \
+                        src/include/lx_user \
                         src/include/spec/arm_64/lx_kit \
                         src/lib/lx_emul \
                         src/lib/lx_kit

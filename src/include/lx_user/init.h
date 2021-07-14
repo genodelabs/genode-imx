@@ -1,5 +1,5 @@
 /**
- * \brief  Lx_emul support to handle reset pins
+ * \brief  Initialization of activity after Linux kernel initialization finished
  * \author Stefan Kalkowski
  * \date   2021-06-29
  */
@@ -18,7 +18,7 @@
 extern "C" {
 #endif
 
-static inline void lx_user_init(void) { }
+void lx_user_init(void);
 
 #ifdef __cplusplus
 }

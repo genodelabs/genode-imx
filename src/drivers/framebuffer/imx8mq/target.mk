@@ -34,6 +34,7 @@ SRC_CC  += lx_emul/task.cc
 SRC_CC  += lx_emul/time.cc
 
 SRC_C   += lx_emul/clocksource.c
+SRC_C   += lx_emul/common_dummies.c
 SRC_C   += lx_emul/irqchip.c
 SRC_C   += lx_emul/start.c
 SRC_C   += lx_emul/shadow/arch/arm64/kernel/smp.c
@@ -79,7 +80,7 @@ SRC_S   += lx_kit/spec/arm_64/setjmp.S
 INC_DIR += $(REP_DIR)/src/include
 INC_DIR += $(REP_DIR)/src/include/spec/arm_64
 INC_DIR += $(REP_DIR)/src/include/lx_emul/shadow
-INC_DIR += $(PRG_DIR)/lx_generated
+INC_DIR += $(REP_DIR)/src/include/lx_generated
 
 vpath % $(REP_DIR)/src/lib
 
@@ -89,7 +90,7 @@ vpath % $(REP_DIR)/src/lib
 #
 
 LX_CONTRIB_DIR  := $(call select_from_ports,mnt_reform2_linux)/linux
-LX_BUILD_DIR    := $(PRG_DIR)/lx_generated
+LX_BUILD_DIR    := $(REP_DIR)/src/include/lx_generated
 
 INC_DIR += $(LX_CONTRIB_DIR)/arch/arm64/include
 INC_DIR += $(LX_BUILD_DIR)/arch/arm64/include/generated

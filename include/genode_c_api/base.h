@@ -26,6 +26,7 @@ extern "C" {
 struct genode_env;
 struct genode_allocator;
 struct genode_signal_handler;
+struct genode_attached_dataspace;
 
 
 /**********************************************************************
@@ -36,10 +37,12 @@ struct genode_signal_handler;
 
 #include <base/env.h>
 #include <base/allocator.h>
+#include <base/attached_dataspace.h>
 
-struct genode_env            : Genode::Env { };
-struct genode_allocator      : Genode::Allocator { };
-struct genode_signal_handler : Genode::Signal_dispatcher_base { };
+struct genode_env                : Genode::Env { };
+struct genode_allocator          : Genode::Allocator { };
+struct genode_signal_handler     : Genode::Signal_dispatcher_base { };
+struct genode_attached_dataspace : Genode::Attached_dataspace { };
 
 static inline auto genode_env_ptr(Genode::Env &env)
 {
@@ -60,6 +63,11 @@ static inline Genode::Signal_context_capability cap(genode_signal_handler *sigh_
 {
 	Genode::Signal_dispatcher_base *dispatcher_ptr = sigh_ptr;
 	return *static_cast<Genode::Signal_handler<Genode::Meta::Empty> *>(dispatcher_ptr);
+}
+
+static inline auto genode_attached_dataspace_ptr(Genode::Attached_dataspace &ds)
+{
+	return static_cast<genode_attached_dataspace *>(&ds);
 }
 
 #endif

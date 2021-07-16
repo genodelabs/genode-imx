@@ -14,29 +14,37 @@
 #include <base/log.h>
 #include <cpu/cache.h>
 #include <lx_emul/alloc.h>
+#include <lx_emul/page_virt.h>
 #include <lx_kit/env.h>
 
 extern "C" void * lx_emul_mem_alloc_aligned(unsigned long size, unsigned long align)
 {
-	return Lx_kit::env().memory.alloc(size, align);
+	void * const ptr = Lx_kit::env().memory.alloc(size, align);
+	lx_emul_forget_pages(ptr, size);
+	return ptr;
 };
 
 
 extern "C" void * lx_emul_mem_alloc(unsigned long size)
 {
 	/* always align memory objects to 32 bytes, like malloc, heap etc. */
-	return Lx_kit::env().memory.alloc(size, 32);
+	void * const ptr = Lx_kit::env().memory.alloc(size, 32);
+	lx_emul_forget_pages(ptr, size);
+	return ptr;
 };
 
 
 extern "C" void * lx_emul_mem_alloc_uncached(unsigned long size)
 {
 	/* always align memory objects to 32 bytes, like malloc, heap etc. */
-	return Lx_kit::env().uncached_memory.alloc(size, 32);
+	void * const ptr = Lx_kit::env().uncached_memory.alloc(size, 32);
+	lx_emul_forget_pages(ptr, size);
+	return ptr;
 };
 
 
-extern "C" unsigned long lx_emul_mem_dma_addr(void * addr) {
+extern "C" unsigned long lx_emul_mem_dma_addr(void * addr)
+{
 	unsigned long ret = Lx_kit::env().memory.dma_addr(addr);
 	if (ret)
 		return ret;

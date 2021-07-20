@@ -1,7 +1,7 @@
 content: drivers.config event_filter.config en_us.chargen \
-         special.chargen numlock_remap.config block_devices.report
+         special.chargen numlock_remap.config
 
-drivers.config numlock_remap.config event_filter.config block_devices.report:
+drivers.config numlock_remap.config event_filter.config:
 	cp $(REP_DIR)/recipes/raw/drivers_managed-mnt_reform2/$@ $@
 
 en_us.chargen special.chargen:

@@ -4,7 +4,8 @@ create_boot_directory
 import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/src/imx8mq_sd_card_drv \
                   [depot_user]/src/init \
-                  [depot_user]/src/platform_drv
+                  [depot_user]/src/platform_drv \
+                  [depot_user]/src/report_rom
 
 build { app/block_tester }
 
@@ -52,10 +53,21 @@ install_config {
 		<route> <any-service> <parent/> </any-service> </route>
 	</start>
 
+	<start name="report_rom">
+		<resource name="RAM" quantum="2M"/>
+		<provides> <service name="Report"/> <service name="ROM"/> </provides>
+		<config verbose="yes">
+		</config>
+		<route> <any-service> <parent/> </any-service> </route>
+	</start>
+
 	<start name="sd_card_drv" caps="300">
 		<binary name="imx8mq_sd_card_drv"/>
 		<resource name="RAM" quantum="16M"/>
 		<provides><service name="Block"/></provides>
+		<config report="yes">
+			<default-policy device="mmcblk0"/>
+		</config>
 		<route>
 			<service name="ROM" label="dtb">
 				<parent label="imx8mq_sd_card_drv-mnt_reform2.dtb"/>

@@ -15,6 +15,8 @@ SRC_C   += $(notdir $(wildcard $(PRG_DIR)/generated_dummies.c))
 
 SRC_CC  += genode_c_api/block.cc
 
+vpath genode_c_api/block.cc $(subst /genode_c_api,,$(call select_from_repositories,src/lib/genode_c_api))
+
 
 #
 # Lx_emul + Lx_kit definitions
@@ -76,12 +78,16 @@ SRC_CC  += lx_kit/task.cc
 SRC_CC  += lx_kit/timeout.cc
 SRC_S   += lx_kit/spec/arm_64/setjmp.S
 
-INC_DIR += $(REP_DIR)/src/include
-INC_DIR += $(REP_DIR)/src/include/spec/arm_64
-INC_DIR += $(REP_DIR)/src/include/lx_emul/shadow
-INC_DIR += $(REP_DIR)/src/include/lx_generated
+DDE_LINUX_DIR := $(subst /src/include/lx_kit,,$(call select_from_repositories,src/include/lx_kit))
 
-vpath % $(REP_DIR)/src/lib
+INC_DIR += $(REP_DIR)/src/include/imx8mq
+INC_DIR += $(DDE_LINUX_DIR)/src/include
+INC_DIR += $(DDE_LINUX_DIR)/src/include/spec/arm_64
+INC_DIR += $(DDE_LINUX_DIR)/src/include/lx_emul/shadow
+INC_DIR += $(REP_DIR)/src/include/imx8mq/lx_generated
+
+vpath lx_emul/common_dummies.c $(REP_DIR)/src/lib/imx8mq
+vpath % $(DDE_LINUX_DIR)/src/lib
 
 
 #
@@ -89,7 +95,7 @@ vpath % $(REP_DIR)/src/lib
 #
 
 LX_CONTRIB_DIR  := $(call select_from_ports,mnt_reform2_linux)/linux
-LX_BUILD_DIR    := $(REP_DIR)/src/include/lx_generated
+LX_BUILD_DIR    := $(REP_DIR)/src/include/imx8mq/lx_generated
 
 INC_DIR += $(LX_CONTRIB_DIR)/arch/arm64/include
 INC_DIR += $(LX_BUILD_DIR)/arch/arm64/include/generated

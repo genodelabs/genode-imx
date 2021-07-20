@@ -100,6 +100,18 @@ int blk_register_queue(struct gendisk * disk)
 }
 
 
+void blk_unregister_queue(struct gendisk * disk)
+{
+	unsigned idx;
+	for (idx = 0; idx < MAX_GEN_DISKS; idx++)
+		if (gendisks[idx] == disk)
+			gendisks[idx] = NULL;
+
+	genode_block_discontinue_device(disk->disk_name);
+}
+
+
+
 static void bio_end_io(struct bio *bio)
 {
 	struct genode_block_request * const req =

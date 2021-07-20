@@ -24,27 +24,24 @@
 #include <genode_c_api/block.h>
 
 using namespace Genode;
-using Buffer = Lx_kit::Mem_allocator::Buffer;
-
 
 extern "C" struct genode_attached_dataspace *
 allocate_peer_buffer(size_t size)
 {
-	Buffer & buffer = Lx_kit::env().memory.alloc_buffer(size);
+	Attached_dataspace & ds = Lx_kit::env().memory.alloc_dataspace(size);
 
 	/*
 	 * We have to call virt_to_pages eagerly here,
 	 * to get contingous page objects registered
 	 */
-	lx_emul_virt_to_pages(buffer.local_addr<void>(), size >> 12);
-	return genode_attached_dataspace_ptr(buffer);
+	lx_emul_virt_to_pages(ds.local_addr<void>(), size >> 12);
+	return genode_attached_dataspace_ptr(ds);
 }
 
 
 extern "C" void free_peer_buffer(struct genode_attached_dataspace * ptr)
 {
-	Attached_dataspace * ds =  static_cast<Attached_dataspace*>(ptr);
-	Lx_kit::env().memory.free(*static_cast<Buffer*>(ds));
+	Lx_kit::env().memory.free(static_cast<Attached_dataspace*>(ptr));
 }
 
 

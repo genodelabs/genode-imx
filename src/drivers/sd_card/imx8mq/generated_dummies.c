@@ -7,14 +7,6 @@
 #include <lx_emul.h>
 
 
-#include <linux/ratelimit_types.h>
-
-int ___ratelimit(struct ratelimit_state * rs,const char * func)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/blk-cgroup.h>
 
 bool __blkcg_punt_bio_submit(struct bio * bio)
@@ -47,14 +39,6 @@ const char * __clk_get_name(const struct clk * clk)
 }
 
 
-#include <linux/cpuhotplug.h>
-
-int __cpuhp_state_remove_instance(enum cpuhp_state state,struct hlist_node * node,bool invoke)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/kexec.h>
 
 void __noclone __crash_kexec(struct pt_regs * regs)
@@ -73,33 +57,9 @@ const struct earlycon_id __earlycon_table[] = {};
 const struct earlycon_id __earlycon_table_end[] = {};
 
 
-#include <linux/gfp.h>
-
-void __free_pages(struct page * page,unsigned int order)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/genhd.h>
-
-int __invalidate_device(struct block_device * bdev,bool kill_dirty)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/suspend.h>
 
 void __pm_pr_dbg(bool defer,const char * fmt,...)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/pm_runtime.h>
-
-void __pm_runtime_disable(struct device * dev,bool check_resume)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -239,14 +199,6 @@ void amba_device_put(struct amba_device * dev)
 }
 
 
-#include <linux/dma-map-ops.h>
-
-void arch_teardown_dma_ops(struct device * dev)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/badblocks.h>
 
 ssize_t badblocks_show(struct badblocks * bb,char * page,int unack)
@@ -274,22 +226,6 @@ struct block_device * bdgrab(struct block_device * bdev)
 #include <linux/backing-dev.h>
 
 void bdi_put(struct backing_dev_info * bdi)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/backing-dev.h>
-
-void bdi_unregister(struct backing_dev_info * bdi)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/blkdev.h>
-
-void bdput(struct block_device * bdev)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -332,20 +268,6 @@ void blk_mq_debugfs_register_sched_hctx(struct request_queue * q,struct blk_mq_h
 }
 
 
-extern void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx * hctx);
-void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx * hctx)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void blk_mq_debugfs_unregister_queue_rqos(struct request_queue * q);
-void blk_mq_debugfs_unregister_queue_rqos(struct request_queue * q)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 extern void blk_mq_debugfs_unregister_sched(struct request_queue * q);
 void blk_mq_debugfs_unregister_sched(struct request_queue * q)
 {
@@ -376,14 +298,6 @@ void blk_stat_add(struct request * rq,u64 now)
 
 extern void blk_stat_free_callback(struct blk_stat_callback * cb);
 void blk_stat_free_callback(struct blk_stat_callback * cb)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/blkdev.h>
-
-void blk_unregister_queue(struct gendisk * disk)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -470,14 +384,6 @@ void bust_spinlocks(int yes)
 #include <linux/sched/nohz.h>
 
 void calc_load_nohz_stop(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/rcupdate.h>
-
-void call_rcu(struct rcu_head * head,rcu_callback_t func)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -700,13 +606,6 @@ struct gpio_descs * __must_check devm_gpiod_get_array(struct device * dev,const 
 }
 
 
-extern int devtmpfs_delete_node(struct device * dev);
-int devtmpfs_delete_node(struct device * dev)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/dma-mapping.h>
 
 unsigned long dma_get_merge_boundary(struct device * dev)
@@ -758,13 +657,6 @@ void * dmam_alloc_attrs(struct device * dev,size_t size,dma_addr_t * dma_handle,
 #include <linux/dma-mapping.h>
 
 void dmam_free_coherent(struct device * dev,size_t size,void * vaddr,dma_addr_t dma_handle)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void dpm_sysfs_remove(struct device * dev);
-void dpm_sysfs_remove(struct device * dev)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -839,14 +731,6 @@ void flush_dcache_page(struct page * page)
 }
 
 
-#include <linux/percpu.h>
-
-void free_percpu(void __percpu * ptr)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/freezer.h>
 
 bool freezing_slow_path(struct task_struct * p)
@@ -866,14 +750,6 @@ gid_t from_kgid(struct user_namespace * targ,kgid_t kgid)
 #include <linux/uidgid.h>
 
 uid_t from_kuid(struct user_namespace * targ,kuid_t kuid)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/blkdev.h>
-
-int fsync_bdev(struct block_device * bdev)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1122,14 +998,6 @@ bool is_vmalloc_addr(const void * x)
 struct kobject *kernel_kobj;
 
 
-#include <linux/kernfs.h>
-
-void kernfs_put(struct kernfs_node * kn)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/kgdb.h>
 
 void kgdb_panic(const char * msg)
@@ -1221,14 +1089,6 @@ int kstrtouint(const char * s,unsigned int base,unsigned int * res)
 #include <linux/kernel.h>
 
 int kstrtoull(const char * s,unsigned int base,unsigned long long * res)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/rcutree.h>
-
-void kvfree_call_rcu(struct rcu_head * head,rcu_callback_t func)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1900,14 +1760,6 @@ unsigned long sysctl_hung_task_timeout_secs;
 
 #include <linux/sysfs.h>
 
-void sysfs_delete_link(struct kobject * kobj,struct kobject * targ,const char * name)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sysfs.h>
-
 int sysfs_emit(char * buf,const char * fmt,...)
 {
 	lx_emul_trace_and_stop(__func__);
@@ -1917,38 +1769,6 @@ int sysfs_emit(char * buf,const char * fmt,...)
 #include <linux/sysfs.h>
 
 int sysfs_emit_at(char * buf,int at,const char * fmt,...)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sysfs.h>
-
-void sysfs_remove_dir(struct kobject * kobj)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sysfs.h>
-
-void sysfs_remove_files(struct kobject * kobj,const struct attribute * const * ptr)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sysfs.h>
-
-void sysfs_remove_groups(struct kobject * kobj,const struct attribute_group ** groups)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sysfs.h>
-
-void sysfs_remove_link(struct kobject * kobj,const char * name)
 {
 	lx_emul_trace_and_stop(__func__);
 }

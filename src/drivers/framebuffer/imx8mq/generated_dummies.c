@@ -836,14 +836,6 @@ void framebuffer_release(struct fb_info * info)
 }
 
 
-#include <linux/percpu.h>
-
-void free_percpu(void __percpu * ptr)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/freezer.h>
 
 bool freezing_slow_path(struct task_struct * p)

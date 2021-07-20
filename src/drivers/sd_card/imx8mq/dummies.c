@@ -14,6 +14,15 @@
 #include <lx_emul.h>
 #include <lx_emul/alloc.h>
 
+#include <linux/ratelimit_types.h>
+
+int ___ratelimit(struct ratelimit_state * rs,const char * func)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
 #include <asm-generic/delay.h>
 
 void __const_udelay(unsigned long xloops)
@@ -31,6 +40,24 @@ int __cpuhp_state_add_instance(enum cpuhp_state state,struct hlist_node * node,b
 }
 
 
+#include <linux/cpuhotplug.h>
+
+int __cpuhp_state_remove_instance(enum cpuhp_state state,struct hlist_node * node,bool invoke)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/genhd.h>
+
+int __invalidate_device(struct block_device * bdev,bool kill_dirty)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
 #include <linux/atomic.h>
 
 atomic_t __num_online_cpus;
@@ -39,6 +66,14 @@ atomic_t __num_online_cpus;
 #include <linux/threads.h>
 
 unsigned long __per_cpu_offset[NR_CPUS] = { 0UL };
+
+
+#include <linux/pm_runtime.h>
+
+void __pm_runtime_disable(struct device * dev,bool check_resume)
+{
+	lx_emul_trace(__func__);
+}
 
 
 #include <linux/pm_runtime.h>
@@ -93,6 +128,14 @@ void arch_setup_dma_ops(struct device * dev,u64 dma_base,u64 size,const struct i
 }
 
 
+#include <linux/dma-map-ops.h>
+
+void arch_teardown_dma_ops(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
 bool arm64_use_ng_mappings = false;
 EXPORT_SYMBOL(arm64_use_ng_mappings);
 
@@ -118,6 +161,22 @@ int bdi_register(struct backing_dev_info * bdi,const char * fmt,...)
 #include <linux/backing-dev.h>
 
 void bdi_set_owner(struct backing_dev_info * bdi,struct device * owner)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/backing-dev.h>
+
+void bdi_unregister(struct backing_dev_info * bdi)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/blkdev.h>
+
+void bdput(struct block_device * bdev)
 {
 	lx_emul_trace(__func__);
 }
@@ -153,6 +212,20 @@ struct blk_queue_stats * blk_alloc_queue_stats(void)
 #include <linux/blk-cgroup.h>
 
 void blk_cgroup_bio_start(struct bio * bio)
+{
+	lx_emul_trace(__func__);
+}
+
+
+extern void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx * hctx);
+void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx * hctx)
+{
+	lx_emul_trace(__func__);
+}
+
+
+extern void blk_mq_debugfs_unregister_queue_rqos(struct request_queue * q);
+void blk_mq_debugfs_unregister_queue_rqos(struct request_queue * q)
 {
 	lx_emul_trace(__func__);
 }
@@ -214,6 +287,14 @@ int cache_line_size(void)
 }
 
 
+#include <linux/rcupdate.h>
+
+void call_rcu(struct rcu_head * head,rcu_callback_t func)
+{
+	lx_emul_trace(__func__);
+}
+
+
 #include <linux/gpio/consumer.h>
 
 struct gpio_desc * __must_check devm_gpiod_get_index(struct device * dev,const char * con_id,unsigned int idx,enum gpiod_flags flags)
@@ -240,11 +321,35 @@ int devtmpfs_create_node(struct device * dev)
 }
 
 
+extern int devtmpfs_delete_node(struct device * dev);
+int devtmpfs_delete_node(struct device * dev)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
 #include <linux/dma-mapping.h>
 
 int dma_supported(struct device *dev, u64 mask)
 {
 	return 1;
+}
+
+
+extern void dpm_sysfs_remove(struct device * dev);
+void dpm_sysfs_remove(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/blkdev.h>
+
+int fsync_bdev(struct block_device * bdev)
+{
+	lx_emul_trace(__func__);
+	return 0;
 }
 
 
@@ -268,6 +373,22 @@ int gpiod_set_debounce(struct gpio_desc * desc,unsigned int debounce)
 
 extern void irq_pm_install_action(struct irq_desc * desc,struct irqaction * action);
 void irq_pm_install_action(struct irq_desc * desc,struct irqaction * action)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/kernfs.h>
+
+void kernfs_put(struct kernfs_node * kn)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/rcutree.h>
+
+void kvfree_call_rcu(struct rcu_head * head,rcu_callback_t func)
 {
 	lx_emul_trace(__func__);
 }
@@ -504,7 +625,47 @@ int sysfs_create_link_nowarn(struct kobject * kobj,struct kobject * target,const
 
 #include <linux/sysfs.h>
 
+void sysfs_delete_link(struct kobject * kobj,struct kobject * targ,const char * name)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+void sysfs_remove_dir(struct kobject * kobj)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
 void sysfs_remove_file_ns(struct kobject * kobj,const struct attribute * attr,const void * ns)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+void sysfs_remove_groups(struct kobject * kobj,const struct attribute_group ** groups)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+void sysfs_remove_files(struct kobject * kobj,const struct attribute * const * ptr)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+void sysfs_remove_link(struct kobject * kobj,const char * name)
 {
 	lx_emul_trace(__func__);
 }

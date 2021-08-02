@@ -108,6 +108,33 @@ Bootstrap::Platform::Board::Board()
 			(Genode::uint32_t)iomuxc_values[i][1];
 	}
 
+	static addr_t initial_values[][2] = {
+	// (IOMUX Controller)
+	{ 0x30340038, 0x49409400 },
+	{ 0x30340040, 0x49409600 },
+	{ 0x303301FC, 0x00000005 },
+	{ 0x30330200, 0x00000005 },
+	{ 0x30330308, 0x00000083 },
+	{ 0x3033030C, 0x000000c3 },
+	{ 0x30330310, 0x000000c3 },
+	{ 0x30330314, 0x000000c3 },
+	{ 0x30330318, 0x000000c3 },
+	{ 0x3033031C, 0x000000c3 },
+	{ 0x30330320, 0x000000c3 },
+	{ 0x30330324, 0x000000c3 },
+	{ 0x30330328, 0x000000c3 },
+	{ 0x3033032C, 0x000000c3 },
+	{ 0x30330350, 0x0000000c },
+	{ 0x30330464, 0x00000016 },
+	{ 0x30330468, 0x00000016 },
+	{ 0x30330500, 0x00000000 },
+};
+
+	num_values = sizeof(initial_values) / (2*sizeof(Genode::addr_t));
+	for (unsigned i = 0; i < num_values; i++) {
+		*((volatile Genode::uint32_t*)initial_values[i][0]) =
+			(Genode::uint32_t)initial_values[i][1];
+	}
 
 	/*************************
 	 ** Raise CPU frequency **

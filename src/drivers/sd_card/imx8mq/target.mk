@@ -84,7 +84,6 @@ INC_DIR += $(REP_DIR)/src/include/imx8mq
 INC_DIR += $(DDE_LINUX_DIR)/src/include
 INC_DIR += $(DDE_LINUX_DIR)/src/include/spec/arm_64
 INC_DIR += $(DDE_LINUX_DIR)/src/include/lx_emul/shadow
-INC_DIR += $(REP_DIR)/src/include/imx8mq/lx_generated
 
 vpath lx_emul/common_dummies.c $(REP_DIR)/src/lib/imx8mq
 vpath % $(DDE_LINUX_DIR)/src/lib
@@ -144,10 +143,6 @@ CC_OPT_$(1) = -DKBUILD_MODFILE='"$(1)"' -DKBUILD_BASENAME='"$(notdir $(1))"' -DK
 endef
 
 $(foreach file,$(LX_SRC),$(eval $(call CC_OPT_LX_RULES,$(file:%.c=%))))
-
-# Turn off some warnings
-CC_OPT_drivers/gpu/drm/drm_plane_helper    += -Wno-uninitialized
-CC_OPT_drivers/gpu/drm/imx/cdn-mhdp-imxdrv += -Wno-unused-variable
 
 
 #

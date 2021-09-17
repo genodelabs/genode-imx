@@ -267,7 +267,7 @@ install_config {
 		<binary name="imx8mq_fb_drv"/>
 		<resource name="RAM" quantum="40M"/>
 		<route>
-			<service name="ROM" label="dtb"> <parent label="imx8mq-mnt_reform2.dtb"/> </service>
+			<service name="ROM" label="dtb"> <parent label="imx8mq_fb_drv-mnt_reform2.dtb"/> </service>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>
 			<service name="PD">       <parent/> </service>
@@ -295,7 +295,7 @@ build_boot_image {
 	imx8mq_pwm_drv
 	imx_gpio_drv
 	imx8q_evk_i2c_drv
-	imx8mq-mnt_reform2.dtb
+	imx8mq_fb_drv-mnt_reform2.dtb
 }
 
 run_genode_until forever

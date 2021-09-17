@@ -1,5 +1,4 @@
-DRIVER  := imx8mq
-TARGET   = $(DRIVER)_fb_drv
+TARGET  := imx8mq_fb_drv
 REQUIRES = arm_v8a
 LIBS     = base blit
 INC_DIR  = $(PRG_DIR)
@@ -62,6 +61,7 @@ SRC_C   += lx_emul/shadow/kernel/stop_machine.c
 SRC_C   += lx_emul/shadow/lib/devres.c
 SRC_C   += lx_emul/shadow/lib/smp_processor_id.c
 SRC_C   += lx_emul/shadow/mm/memblock.c
+SRC_C   += lx_emul/shadow/mm/page_alloc.c
 SRC_C   += lx_emul/shadow/mm/percpu.c
 SRC_C   += lx_emul/shadow/mm/slab_common.c
 SRC_C   += lx_emul/shadow/mm/slub.c
@@ -83,7 +83,6 @@ INC_DIR += $(REP_DIR)/src/include/imx8mq
 INC_DIR += $(DDE_LINUX_DIR)/src/include
 INC_DIR += $(DDE_LINUX_DIR)/src/include/spec/arm_64
 INC_DIR += $(DDE_LINUX_DIR)/src/include/lx_emul/shadow
-INC_DIR += $(REP_DIR)/src/include/imx8mq/lx_generated
 
 vpath lx_emul/common_dummies.c $(REP_DIR)/src/lib/imx8mq
 vpath % $(DDE_LINUX_DIR)/src/lib
@@ -163,7 +162,7 @@ DTS_TOOL                 := $(BASE_DIR)/../../tool/dts/extract
 DTS_PATH(mnt_reform2)    := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
 DTS_EXTRACT(mnt_reform2) := --select dcss --select edp_bridge --select lcdif
 
-CUSTOM_TARGET_DEPS += $(addprefix $(INSTALL_DIR)/$(DRIVER)-,$(addsuffix .dtb,$(BOARDS)))
+CUSTOM_TARGET_DEPS += $(addprefix $(INSTALL_DIR)/$(TARGET)-,$(addsuffix .dtb,$(BOARDS)))
 
 $(INSTALL_DIR)/%.dtb: %.dtb
 	$(VERBOSE)cp -f $< $@
@@ -172,9 +171,9 @@ $(INSTALL_DIR)/%.dtb: %.dtb
 	$(VERBOSE)dtc -q -Idts $< > $@
 
 # dependencies of driver-specifc dts files from board's dts files
-$(foreach B,$(BOARDS),$(eval $(DRIVER)-$B.dts: $(LX_CONTRIB_DIR)/${DTS_PATH($B)}))
+$(foreach B,$(BOARDS),$(eval $(TARGET)-$B.dts: $(LX_CONTRIB_DIR)/${DTS_PATH($B)}))
 
-$(DRIVER)-%.dts:
+$(TARGET)-%.dts:
 	$(VERBOSE)$(CROSS_DEV_PREFIX)cpp -I$(LX_CONTRIB_DIR)/include \
 	          -x assembler-with-cpp -MMD -P $(LX_CONTRIB_DIR)/${DTS_PATH($*)} |\
 	          sed -s 's/interrupt-parent = <\&gpc>;/interrupt-parent = <\&gic>;/' | \

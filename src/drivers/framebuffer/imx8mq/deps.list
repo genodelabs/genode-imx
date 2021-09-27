@@ -12,7 +12,6 @@ arch/arm64/include/asm/atomic_ll_sc.h
 arch/arm64/include/asm/barrier.h
 arch/arm64/include/asm/bitops.h
 arch/arm64/include/asm/bitrev.h
-arch/arm64/include/asm/boot.h
 arch/arm64/include/asm/brk-imm.h
 arch/arm64/include/asm/bug.h
 arch/arm64/include/asm/cacheflush.h
@@ -31,7 +30,6 @@ arch/arm64/include/asm/elf.h
 arch/arm64/include/asm/esr.h
 arch/arm64/include/asm/exec.h
 arch/arm64/include/asm/extable.h
-arch/arm64/include/asm/fixmap.h
 arch/arm64/include/asm/fpsimd.h
 arch/arm64/include/asm/ftrace.h
 arch/arm64/include/asm/hardirq.h
@@ -50,23 +48,19 @@ arch/arm64/include/asm/kprobes.h
 arch/arm64/include/asm/kvm_arm.h
 arch/arm64/include/asm/linkage.h
 arch/arm64/include/asm/lse.h
-arch/arm64/include/asm/memory.h
 arch/arm64/include/asm/mman.h
 arch/arm64/include/asm/mmu_context.h
 arch/arm64/include/asm/mmu.h
 arch/arm64/include/asm/mmzone.h
 arch/arm64/include/asm/module.h
 arch/arm64/include/asm/mte-def.h
-arch/arm64/include/asm/mte.h
 arch/arm64/include/asm/mte-kasan.h
 arch/arm64/include/asm/numa.h
 arch/arm64/include/asm/page-def.h
-arch/arm64/include/asm/page.h
 arch/arm64/include/asm/paravirt.h
 arch/arm64/include/asm/pci.h
 arch/arm64/include/asm/percpu.h
 arch/arm64/include/asm/perf_event.h
-arch/arm64/include/asm/pgtable.h
 arch/arm64/include/asm/pgtable-hwdef.h
 arch/arm64/include/asm/pgtable-prot.h
 arch/arm64/include/asm/pgtable-types.h
@@ -200,7 +194,6 @@ include/asm-generic/early_ioremap.h
 include/asm-generic/emergency-restart.h
 include/asm-generic/error-injection.h
 include/asm-generic/export.h
-include/asm-generic/fixmap.h
 include/asm-generic/getorder.h
 include/asm-generic/hardirq.h
 include/asm-generic/hugetlb.h
@@ -215,7 +208,6 @@ include/asm-generic/kmap_size.h
 include/asm-generic/kprobes.h
 include/asm-generic/local64.h
 include/asm-generic/local.h
-include/asm-generic/memory_model.h
 include/asm-generic/mm_hooks.h
 include/asm-generic/mmiowb.h
 include/asm-generic/mmu_context.h
@@ -677,7 +669,6 @@ include/linux/perf_event.h
 include/linux/perf_regs.h
 include/linux/personality.h
 include/linux/pfn.h
-include/linux/pgtable.h
 include/linux/phy.h
 include/linux/phy/phy-dp.h
 include/linux/phy/phy.h
@@ -811,6 +802,7 @@ include/linux/sizes.h
 include/linux/skbuff.h
 include/linux/slab.h
 include/linux/slub_def.h
+include/linux/smpboot.h
 include/linux/smp.h
 include/linux/smp_types.h
 include/linux/socket.h
@@ -1230,6 +1222,7 @@ kernel/time/timekeeping.h
 kernel/time/timekeeping_internal.h
 kernel/workqueue_internal.h
 lib/crc32defs.h
+lib/crc32table.h
 lib/kstrtox.h
 mm/internal.h
 mm/slab.h

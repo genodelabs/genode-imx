@@ -105,14 +105,6 @@ pid_t __task_pid_nr_ns(struct task_struct * task,enum pid_type type,struct pid_n
 }
 
 
-#include <linux/interrupt.h>
-
-void __tasklet_schedule(struct tasklet_struct * t)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/blktrace_api.h>
 
 void __trace_note_message(struct blk_trace * bt,struct blkcg * blkcg,const char * fmt,...)
@@ -880,6 +872,13 @@ bool housekeeping_enabled(enum hk_flags flags)
 }
 
 
+extern int idle_cpu(int cpu);
+int idle_cpu(int cpu)
+{
+	return 1;
+}
+
+
 #include <linux/vmstat.h>
 
 void inc_zone_page_state(struct page * page,enum zone_stat_item item)
@@ -1437,11 +1436,33 @@ struct proc_dir_entry * proc_create(const char * name,umode_t mode,struct proc_d
 }
 
 
+extern void rcu_irq_enter(void);
+void rcu_irq_enter(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+
 #include <linux/rcutree.h>
 
 void rcu_irq_enter_irqson(void)
 {
 	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern void rcu_softirq_qs(void);
+void rcu_softirq_qs(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+extern void rcu_irq_exit(void);
+void rcu_irq_exit(void)
+{
+	lx_emul_trace(__func__);
 }
 
 

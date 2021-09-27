@@ -520,6 +520,15 @@ void simple_release_fs(struct vfsmount ** mount,int * count)
 }
 
 
+#include <linux/smpboot.h>
+
+int smpboot_register_percpu_thread(struct smp_hotplug_thread *plug_thread)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
 #include <linux/sys_soc.h>
 
 const struct soc_device_attribute * soc_device_match(const struct soc_device_attribute * matches)

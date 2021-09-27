@@ -56,7 +56,6 @@ SRC_C   += lx_emul/shadow/kernel/rcu/srcutree.c
 SRC_C   += lx_emul/shadow/kernel/rcu/tree.c
 SRC_C   += lx_emul/shadow/kernel/sched/core.c
 SRC_C   += lx_emul/shadow/kernel/smp.c
-SRC_C   += lx_emul/shadow/kernel/softirq.c
 SRC_C   += lx_emul/shadow/kernel/stop_machine.c
 SRC_C   += lx_emul/shadow/lib/devres.c
 SRC_C   += lx_emul/shadow/lib/smp_processor_id.c

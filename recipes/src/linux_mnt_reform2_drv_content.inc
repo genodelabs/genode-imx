@@ -11,6 +11,7 @@ MIRROR_FROM_DDE_DIR  := src/include/lx_emul \
                         src/lib/lx_kit
 
 MIRROR_FROM_REP_DIR  := src/drivers/$(DRIVER)/imx8mq \
+                        src/drivers/linux_mnt_reform2_drv_target.inc \
                         src/include/imx8mq \
                         src/lib/imx8mq
 

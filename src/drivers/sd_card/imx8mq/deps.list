@@ -739,7 +739,6 @@ include/linux/sizes.h
 include/linux/skbuff.h
 include/linux/slab.h
 include/linux/slub_def.h
-include/linux/smpboot.h
 include/linux/smp.h
 include/linux/smp_types.h
 include/linux/socket.h

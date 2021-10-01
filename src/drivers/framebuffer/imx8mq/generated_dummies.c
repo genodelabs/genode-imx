@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2021-06-17
+ * \date   2021-10-01
  */
 
 #include <lx_emul.h>
@@ -112,6 +112,14 @@ bool __refrigerator(bool check_kthr_stop)
 #include <linux/sched.h>
 
 pid_t __task_pid_nr_ns(struct task_struct * task,enum pid_type type,struct pid_namespace * ns)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/interrupt.h>
+
+void __tasklet_schedule(struct tasklet_struct * t)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1049,13 +1057,6 @@ struct pseudo_fs_context * init_pseudo(struct fs_context * fc,unsigned long magi
 }
 
 
-extern int idle_cpu(int cpu);
-int idle_cpu(int cpu)
-{
-	return 1;
-}
-
-
 #include <linux/wait_bit.h>
 
 void init_wait_var_entry(struct wait_bit_queue_entry * wbq_entry,void * var,int flags)
@@ -1418,14 +1419,6 @@ void perf_trace_run_bpf_submit(void * raw_data,int size,int rctx,struct trace_ev
 }
 
 
-#include <asm/pgtable.h>
-
-pgprot_t pgprot_writecombine(pgprot_t prot)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/initrd.h>
 
 unsigned long phys_initrd_size;
@@ -1570,28 +1563,6 @@ void put_unused_fd(unsigned int fd)
 {
 	lx_emul_trace_and_stop(__func__);
 }
-
-
-extern void rcu_irq_enter(void);
-void rcu_irq_enter(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-extern void rcu_softirq_qs(void);
-void rcu_softirq_qs(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-extern void rcu_irq_exit(void);
-void rcu_irq_exit(void)
-{
-	lx_emul_trace(__func__);
-}
-
 
 
 #include <linux/reboot.h>

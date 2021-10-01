@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2021-07-02
+ * \date   2021-10-01
  */
 
 #include <lx_emul.h>
@@ -10,14 +10,6 @@
 #include <linux/blk-cgroup.h>
 
 bool __blkcg_punt_bio_submit(struct bio * bio)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/blk-cgroup.h>
-
-u64 __blkg_prfill_u64(struct seq_file * sf,struct blkg_policy_data * pd,u64 v)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -105,9 +97,9 @@ pid_t __task_pid_nr_ns(struct task_struct * task,enum pid_type type,struct pid_n
 }
 
 
-#include <linux/blktrace_api.h>
+#include <linux/interrupt.h>
 
-void __trace_note_message(struct blk_trace * bt,struct blkcg * blkcg,const char * fmt,...)
+void __tasklet_schedule(struct tasklet_struct * t)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -295,58 +287,6 @@ void blk_stat_free_callback(struct blk_stat_callback * cb)
 }
 
 
-#include <linux/blk-cgroup.h>
-
-void blkcg_print_blkgs(struct seq_file * sf,struct blkcg * blkcg,u64 (* prfill)(struct seq_file *,struct blkg_policy_data *,int),const struct blkcg_policy * pol,int data,bool show_total)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/blk-cgroup.h>
-
-struct blkcg blkcg_root;
-
-
-#include <linux/blk-cgroup.h>
-
-void blkg_conf_finish(struct blkg_conf_ctx * ctx)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/blk-cgroup.h>
-
-int blkg_conf_prep(struct blkcg * blkcg,const struct blkcg_policy * pol,char * input,struct blkg_conf_ctx * ctx)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/blk-cgroup.h>
-
-const char * blkg_dev_name(struct blkcg_gq * blkg)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/blk-cgroup.h>
-
-struct blkcg_gq * blkg_lookup_slowpath(struct blkcg * blkcg,struct request_queue * q,bool update_hint)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern u64 blkg_prfill_rwstat(struct seq_file * sf,struct blkg_policy_data * pd,int off);
-u64 blkg_prfill_rwstat(struct seq_file * sf,struct blkg_policy_data * pd,int off)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/writeback.h>
 
 int block_dump;
@@ -466,22 +406,6 @@ struct cpu_topology cpu_topology[NR_CPUS] = {};
 #include <linux/sched/topology.h>
 
 bool cpus_share_cache(int this_cpu,int that_cpu)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/cgroup.h>
-
-struct cgroup_subsys_state * css_next_descendant_post(struct cgroup_subsys_state * pos,struct cgroup_subsys_state * root)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/cgroup.h>
-
-struct cgroup_subsys_state * css_next_descendant_pre(struct cgroup_subsys_state * pos,struct cgroup_subsys_state * root)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -869,13 +793,6 @@ bool has_capability_noaudit(struct task_struct * t,int cap)
 bool housekeeping_enabled(enum hk_flags flags)
 {
 	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern int idle_cpu(int cpu);
-int idle_cpu(int cpu)
-{
-	return 1;
 }
 
 
@@ -1286,14 +1203,6 @@ struct clk * of_clk_get(struct device_node * np,int index)
 }
 
 
-#include <linux/cgroup.h>
-
-struct cgroup_subsys_state * of_css(struct kernfs_open_file * of)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/pm_opp.h>
 
 int of_get_required_opp_performance_state(struct device_node * np,int index)
@@ -1436,33 +1345,11 @@ struct proc_dir_entry * proc_create(const char * name,umode_t mode,struct proc_d
 }
 
 
-extern void rcu_irq_enter(void);
-void rcu_irq_enter(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-
 #include <linux/rcutree.h>
 
 void rcu_irq_enter_irqson(void)
 {
 	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void rcu_softirq_qs(void);
-void rcu_softirq_qs(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-extern void rcu_irq_exit(void);
-void rcu_irq_exit(void)
-{
-	lx_emul_trace(__func__);
 }
 
 

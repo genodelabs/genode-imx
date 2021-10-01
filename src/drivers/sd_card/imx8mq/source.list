@@ -61,7 +61,6 @@ kernel/sched/clock.c
 kernel/sched/completion.c
 kernel/sched/swait.c
 kernel/sched/wait.c
-kernel/softirq.c
 kernel/time/clockevents.c
 kernel/time/clocksource.c
 kernel/time/hrtimer.c

@@ -344,15 +344,6 @@ void dpm_sysfs_remove(struct device * dev)
 }
 
 
-#include <linux/smpboot.h>
-
-int smpboot_register_percpu_thread(struct smp_hotplug_thread *plug_thread)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
 #include <linux/blkdev.h>
 
 int fsync_bdev(struct block_device * bdev)

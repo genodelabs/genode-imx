@@ -377,6 +377,14 @@ const struct iommu_ops * of_iommu_configure(struct device * dev,
 int oops_in_progress = 0;		/* If set, an oops, panic(), BUG() or die() is in progress */
 
 
+#include <asm/pgtable.h>
+
+pgprot_t pgprot_writecombine(pgprot_t prot)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/pinctrl/devinfo.h>
 
 int pinctrl_bind_pins(struct device * dev)
@@ -517,15 +525,6 @@ int simple_pin_fs(struct file_system_type * type, struct vfsmount ** mount, int 
 void simple_release_fs(struct vfsmount ** mount,int * count)
 {
 	kfree(*mount);
-}
-
-
-#include <linux/smpboot.h>
-
-int smpboot_register_percpu_thread(struct smp_hotplug_thread *plug_thread)
-{
-	lx_emul_trace(__func__);
-	return 0;
 }
 
 

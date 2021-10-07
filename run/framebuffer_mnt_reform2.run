@@ -148,7 +148,7 @@ install_config {
 				        parent="video_pll1_clk"
 				        rate="118800000"
 				        driver_name="pix"/>
-				<clock  name="video2_pll2_clk"
+				<clock  name="video_pll2_clk"
 				        parent="27m_ref_clk"
 				        driver_name="pll_src"/>
 				<clock  name="27m_ref_clk"

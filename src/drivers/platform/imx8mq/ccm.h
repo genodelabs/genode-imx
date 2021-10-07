@@ -257,7 +257,7 @@ struct Driver::Ccm
 	Sccg_pll      system_pll1_clk   { "system_pll1_clk",   sccg_pll_base(0),    tree };
 	Sccg_pll      system_pll2_clk   { "system_pll2_clk",   sccg_pll_base(1),    tree };
 	Sccg_pll      system_pll3_clk   { "system_pll3_clk",   sccg_pll_base(2),    tree };
-	Sccg_pll      video_pll2_clk    { "video2_pll2_clk",   sccg_pll_base(3),    tree };
+	Sccg_pll      video_pll2_clk    { "video_pll2_clk",    sccg_pll_base(3),    tree };
 	Sccg_pll      dram_pll_clk      { "dram_pll_clk",      sccg_pll_base(4),    tree };
 
 	Fixed_divider system_pll1_div20 { "system_pll1_div20", system_pll1_clk, 20, tree };

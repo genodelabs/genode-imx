@@ -370,17 +370,6 @@ void Driver::Ccm::Gate::disable()
 
 Driver::Ccm::Ccm(Genode::Env & env) : env(env)
 {
-	//FIXME: add beyond initialization code,
-	//       when all drivers use the new platform driver
-	//       Until now, the disabling of certain clocks will harm
-	//       drivers not claiming it resources from here
-#if 0
-	video_pll1_clk.enable();
-
-	/* set VIDEO PLL */
-	video_pll1_clk.set_parent(m27_ref_clk.name());
-	video_pll1_clk.set_rate(593999999);
-
 	audio_pll1_clk.disable();
 	audio_pll2_clk.disable();
 	video_pll1_clk.disable();
@@ -477,23 +466,7 @@ Driver::Ccm::Ccm(Genode::Env & env) : env(env)
 	old_mipi_dsi_esc_rx_clk_root.disable();
 	display_hdmi_clk_root.disable();
 
-	/* set certain reference clocks */
-	ahb_clk_root.set_parent("system_pll1_div6");
-	nand_usdhc_bus_clk_root.set_parent("system_pll1_div3");
-	audio_ahb_clk_root.set_parent("system_pll2_div2");
-	pcie1_ctrl_clk_root.set_parent("system_pll2_div5");
-	pcie1_phy_clk_root.set_parent("system_pll2_div10");
-	pcie2_ctrl_clk_root.set_parent("system_pll2_div5");
-	pcie2_phy_clk_root.set_parent("system_pll2_div10");
-	mipi_csi1_core_clk_root.set_parent("system_pll1_div3");
-	mipi_csi1_phy_ref_clk_root.set_parent("system_pll2_clk");
-	mipi_csi1_esc_clk_root.set_parent("system_pll1_clk");
-	mipi_csi2_core_clk_root.set_parent("system_pll1_div3");
-	mipi_csi2_phy_ref_clk_root.set_parent("system_pll2_clk");
-	mipi_csi2_esc_clk_root.set_parent("system_pll1_clk");
-
 	/* increase NOC clock for better DDR performance */
 	noc_clk_root.set_parent("system_pll1_clk");
 	noc_clk_root.set_rate(800000000);
-#endif
 }

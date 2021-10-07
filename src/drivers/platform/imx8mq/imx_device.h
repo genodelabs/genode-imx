@@ -108,8 +108,9 @@ struct Driver::Clock_update_policy
 
 	static bool element_matches_xml_node(Element const & clock, Genode::Xml_node node)
 	{
-		Element::Name name = node.attribute_value("name", Element::Name());
-		return name == clock.name;
+		Element::Name name        = node.attribute_value("name", Element::Name());
+		Element::Name driver_name = node.attribute_value("driver_name", Element::Name());
+		return name == clock.name && driver_name == clock.driver_name;
 	}
 
 	static bool node_is_element(Genode::Xml_node node)

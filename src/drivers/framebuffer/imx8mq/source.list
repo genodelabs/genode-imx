@@ -1,3 +1,4 @@
+arch/arm64/boot/dts/freescale/imx8mq-evk.dts
 arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
 arch/arm64/lib/memchr.S
 arch/arm64/lib/memcmp.S
@@ -61,6 +62,7 @@ kernel/sched/clock.c
 kernel/sched/completion.c
 kernel/sched/swait.c
 kernel/sched/wait.c
+kernel/task_work.c
 kernel/time/clockevents.c
 kernel/time/clocksource.c
 kernel/time/hrtimer.c
@@ -224,8 +226,16 @@ drivers/i2c/i2c-core-base.c
 drivers/i2c/i2c-core-of.c
 drivers/i2c/i2c-core-smbus.c
 drivers/irqchip/irq-imx-irqsteer.c
+drivers/media/cec/core/cec-adap.c
+drivers/media/cec/core/cec-core.c
+drivers/media/cec/core/cec-api.c
+drivers/media/cec/core/cec-notifier.c
 drivers/phy/freescale/phy-fsl-imx8-mipi-dphy.c
 drivers/phy/phy-core.c
 drivers/phy/phy-core-mipi-dphy.c
 drivers/video/fbdev/core/fbcmap.c
+drivers/video/display_timing.c
+drivers/video/hdmi.c
 drivers/video/of_display_timing.c
+drivers/video/of_videomode.c
+drivers/video/videomode.c

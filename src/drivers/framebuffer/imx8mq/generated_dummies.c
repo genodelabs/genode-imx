@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2021-10-01
+ * \date   2021-10-06
  */
 
 #include <lx_emul.h>
@@ -26,14 +26,6 @@ void __check_object_size(const void * ptr,unsigned long n,bool to_user)
 #include <linux/clk-provider.h>
 
 const char * __clk_get_name(const struct clk * clk)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <asm-generic/delay.h>
-
-void __const_udelay(unsigned long xloops)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -299,49 +291,9 @@ void call_srcu(struct srcu_struct * ssp,struct rcu_head * rhp,rcu_callback_t fun
 }
 
 
-#include <media/cec.h>
+#include <linux/cdev.h>
 
-struct cec_adapter * cec_allocate_adapter(const struct cec_adap_ops * ops,void * priv,const char * name,u32 caps,u8 available_las)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <media/cec.h>
-
-void cec_delete_adapter(struct cec_adapter * adap)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <media/cec.h>
-
-void cec_received_msg_ts(struct cec_adapter * adap,struct cec_msg * msg,ktime_t ts)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <media/cec.h>
-
-int cec_register_adapter(struct cec_adapter * adap,struct device * parent)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <media/cec.h>
-
-void cec_transmit_done_ts(struct cec_adapter * adap,u8 status,u8 arb_lost_cnt,u8 nack_cnt,u8 low_drive_cnt,u8 error_cnt,ktime_t ts)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <media/cec.h>
-
-void cec_unregister_adapter(struct cec_adapter * adap)
+void cdev_device_del(struct cdev * cdev,struct device * dev)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -366,14 +318,6 @@ void cfb_fillrect(struct fb_info * p,const struct fb_fillrect * rect)
 #include <linux/fb.h>
 
 void cfb_imageblit(struct fb_info * p,const struct fb_image * image)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/clk.h>
-
-int clk_set_parent(struct clk * clk,struct clk * parent)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -438,6 +382,14 @@ ssize_t debugfs_attr_write(struct file * file,const char __user * buf,size_t len
 #include <linux/debugfs.h>
 
 struct dentry * debugfs_create_bool(const char * name,umode_t mode,struct dentry * parent,bool * value)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/debugfs.h>
+
+void debugfs_create_devm_seqfile(struct device * dev,const char * name,struct dentry * parent,int (* read_fn)(struct seq_file * s,void * data))
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -964,62 +916,6 @@ const u8 guid_index[16] = {};
 #include <linux/capability.h>
 
 bool has_capability_noaudit(struct task_struct * t,int cap)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/hdmi.h>
-
-int hdmi_avi_infoframe_check(struct hdmi_avi_infoframe * frame)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/hdmi.h>
-
-void hdmi_avi_infoframe_init(struct hdmi_avi_infoframe * frame)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/hdmi.h>
-
-ssize_t hdmi_avi_infoframe_pack(struct hdmi_avi_infoframe * frame,void * buffer,size_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/hdmi.h>
-
-int hdmi_drm_infoframe_init(struct hdmi_drm_infoframe * frame)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/hdmi.h>
-
-ssize_t hdmi_drm_infoframe_pack(struct hdmi_drm_infoframe * frame,void * buffer,size_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/hdmi.h>
-
-int hdmi_vendor_infoframe_init(struct hdmi_vendor_infoframe * frame)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/hdmi.h>
-
-ssize_t hdmi_vendor_infoframe_pack(struct hdmi_vendor_infoframe * frame,void * buffer,size_t size)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1775,14 +1671,6 @@ int seq_write(struct seq_file * seq,const void * data,size_t len)
 }
 
 
-#include <linux/freezer.h>
-
-bool set_freezable(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/scatterlist.h>
 
 void sg_free_table(struct sg_table * table)
@@ -2030,22 +1918,6 @@ pid_t task_numa_group_id(struct task_struct * p)
 }
 
 
-#include <linux/task_work.h>
-
-int task_work_add(struct task_struct * task,struct callback_head * work,enum task_work_notify_mode notify)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/task_work.h>
-
-struct callback_head * task_work_cancel(struct task_struct * task,task_work_func_t func)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/clockchips.h>
 
 void tick_broadcast(const struct cpumask * mask)
@@ -2166,6 +2038,14 @@ void unblank_screen(void)
 }
 
 
+#include <linux/fs.h>
+
+void unregister_chrdev_region(dev_t from,unsigned count)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/fb.h>
 
 void unregister_framebuffer(struct fb_info * fb_info)
@@ -2202,14 +2082,6 @@ void vfree(const void * addr)
 }
 
 
-#include <video/videomode.h>
-
-void videomode_from_timing(const struct display_timing * dt,struct videomode * vm)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/mm.h>
 
 pgprot_t vm_get_page_prot(unsigned long vm_flags)
@@ -2228,14 +2100,6 @@ void * vzalloc(unsigned long size)
 
 #include <linux/sched/wake_q.h>
 
-void wake_q_add(struct wake_q_head * head,struct task_struct * task)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sched/wake_q.h>
-
 void wake_q_add_safe(struct wake_q_head * head,struct task_struct * task)
 {
 	lx_emul_trace_and_stop(__func__);
@@ -2245,14 +2109,6 @@ void wake_q_add_safe(struct wake_q_head * head,struct task_struct * task)
 #include <linux/sched/nohz.h>
 
 void wake_up_nohz_cpu(int cpu)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sched/wake_q.h>
-
-void wake_up_q(struct wake_q_head * head)
 {
 	lx_emul_trace_and_stop(__func__);
 }

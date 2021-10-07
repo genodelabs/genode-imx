@@ -21,6 +21,19 @@ unsigned long __must_check __arch_clear_user(void __user *to, unsigned long n)
 }
 
 
+#include <asm-generic/delay.h>
+#include <linux/delay.h>
+
+void __const_udelay(unsigned long xloops)
+{
+	unsigned long usecs = xloops / 0x10C7UL;
+	if (usecs < 100)
+		lx_emul_time_udelay(usecs);
+	else
+		usleep_range(usecs, usecs * 10);
+}
+
+
 #include <linux/serial_core.h>
 
 const struct earlycon_id __earlycon_table[] = { };
@@ -113,6 +126,16 @@ struct inode * alloc_anon_inode(struct super_block * s)
 }
 
 
+#include <linux/fs.h>
+
+int alloc_chrdev_region(dev_t * dev,unsigned baseminor,unsigned count,const char * name)
+{
+	static dev_t counter = 0;
+	*dev = counter++;
+	return 0;
+}
+
+
 #include <linux/dma-mapping.h>
 
 void arch_setup_dma_ops(struct device * dev,u64 dma_base,u64 size,const struct iommu_ops * iommu,bool coherent)
@@ -152,6 +175,32 @@ bool capable(int cap)
 {
 	lx_emul_trace(__func__);
 	return true;
+}
+
+
+#include <linux/cdev.h>
+
+int cdev_device_add(struct cdev * cdev,struct device * dev)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/cdev.h>
+
+void cdev_init(struct cdev * cdev,const struct file_operations * fops)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/clk.h>
+
+int clk_set_parent(struct clk * clk,struct clk * parent)
+{
+	lx_emul_trace(__func__);
+	return 0;
 }
 
 
@@ -333,6 +382,14 @@ struct kobject *kernel_kobj;
 void kernfs_put(struct kernfs_node * kn) { }
 
 
+#include <linux/sched.h>
+
+void kick_process(struct task_struct *p)
+{
+	lx_emul_trace(__func__);
+}
+
+
 #include <linux/kobject.h>
 
 int kobject_uevent_env(struct kobject * kobj,enum kobject_action action,char * envp_ext[])
@@ -500,6 +557,15 @@ void sched_set_fifo(struct task_struct * p)
 }
 
 
+#include <linux/freezer.h>
+
+bool set_freezable(void)
+{
+	lx_emul_trace(__func__);
+	return false;
+}
+
+
 #include <linux/shmem_fs.h>
 
 struct file * shmem_file_setup(const char * name,loff_t size,unsigned long flags)
@@ -561,3 +627,22 @@ void unregister_handler_proc(unsigned int irq,struct irqaction * action)
 {
 	lx_emul_trace(__func__);
 }
+
+
+#include <linux/sched/wake_q.h>
+
+void wake_q_add(struct wake_q_head * head,struct task_struct * task)
+{
+	lx_emul_trace(__func__);
+	wake_up_process(task);
+}
+
+
+#include <linux/sched/wake_q.h>
+
+void wake_up_q(struct wake_q_head * head)
+{
+	lx_emul_trace(__func__);
+}
+
+

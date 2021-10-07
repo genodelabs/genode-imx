@@ -25,3 +25,13 @@
 
 /* fix for warning in drm/bridge/cdns-mhdp-common.h */
 #include <linux/platform_device.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void lx_emul_time_udelay(unsigned long usec);
+
+#ifdef __cplusplus
+}
+#endif

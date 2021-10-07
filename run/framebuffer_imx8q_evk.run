@@ -1,0 +1,130 @@
+assert_spec arm_v8a
+
+create_boot_directory
+import_from_depot [depot_user]/src/[base_src] \
+                  [depot_user]/src/init
+
+build {
+	drivers/framebuffer/imx8mq
+	drivers/gpio/imx/spec/arm_v8
+	drivers/i2c/imx8q_evk
+	drivers/platform/imx8mq
+	test/framebuffer
+}
+
+install_config {
+<config>
+	<parent-provides>
+		<service name="ROM"/>
+		<service name="IRQ"/>
+		<service name="IO_MEM"/>
+		<service name="IO_PORT"/>
+		<service name="PD"/>
+		<service name="RM"/>
+		<service name="CPU"/>
+		<service name="LOG"/>
+	</parent-provides>
+	<default-route>
+		<any-service> <parent/> <any-child/> </any-service>
+	</default-route>
+	<default caps="100"/>
+
+	<start name="timer">
+		<resource name="RAM" quantum="1M"/>
+		<provides><service name="Timer"/></provides>
+	</start>
+
+	<start name="platform_drv" caps="150">
+		<binary name="imx8mq_platform_drv"/>
+		<resource name="RAM" quantum="1M"/>
+		<provides> <service name="Platform"/> </provides>
+		<config>
+
+			<device name="dcss" type="nxp,imx8mq-dcss">
+				<io_mem address="0x32e00000" size="0x2d000"/>
+				<io_mem address="0x32e2f000" size="0x1000"/>
+				<clock  name="display_apb_clk_root"
+				        driver_name="apb"/>
+				<clock  name="display_axi_clk_root"
+				        parent="system_pll1_clk"
+				        rate="800000000"
+				        driver_name="axi"/>
+				<clock  name="display_rtrm_clk_root"
+				        parent="system_pll1_clk"
+				        rate="400000000"
+				        driver_name="rtrm"/>
+				<clock  name="video_pll2_clk"
+				        parent="hdmi_phy_27m_clk"
+				        rate="148500000"
+				        driver_name="pix"/>
+				<clock  name="display_dtrc_clk_root"
+				        driver_name="dtrc"/>
+				<clock  name="video_pll2_clk"
+				        driver_name="pll_src"/>
+				<clock  name="hdmi_phy_27m_clk"
+				        driver_name="pll_phy_ref"/>
+				<clock  name="video_pll1_clk"
+				        parent="25m_ref_clk"
+				        rate="25000000"/>
+				<clock  name="dc_pixel_clk_root"
+				        parent="video_pll1_clk"
+				        rate="594000000"/>
+			</device>
+
+			<device name="hdmi" type="cdn,imx8mq-hdmi">
+				<io_mem address="0x32c00000" size="0x100000"/>
+				<io_mem address="0x32e40000" size="0x40000"/>
+				<irq    number="48"/>
+				<irq    number="57"/>
+			</device>
+
+			<device name="irqsteer" type="fsl,imx-irqsteer">
+				<io_mem address="0x32e2d000" size="0x1000"/>
+				<irq    number="50" />
+				<clock  name="display_apb_clk_root"
+				        driver_name="ipg"/>
+			</device>
+
+			<policy label="fb_drv -> " info="yes">
+				<device name="dcss"/>
+				<device name="hdmi"/>
+				<device name="irqsteer"/>
+			</policy>
+		</config>
+		<route> <any-service> <parent/> </any-service> </route>
+	</start>
+
+	<start name="fb_drv" caps="250">
+		<binary name="imx8mq_fb_drv"/>
+		<resource name="RAM" quantum="40M"/>
+		<route>
+			<service name="ROM" label="dtb"> <parent label="imx8mq_fb_drv-imx8q_evk.dtb"/> </service>
+			<service name="RM">       <parent/> </service>
+			<service name="ROM">      <parent/> </service>
+			<service name="PD">       <parent/> </service>
+			<service name="CPU">      <parent/> </service>
+			<service name="LOG">      <parent/> </service>
+			<service name="Timer">    <child name="timer"/>            </service>
+			<service name="Platform"> <child name="platform_drv"/>     </service>
+			<service name="Capture">  <child name="test-framebuffer"/> </service>
+		</route>
+	</start>
+
+	<start name="test-framebuffer">
+		<resource name="RAM" quantum="10M"/>
+		<provides> <service name="Capture"/> </provides>
+		<config/>
+	</start>
+
+</config>}
+
+build_boot_image {
+	imx_gpio_drv
+	imx8mq_platform_drv
+	imx8mq_fb_drv
+	imx8q_evk_i2c_drv
+	imx8mq_fb_drv-imx8q_evk.dtb
+	test-framebuffer
+}
+
+run_genode_until forever

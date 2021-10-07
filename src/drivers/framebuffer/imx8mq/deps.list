@@ -140,6 +140,8 @@ drivers/gpu/drm/imx/imx-drm.h
 drivers/gpu/drm/mxsfb/mxsfb_drv.h
 drivers/gpu/drm/mxsfb/mxsfb_regs.h
 drivers/i2c/i2c-core.h
+drivers/media/cec/core/cec-pin-priv.h
+drivers/media/cec/core/cec-priv.h
 drivers/of/of_private.h
 include/acpi/acbuffer.h
 include/acpi/acconfig.h
@@ -860,6 +862,7 @@ include/linux/timex.h
 include/linux/topology.h
 include/linux/trace_clock.h
 include/linux/trace_events.h
+include/linux/tracehook.h
 include/linux/tracepoint-defs.h
 include/linux/tracepoint.h
 include/linux/trace_recursion.h
@@ -903,6 +906,8 @@ include/linux/ww_mutex.h
 include/linux/xarray.h
 include/linux/xattr.h
 include/media/cec.h
+include/media/cec-notifier.h
+include/media/cec-pin.h
 include/media/rc-core.h
 include/media/rc-map.h
 include/net/addrconf.h

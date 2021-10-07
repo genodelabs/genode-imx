@@ -166,9 +166,43 @@ void Driver::Ccm::Sccg_pll::set_parent(Name parent)
 }
 
 
-void Driver::Ccm::Sccg_pll::set_rate(unsigned long)
+static inline bool find_sccg_pll_values(unsigned long parent_rate,
+                                        unsigned long rate,
+                                        unsigned    & factor,
+                                        unsigned    & quotient)
 {
-	Genode::error(__func__," not implemented yet!");
+	for (unsigned q = 1; q <= 64; q++)
+		for (unsigned f = 1; f <= 64; f++) {
+			if (rate != (parent_rate * f / q))
+					continue;
+				factor   = f;
+				quotient = q;
+				return true;
+			}
+	return false;
+}
+
+
+void Driver::Ccm::Sccg_pll::set_rate(unsigned long rate)
+{
+	unsigned long parent_rate = _parent().get_rate();
+
+	if (rate == parent_rate) {
+		write<Config_reg_0::Bypass2>(1);
+		return;
+	}
+
+	unsigned f, q;
+	if (!find_sccg_pll_values(parent_rate, rate, f, q)) {
+		Genode::error(__func__," not implemented for rate ", rate);
+		return;
+	}
+
+	write<Config_reg_0::Bypass2>(0);
+	write<Config_reg_0::Bypass1>(1);
+	write<Config_reg_2::Feedback_divf2>(f-1);
+	write<Config_reg_2::Ref_divr2>(q-1);
+	write<Config_reg_2::Output_div_val>(0);
 }
 
 

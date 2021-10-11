@@ -1116,7 +1116,6 @@ kernel/time/timekeeping.h
 kernel/time/timekeeping_internal.h
 kernel/workqueue_internal.h
 lib/crc32defs.h
-lib/crc32table.h
 lib/kstrtox.h
 mm/internal.h
 mm/slab.h

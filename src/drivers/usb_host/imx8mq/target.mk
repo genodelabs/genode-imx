@@ -21,10 +21,10 @@ SRC_CC  += genode_c_api/usb.cc
 vpath genode_c_api/usb.cc $(subst /genode_c_api,,$(call select_from_repositories,src/lib/genode_c_api))
 
 # Driver-specific device-tree binary data
-BOARDS                   := mnt_reform2 imx8mq-evk
+BOARDS                   := mnt_reform2 imx8q_evk
 DTS_PATH(mnt_reform2)    := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
 DTS_EXTRACT(mnt_reform2) := --select usb_dwc3_0 --select usb_dwc3_1
-DTS_PATH(imx8mq-evk)     := arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-DTS_EXTRACT(imx8mq-evk)  := --select usb_dwc3_1
+DTS_PATH(imx8q_evk)      := arch/arm64/boot/dts/freescale/imx8mq-evk.dts
+DTS_EXTRACT(imx8q_evk)   := --select usb_dwc3_1
 
 include $(REP_DIR)/src/drivers/linux_mnt_reform2_drv_target.inc

@@ -339,23 +339,7 @@ bool capable(int cap)
 
 #include <linux/cdev.h>
 
-int cdev_device_add(struct cdev * cdev,struct device * dev)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/cdev.h>
-
 void cdev_device_del(struct cdev * cdev,struct device * dev)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/cdev.h>
-
-void cdev_init(struct cdev * cdev,const struct file_operations * fops)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -846,14 +830,6 @@ int io_schedule_prepare(void)
 }
 
 
-#include <linux/sched.h>
-
-long __sched io_schedule_timeout(long timeout)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/ioport.h>
 
 struct resource iomem_resource;
@@ -949,14 +925,6 @@ void kmsg_dump(enum kmsg_dump_reason reason)
 #include <linux/kobject.h>
 
 int kobject_synth_uevent(struct kobject * kobj,const char * buf,size_t count)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/kobject.h>
-
-int kobject_uevent_env(struct kobject * kobj,enum kobject_action action,char * envp_ext[])
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1860,14 +1828,6 @@ const u8 uuid_index[16] = {};
 
 #include <linux/sched/wake_q.h>
 
-void wake_q_add(struct wake_q_head * head,struct task_struct * task)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sched/wake_q.h>
-
 void wake_q_add_safe(struct wake_q_head * head,struct task_struct * task)
 {
 	lx_emul_trace_and_stop(__func__);
@@ -1877,29 +1837,6 @@ void wake_q_add_safe(struct wake_q_head * head,struct task_struct * task)
 #include <linux/sched/nohz.h>
 
 void wake_up_nohz_cpu(int cpu)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sched/wake_q.h>
-
-void wake_up_q(struct wake_q_head * head)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/pm_wakeup.h>
-
-void wakeup_source_unregister(struct wakeup_source * ws)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void wbt_set_write_cache(struct request_queue * q,bool write_cache_on);
-void wbt_set_write_cache(struct request_queue * q,bool write_cache_on)
 {
 	lx_emul_trace_and_stop(__func__);
 }

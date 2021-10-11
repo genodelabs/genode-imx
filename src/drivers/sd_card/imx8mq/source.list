@@ -1,3 +1,4 @@
+arch/arm64/boot/dts/freescale/imx8mq-evk.dts
 arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
 arch/arm64/lib/memchr.S
 arch/arm64/lib/memcmp.S
@@ -127,6 +128,7 @@ block/blk-mq.c
 block/blk-rq-qos.c
 block/blk-settings.c
 block/blk-timeout.c
+block/blk-wbt.c
 block/bounce.c
 block/elevator.c
 block/genhd.c

@@ -909,6 +909,7 @@ include/trace/events/power.h
 include/trace/events/regulator.h
 include/trace/events/sched.h
 include/trace/events/timer.h
+include/trace/events/wbt.h
 include/trace/events/workqueue.h
 include/trace/perf.h
 include/trace/syscall.h

@@ -23,14 +23,6 @@ int ___ratelimit(struct ratelimit_state * rs,const char * func)
 }
 
 
-#include <asm-generic/delay.h>
-
-void __const_udelay(unsigned long xloops)
-{
-	lx_emul_time_udelay(xloops / 0x10C7UL);
-}
-
-
 #include <linux/cpuhotplug.h>
 
 int __cpuhp_state_add_instance(enum cpuhp_state state,struct hlist_node * node,bool invoke)
@@ -107,16 +99,6 @@ void __pm_runtime_use_autosuspend(struct device * dev,bool use)
 void add_interrupt_randomness(int irq,int irq_flags)
 {
 	lx_emul_trace(__func__);
-}
-
-
-#include <linux/fs.h>
-
-int alloc_chrdev_region(dev_t * dev,unsigned baseminor,unsigned count,const char * name)
-{
-	static dev_t counter = 0;
-	*dev = counter++;
-	return 0;
 }
 
 
@@ -280,16 +262,26 @@ void blkdev_put(struct block_device * bdev,fmode_t mode)
 }
 
 
-extern int cache_line_size(void);
-int cache_line_size(void)
-{
-	return 128;
-}
-
-
 #include <linux/rcupdate.h>
 
 void call_rcu(struct rcu_head * head,rcu_callback_t func)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/cdev.h>
+
+int cdev_device_add(struct cdev * cdev,struct device * dev)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/cdev.h>
+
+void cdev_init(struct cdev * cdev,const struct file_operations * fops)
 {
 	lx_emul_trace(__func__);
 }
@@ -394,6 +386,15 @@ void kvfree_call_rcu(struct rcu_head * head,rcu_callback_t func)
 }
 
 
+#include <linux/kobject.h>
+
+int kobject_uevent_env(struct kobject * kobj,enum kobject_action action,char * envp_ext[])
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
 #include <linux/leds.h>
 
 int led_classdev_register_ext(struct device * parent,struct led_classdev * led_cdev,struct led_init_data * init_data)
@@ -443,27 +444,6 @@ void mmc_remove_host_debugfs(struct mmc_host * host)
 {
 	lx_emul_trace(__func__);
 }
-
-
-#include <linux/nodemask.h>
-
-nodemask_t node_states[NR_NODE_STATES] __read_mostly = {
-	[N_POSSIBLE] = NODE_MASK_ALL,
-	[N_ONLINE] = { { [0] = 1UL } },
-#ifndef CONFIG_NUMA
-	[N_NORMAL_MEMORY] = { { [0] = 1UL } },
-#ifdef CONFIG_HIGHMEM
-	[N_HIGH_MEMORY] = { { [0] = 1UL } },
-#endif
-	[N_MEMORY] = { { [0] = 1UL } },
-	[N_CPU] = { { [0] = 1UL } },
-#endif /* NUMA */
-};
-
-
-#include <linux/nodemask.h>
-
-unsigned int nr_node_ids = MAX_NUMNODES;
 
 
 #include <linux/clk/clk-conf.h>
@@ -677,10 +657,26 @@ DEFINE_PER_CPU(struct vm_event_state, vm_event_states) = {{0}};
 EXPORT_PER_CPU_SYMBOL(vm_event_states);
 
 
+#include <linux/sched/wake_q.h>
+
+void wake_up_q(struct wake_q_head * head)
+{
+	lx_emul_trace(__func__);
+}
+
+
 #include <linux/pm_wakeup.h>
 
 struct wakeup_source * wakeup_source_register(struct device * dev,const char * name)
 {
 	lx_emul_trace(__func__);
 	return NULL;
+}
+
+
+#include <linux/pm_wakeup.h>
+
+void wakeup_source_unregister(struct wakeup_source * ws)
+{
+	lx_emul_trace(__func__);
 }

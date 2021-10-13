@@ -1,19 +1,20 @@
 diff --git a/board/boundary/nitrogen8m_som/nitrogen8m_som.c b/board/boundary/nitrogen8m_som/nitrogen8m_som.c
-index 69775d5ea6..867688e222 100644
+index 89ebf8e08b..3269cdccee 100644
 --- a/board/boundary/nitrogen8m_som/nitrogen8m_som.c
 +++ b/board/boundary/nitrogen8m_som/nitrogen8m_som.c
-@@ -336,8 +336,7 @@ static void set_env_vars(void)
- 	env_set("bootcmd", "ext4load mmc 0 ${loadaddr} /Image; ext4load mmc 0 ${fdt_addr} /imx8mq-mnt-reform2.dtb; booti ${loadaddr} - ${fdt_addr}");
- #else
- 	// boot normal system from SD card and start /sbin/reform-init
--	env_set("bootargs", "noinitrd root=/dev/mmcblk1p1 rootwait rw console=ttymxc0,115200 console=tty1 cma=512M pci=nomsi init=/sbin/reform-init");
--	env_set("bootcmd", "ext4load mmc 1 ${loadaddr} /Image; ext4load mmc 1 ${fdt_addr} /imx8mq-mnt-reform2.dtb; booti ${loadaddr} - ${fdt_addr}");
-+	env_set("bootcmd", "ext4load mmc 1 0x51000000 /uImage; ext4load mmc 1 0x50000000 /dtb; bootm 0x51000000 - 0x50000000");
- #endif
- 
- 	env_set("bootdelay", "1");
+@@ -335,6 +335,10 @@ static void set_env_vars(void)
+ 	env_set("fdt_addr", "0x50000000");
+ #ifdef MNTREFORM_BOOT_RISCOS
+ 	env_set("bootcmd", "usb start; usb reset; ext4load mmc 1 ${loadaddr} /RISCOSIMX8M; go ${loadaddr} 32");
++#elif MNTREFORM_BOOT_GENODE
++	env_set("bootcmd", "ext4load mmc 1 0x51000000 /uImage; bootm start 0x51000000; bootm loados; bootm go");
++#elif MNTREFORM_BOOT_GENODE_FROM_EMMC
++	env_set("bootcmd", "ext4load mmc 0 0x51000000 /uImage; bootm start 0x51000000; bootm loados; bootm go");
+ #elif MNTREFORM_BOOT_EMMC
+ 	// boot rescue system from eMMC
+ 	env_set("bootargs", "noinitrd root=/dev/mmcblk0p1 rootwait rw console=ttymxc0,115200 console=tty1 cma=512M pci=nomsi init=/sbin/reform-init");
 diff --git a/common/bootm.c b/common/bootm.c
-index e517d9f118..e210e80123 100644
+index e517d9f118..a349bbb6a3 100644
 --- a/common/bootm.c
 +++ b/common/bootm.c
 @@ -31,7 +31,7 @@
@@ -21,25 +22,7 @@ index e517d9f118..e210e80123 100644
  #ifndef CONFIG_SYS_BOOTM_LEN
  /* use 8MByte as default max gunzip size */
 -#define CONFIG_SYS_BOOTM_LEN	0x800000
-+#define CONFIG_SYS_BOOTM_LEN   0x4000000
++#define CONFIG_SYS_BOOTM_LEN	0x4000000
  #endif
  
  #define IH_INITRD_ARCH IH_ARCH_DEFAULT
-@@ -254,7 +254,7 @@ int bootm_find_images(int flag, int argc, char * const argv[])
- 		return 1;
- 	}
- 
--#if IMAGE_ENABLE_OF_LIBFDT
-+#if 0
- 	/* find flattened device tree */
- 	ret = boot_get_fdt(flag, argc, argv, IH_ARCH_DEFAULT, &images,
- 			   &images.ft_addr, &images.ft_len);
-@@ -527,7 +527,7 @@ ulong bootm_disable_interrupts(void)
- # endif
- #endif
- 
--#if defined(CONFIG_CMD_USB)
-+#if 0
- 	/*
- 	 * turn off USB to prevent the host controller from writing to the
- 	 * SDRAM while Linux is booting. This could happen (at least for OHCI

@@ -30,7 +30,6 @@ proc run_image {elf_img} {
 	#
 	# Build ext2 image
 	#
-	exec cp u-boot/mnt_reform2/arch/arm/dts/imx8mq-nitrogen8m_som.dtb [run_dir]/ext2/dtb
 	set size_img [expr [regsub {\s.*} [exec du -b [run_dir]/ext2] {}]]
 	set disk_size_kb [expr (($size_img / 1024) + 1800)]
 	set part_offset [expr (4 * 1024 * 1024)]

@@ -3,8 +3,8 @@ VERSION := 2
 
 DOWNLOADS := reform2_uboot.git
 
-URL(reform2_uboot) := https://source.mntmn.com/MNT/reform-boundary-uboot.git
+URL(reform2_uboot) := https://source.mnt.re/reform/reform-boundary-uboot.git
 DIR(reform2_uboot) := uboot
-REV(reform2_uboot) := 46feaf0b92d91c866d2cfbf560bb4ecb2e4084e2
+REV(reform2_uboot) := bdcdce7434b9db19aabd59181014f24d66af0db8
 PATCHES            := patches/uboot.patch
 PATCH_OPT          := -p1 --directory=uboot

@@ -1,0 +1,11 @@
+_/raw/drivers_managed-imx8q_evk
+_/src/event_filter
+_/src/imx8mq_fb_drv
+_/src/imx8mq_platform_drv
+_/src/imx8mq_sd_card_drv
+_/src/imx8mq_usb_host_drv
+_/src/report_rom
+_/src/rom_filter
+_/src/rom_reporter
+_/src/usb_block_drv
+_/src/usb_hid_drv

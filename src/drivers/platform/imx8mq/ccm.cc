@@ -372,16 +372,10 @@ Driver::Ccm::Ccm(Genode::Env & env) : env(env)
 {
 	audio_pll1_clk.disable();
 	audio_pll2_clk.disable();
-	video_pll1_clk.disable();
 	gpu_pll_clk.disable();
 	vpu_pll_clk.disable();
 	system_pll3_clk.disable();
 	video_pll2_clk.disable();
-
-	usb_ctrl1_gate.disable();
-	usb_ctrl2_gate.disable();
-	usb_phy1_gate.disable();
-	usb_phy2_gate.disable();
 
 	/* turn off all unnecessary root clocks */
 	arm_m4_clk_root.disable();

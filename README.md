@@ -10,7 +10,7 @@ To use it, you first need to obtain a clone of Genode:
 
 Now, clone the _genode-imx.git_ repository to _genode/repos/imx_:
 
-! git clone https://github.com/nfeske/genode-imx.git genode/repos/imx
+! git clone https://github.com/skalk/genode-imx.git genode/repos/imx
 
 For enabling the board support, adjust the build-directory configuration
 _etc/build.conf_ by adding the following line to the 'REPOSITORIES'

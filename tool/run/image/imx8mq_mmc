@@ -5,7 +5,7 @@ proc run_image {elf_img} {
 
 	set sgdisk [installed_command sgdisk]
 
-	build { u-boot }
+	build { u-boot/[board] }
 
 	exec mkdir -p [run_dir]/ext2
 
@@ -50,7 +50,7 @@ proc run_image {elf_img} {
 	#
 	# Install bootloader
 	#
-	exec dd if=u-boot/mnt_reform2/flash.bin of=[run_dir].img conv=notrunc bs=1k seek=33 2>/dev/null
+	exec dd if=u-boot/[board]/flash.bin of=[run_dir].img conv=notrunc bs=1k seek=33 2>/dev/null
 
 	#
 	# Cleanup

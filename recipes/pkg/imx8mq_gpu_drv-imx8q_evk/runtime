@@ -1,0 +1,14 @@
+<runtime ram="256M" caps="500" binary="imx8mq_gpu_drv">
+
+	<requires> <timer/> <platform/> </requires>
+
+	<provides> <gpu/> </provides>
+
+	<config dtb="imx8mq_gpu_drv-imx8q_evk.dtb"/>
+
+	<content>
+		<rom label="imx8mq_gpu_drv"/>
+		<rom label="imx8mq_gpu_drv-imx8q_evk.dtb"/>
+	</content>
+
+</runtime>

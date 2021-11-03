@@ -117,6 +117,31 @@ struct Driver::Ccm
 	};
 
 
+	struct Pllout_monitor : Mmio
+	{
+		struct Config : Register<0x0, 32>
+		{
+			struct Ref_sel : Bitfield<0,4> {
+				enum Ref_clk {
+					REF_CLK_25M, REF_CLK_27M, HDMI_PHY_27M, CLK_P_N,
+					OSC_32K, AUDIO_PLL1, AUDIO_PLL2, GPU_PLL, VPU_PLL,
+					VIDEO_PLL1, ARM_PLL, SYS_PLL1, SYS_PLL2, SYS_PLL3,
+					VIDEO_PLL2, DRAM_PLL
+				};
+			};
+
+			struct Enable : Bitfield<4,1> {};
+		};
+
+		struct Sccg_divider : Register<0x8, 32>
+		{
+			struct System_pll_1 : Bitfield<0, 3> {};
+		};
+
+		Pllout_monitor(addr_t const base) : Mmio(base) {};
+	};
+
+
 	class Root_clock : public Clock, Mmio
 	{
 		struct Target_reg : Register<0x0, 32>
@@ -259,6 +284,8 @@ struct Driver::Ccm
 	Sccg_pll      system_pll3_clk   { "system_pll3_clk",   sccg_pll_base(2),    tree };
 	Sccg_pll      video_pll2_clk    { "video_pll2_clk",    sccg_pll_base(3),    tree };
 	Sccg_pll      dram_pll_clk      { "dram_pll_clk",      sccg_pll_base(4),    tree };
+
+	Pllout_monitor pllout { (addr_t)ccm_analog_regs.local_addr<const void>() + 0x74  };
 
 	Fixed_divider system_pll1_div20 { "system_pll1_div20", system_pll1_clk, 20, tree };
 	Fixed_divider system_pll1_div10 { "system_pll1_div10", system_pll1_clk, 10, tree };

@@ -463,4 +463,8 @@ Driver::Ccm::Ccm(Genode::Env & env) : env(env)
 	/* increase NOC clock for better DDR performance */
 	noc_clk_root.set_parent("system_pll1_clk");
 	noc_clk_root.set_rate(800000000);
+
+	pllout.write<Pllout_monitor::Config::Ref_sel>(Pllout_monitor::Config::Ref_sel::SYS_PLL1);
+	pllout.write<Pllout_monitor::Sccg_divider::System_pll_1>(0b111);
+	pllout.write<Pllout_monitor::Config::Enable>(1);
 }

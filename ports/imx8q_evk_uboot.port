@@ -1,6 +1,6 @@
 LICENSE       := GPLv2
 VERSION       := 2
-DOWNLOADS     := uboot.archive atf.archive mkimage.archive firmware.file custom_patches
+DOWNLOADS     := uboot.archive atf.archive mkimage.archive firmware.file
 
 URL(uboot)    := https://github.com/alex-ab/uboot-imx/tarball/85bdcc7
 NAME(uboot)   := uboot.tgz
@@ -23,5 +23,5 @@ URL(firmware) := https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-8.1.bin
 SHA(firmware) := d6a1d8dc3ce8f2e928bc6b58c7d583126abfd14d8ab61a2d8ebd760a898b5195
 DIR(firmware  := firmware
 
-custom_patches: firmware.file
-	mkdir firmware; cd firmware; sh ../firmware-imx-8.1.bin --auto-accept
+default: firmware.file
+	$(VERBOSE)rm -rf firmware; mkdir -p firmware; cd firmware; sh ../firmware-imx-8.1.bin --auto-accept

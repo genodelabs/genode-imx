@@ -1,3 +1,5 @@
+REQUIRES = hw
+
 REP_INC_DIR += src/core/board/imx8q_evk
 REP_INC_DIR += src/core/spec/arm/virtualization
 

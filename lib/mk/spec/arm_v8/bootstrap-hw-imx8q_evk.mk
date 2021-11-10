@@ -1,3 +1,5 @@
+REQUIRES = hw
+
 REP_INC_DIR += src/bootstrap/board/imx8q_evk
 
 SRC_CC  += bootstrap/board/imx8q_evk/platform.cc

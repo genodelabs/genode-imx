@@ -1,0 +1,5 @@
+proc imx8mq_gpu_dtb_file {} {
+	return imx8mq_gpu_drv-imx8q_evk.dtb
+}
+
+source ${genode_dir}/repos/imx/run/imx8mq_gpu_drv.inc

@@ -23,6 +23,57 @@ int ___ratelimit(struct ratelimit_state * rs,const char * func)
 }
 
 
+struct bio;
+extern void __bio_crypt_advance(struct bio *bio, unsigned int bytes);
+void __bio_crypt_advance(struct bio *bio, unsigned int bytes)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/blk-crypto.h>
+
+int __bio_crypt_clone(struct bio *dst, struct bio *src, gfp_t gfp_mask)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern void __bio_crypt_free_ctx(struct bio *bio);
+void __bio_crypt_free_ctx(struct bio *bio)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern bool __blk_crypto_bio_prep(struct bio **bio_ptr);
+bool __blk_crypto_bio_prep(struct bio **bio_ptr)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern void __blk_crypto_free_request(struct request *rq);
+void __blk_crypto_free_request(struct request *rq)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern blk_status_t __blk_crypto_init_request(struct request *rq);
+blk_status_t __blk_crypto_init_request(struct request *rq)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int __blk_crypto_rq_bio_prep(struct request *rq, struct bio *bio, gfp_t gfp_mask);
+int __blk_crypto_rq_bio_prep(struct request *rq, struct bio *bio, gfp_t gfp_mask)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/cpuhotplug.h>
 
 int __cpuhp_state_add_instance(enum cpuhp_state state,struct hlist_node * node,bool invoke)

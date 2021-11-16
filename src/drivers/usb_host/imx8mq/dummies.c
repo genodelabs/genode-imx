@@ -71,6 +71,14 @@ int __pm_runtime_suspend(struct device * dev,int rpmflags)
 }
 
 
+#include <asm-generic/delay.h>
+
+void __udelay(unsigned long usecs)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/rwlock_api_smp.h>
 
 unsigned long __lockfunc _raw_read_lock_irqsave(rwlock_t * lock)
@@ -101,6 +109,14 @@ void add_device_randomness(const void * buf,unsigned int size)
 void add_interrupt_randomness(int irq,int irq_flags)
 {
 	lx_emul_trace(__func__);
+}
+
+
+#include <linux/gfp.h>
+
+struct page *alloc_pages_current(gfp_t gfp, unsigned order)
+{
+	lx_emul_trace_and_stop(__func__);
 }
 
 

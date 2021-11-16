@@ -136,6 +136,14 @@ int alloc_chrdev_region(dev_t * dev,unsigned baseminor,unsigned count,const char
 }
 
 
+#include <linux/gfp.h>
+
+struct page *alloc_pages_current(gfp_t gfp, unsigned order)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/dma-mapping.h>
 
 void arch_setup_dma_ops(struct device * dev,u64 dma_base,u64 size,const struct iommu_ops * iommu,bool coherent)
@@ -192,6 +200,22 @@ int cdev_device_add(struct cdev * cdev,struct device * dev)
 void cdev_init(struct cdev * cdev,const struct file_operations * fops)
 {
 	lx_emul_trace(__func__);
+}
+
+
+#include <drm/bridge/cdns-mhdp-common.h>
+
+int cdns_dp_bind(struct platform_device *pdev, struct drm_encoder *encoder, struct cdns_mhdp_device *mhdp)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <drm/bridge/cdns-mhdp-common.h>
+
+void cdns_dp_unbind(struct device *dev)
+{
+	lx_emul_trace_and_stop(__func__);
 }
 
 

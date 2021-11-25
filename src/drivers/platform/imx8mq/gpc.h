@@ -71,7 +71,10 @@ struct Gpc
 			return;
 		}
 
-		env.pd().managing_system(state);
+		state = env.pd().managing_system(state);
+
+		if (state.r[0] != 0)
+			Genode::error("Cannot enable power domain ", name.string());
 	}
 
 	void disable(Genode::String<64> name)
@@ -87,7 +90,10 @@ struct Gpc
 			return;
 		}
 
-		env.pd().managing_system(state);
+		state = env.pd().managing_system(state);
+
+		if (state.r[0] != 0)
+			Genode::error("Cannot disable power domain ", name.string());
 	}
 
 	Gpc(Genode::Env & env) : env(env)

@@ -172,7 +172,7 @@ append config {
 			</service>
 			<service name="Timer"> <child name="timer"/> </service>
 			<service name="Gui"> <child name="nitpicker"/> </service>
-			<service name="Platform"> <child name="drivers"/> </service>
+			<service name="Platform"> <child name="drivers" label="runtime -> gpu"/> </service>
 			<any-service> <parent/> </any-service>
 		</route>
 	</start>

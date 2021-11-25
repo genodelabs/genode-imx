@@ -22,7 +22,7 @@ install_config {
 	</parent-provides>
 	<default caps="100"/>
 
-	<start name="imx8mq_platform_drv">
+	<start name="imx8mq_platform_drv" managing_system="yes">
 		<resource name="RAM" quantum="1M"/>
 		<provides><service name="Platform"/></provides>
 		<config>

@@ -261,22 +261,6 @@ void add_interrupt_randomness(int irq,int irq_flags)
 }
 
 
-#include <linux/rcupdate.h>
-
-void call_rcu(struct rcu_head * head,rcu_callback_t func)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/rcutree.h>
-
-void kvfree_call_rcu(struct rcu_head * head,rcu_callback_t func)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/vmalloc.h>
 
 void vunmap(const void * addr)

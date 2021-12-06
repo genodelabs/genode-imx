@@ -17,13 +17,13 @@
  ** Frac_pll immplementation **
  ******************************/
 
-void Driver::Ccm::Frac_pll::disable()
+void Driver::Ccm::Frac_pll::_disable()
 {
 	write<Config_reg_0::Power_down>(1);
 }
 
 
-void Driver::Ccm::Frac_pll::enable()
+void Driver::Ccm::Frac_pll::_enable()
 {
 	if (!read<Config_reg_0::Power_down>()) return;
 
@@ -35,22 +35,7 @@ void Driver::Ccm::Frac_pll::enable()
 }
 
 
-Driver::Clock & Driver::Ccm::Frac_pll::_parent() const
-{
-	Name pname;
-
-	switch (read<Config_reg_0::Ref_sel>()) {
-		case Config_reg_0::Ref_sel::REF_CLK_25M:   pname = "25m_ref_clk";      break;
-		case Config_reg_0::Ref_sel::REF_CLK_27M:   pname = "27m_ref_clk";      break;
-		case Config_reg_0::Ref_sel::HDMI_PHY_27M:  pname = "hdmi_phy_27m_clk"; break;
-		case Config_reg_0::Ref_sel::CLK_P_N:       pname = "no_clk";           break;
-	};
-
-	return static_cast<Clock_tree_element*>(_tree.first()->find_by_name(pname.string()))->object();
-};
-
-
-void Driver::Ccm::Frac_pll::set_parent(Name parent)
+void Driver::Ccm::Frac_pll::parent(Name parent)
 {
 	if (parent == "25m_ref_clk") {
 		write<Config_reg_0::Ref_sel>(Config_reg_0::Ref_sel::REF_CLK_25M);
@@ -68,14 +53,17 @@ void Driver::Ccm::Frac_pll::set_parent(Name parent)
 }
 
 
-void Driver::Ccm::Frac_pll::set_rate(unsigned long rate)
+void Driver::Ccm::Frac_pll::rate(Rate rate)
 {
 	static constexpr uint32_t fixed_frac = 1 << 24;
 
+	uint64_t pr = 0;
+	_parent([&] (Clock & clock) { pr = clock.rate().value; });
+
 	/* we set output div value to fixed value of 2 */
-	uint64_t r        = rate * 2;
-	uint64_t pr       = _parent().get_rate() * 8 /
-	                    (read<Config_reg_0::Refclk_div_value>() + 1);
+	uint64_t r = rate.value * 2;
+	pr         = pr * 8 /
+	             (read<Config_reg_0::Refclk_div_value>() + 1);
 	uint32_t div_int  = (uint32_t)((r / pr) & 0b1111111);
 	uint32_t div_frac = (uint32_t)(((r - div_int * pr) * fixed_frac) / pr);
 
@@ -100,7 +88,7 @@ void Driver::Ccm::Frac_pll::set_rate(unsigned long rate)
 }
 
 
-unsigned long Driver::Ccm::Frac_pll::get_rate() const
+Driver::Clock::Rate Driver::Ccm::Frac_pll::rate() const
 {
 	static constexpr uint32_t fixed_frac = 1 << 24;
 
@@ -114,15 +102,17 @@ unsigned long Driver::Ccm::Frac_pll::get_rate() const
 	uint32_t divff = read<Config_reg_1::Frac_div_ctl>();
 	uint32_t divfi = read<Config_reg_1::Int_div_ctl>();
 
-	uint64_t ref = _parent().get_rate() * 8 / divr;
+	uint64_t ref = 0;
+	_parent([&] (Clock & clock) { ref = clock.rate().value; });
+	ref = ref * 8 / divr;
 
-	return (ref * (divfi + 1) / divq) +
-	       (ref * divff / fixed_frac / divq);
+	return {(ref * (divfi + 1) / divq) +
+	        (ref * divff / fixed_frac / divq)};
 }
 
 
-Driver::Ccm::Frac_pll::Frac_pll(Name name, addr_t const base, Clock_tree & tree)
-: Clock(name, tree), Mmio(base), _tree(tree)
+Driver::Ccm::Frac_pll::Frac_pll(Clocks & clocks, Name name, addr_t const base)
+: Clock(clocks, name), Mmio(base), _clocks(clocks)
 {
 	write<Config_reg_0::Bypass>(0);
 	write<Config_reg_0::Out_enable>(1);
@@ -133,22 +123,7 @@ Driver::Ccm::Frac_pll::Frac_pll(Name name, addr_t const base, Clock_tree & tree)
  ** Sccg_pll immplementation **
  ******************************/
 
-Driver::Clock & Driver::Ccm::Sccg_pll::_parent() const
-{
-	Name pname;
-
-	switch (read<Config_reg_0::Ref_sel>()) {
-		case Config_reg_0::Ref_sel::REF_CLK_25M:   pname = "25m_ref_clk";      break;
-		case Config_reg_0::Ref_sel::REF_CLK_27M:   pname = "27m_ref_clk";      break;
-		case Config_reg_0::Ref_sel::HDMI_PHY_27M:  pname = "hdmi_phy_27m_clk"; break;
-		case Config_reg_0::Ref_sel::CLK_P_N:       pname = "no_clk";           break;
-	};
-
-	return static_cast<Clock_tree_element*>(_tree.first()->find_by_name(pname.string()))->object();
-};
-
-
-void Driver::Ccm::Sccg_pll::set_parent(Name parent)
+void Driver::Ccm::Sccg_pll::parent(Name parent)
 {
 	if (parent == "25m_ref_clk") {
 		write<Config_reg_0::Ref_sel>(Config_reg_0::Ref_sel::REF_CLK_25M);
@@ -183,18 +158,19 @@ static inline bool find_sccg_pll_values(unsigned long parent_rate,
 }
 
 
-void Driver::Ccm::Sccg_pll::set_rate(unsigned long rate)
+void Driver::Ccm::Sccg_pll::rate(Rate rate)
 {
-	unsigned long parent_rate = _parent().get_rate();
+	Rate parent_rate = {0};
+	_parent([&] (Clock & clock) { parent_rate = clock.rate(); });
 
-	if (rate == parent_rate) {
+	if (rate.value == parent_rate.value) {
 		write<Config_reg_0::Bypass2>(1);
 		return;
 	}
 
 	unsigned f, q;
-	if (!find_sccg_pll_values(parent_rate, rate, f, q)) {
-		Genode::error(__func__," not implemented for rate ", rate);
+	if (!find_sccg_pll_values(parent_rate.value, rate.value, f, q)) {
+		Genode::error(__func__," not implemented for rate ", rate.value);
 		return;
 	}
 
@@ -206,7 +182,7 @@ void Driver::Ccm::Sccg_pll::set_rate(unsigned long rate)
 }
 
 
-unsigned long Driver::Ccm::Sccg_pll::get_rate() const
+Driver::Clock::Rate Driver::Ccm::Sccg_pll::rate() const
 {
 	unsigned factor = read<Config_reg_1::Sse>() ? 8 : 2;
 	unsigned divf1  = read<Config_reg_2::Feedback_divf1>() + 1;
@@ -215,21 +191,22 @@ unsigned long Driver::Ccm::Sccg_pll::get_rate() const
 	unsigned divr2  = read<Config_reg_2::Ref_divr2>()      + 1;
 	unsigned divq   = read<Config_reg_2::Output_div_val>() + 1;
 
-	unsigned long parent_rate = _parent().get_rate();
+	unsigned long parent_rate = 0;
+	_parent([&] (Clock & clock) { parent_rate = clock.rate().value; });
 
 	if (read<Config_reg_0::Bypass2>()) {
-		return parent_rate;
+		return {parent_rate};
 	}
 
 	if (read<Config_reg_0::Bypass1>()) {
-		return (parent_rate * divf2) / (divr2 * divq);
+		return {(parent_rate * divf2) / (divr2 * divq)};
 	}
 
-	return parent_rate * factor * divf1 * divf2 / (divr1*divr2*divq);
+	return {parent_rate * factor * divf1 * divf2 / (divr1*divr2*divq)};
 }
 
 
-void Driver::Ccm::Sccg_pll::enable()
+void Driver::Ccm::Sccg_pll::_enable()
 {
 	if (!read<Config_reg_0::Power_down>()) return;
 
@@ -241,7 +218,7 @@ void Driver::Ccm::Sccg_pll::enable()
 }
 
 
-void Driver::Ccm::Sccg_pll::disable()
+void Driver::Ccm::Sccg_pll::_disable()
 {
 	write<Config_reg_0::Power_down>(1);
 }
@@ -251,18 +228,18 @@ void Driver::Ccm::Sccg_pll::disable()
  ** Root_clock immplementation **
  ********************************/
 
-void Driver::Ccm::Root_clock::set_rate(unsigned long rate)
+void Driver::Ccm::Root_clock::rate(Rate rate)
 {
 	uint32_t pre_div   = 0;
 	uint32_t post_div  = 0;
 	int      deviation = (int)(~0U >> 1);
 
 	unsigned long parent_rate =
-		_ref_clks[read<Target_reg::Ref_sel>()].ref.get_rate();
+		_ref_clks[read<Target_reg::Ref_sel>()].ref.rate().value;
 
 	for (unsigned pre = 0; pre < (1<<3); pre++) {
 		for (unsigned post = 0; post < (1<<6); post++) {
-			int diff = (parent_rate / (pre+1)) / (post+1) - rate;
+			int diff = (parent_rate / (pre+1)) / (post+1) - rate.value;
 			if (abs(diff) < abs(deviation)) {
 				pre_div   = pre;
 				post_div  = post;
@@ -276,10 +253,10 @@ void Driver::Ccm::Root_clock::set_rate(unsigned long rate)
 };
 
 
-void Driver::Ccm::Root_clock::set_parent(Name name)
+void Driver::Ccm::Root_clock::parent(Name name)
 {
 	for (unsigned i = 0; i < REF_CLK_MAX; i++) {
-		if (_ref_clks[i].ref.name() == name) {
+		if (_ref_clks[i].ref.name == name) {
 			/**
 			 * enable parent before setting it,
 			 * otherwise the system stalls
@@ -294,17 +271,17 @@ void Driver::Ccm::Root_clock::set_parent(Name name)
 }
 
 
-unsigned long Driver::Ccm::Root_clock::get_rate() const
+Driver::Clock::Rate Driver::Ccm::Root_clock::rate() const
 {
 	unsigned long parent_rate =
-		_ref_clks[read<Target_reg::Ref_sel>()].ref.get_rate();
+		_ref_clks[read<Target_reg::Ref_sel>()].ref.rate().value;
 	unsigned pre  = read<Target_reg::Pre_div>()+1;
 	unsigned post = read<Target_reg::Post_div>()+1;
-	return parent_rate / pre / post;
+	return {parent_rate / pre / post};
 }
 
 
-void Driver::Ccm::Root_clock::enable()
+void Driver::Ccm::Root_clock::_enable()
 {
 	/* enable the parent clock */
 	_ref_clks[read<Target_reg::Ref_sel>()].ref.enable();
@@ -312,7 +289,7 @@ void Driver::Ccm::Root_clock::enable()
 }
 
 
-void Driver::Ccm::Root_clock::disable()
+void Driver::Ccm::Root_clock::_disable()
 {
 	/*
 	 * the parent clock cannot be disabled implictly,
@@ -323,24 +300,24 @@ void Driver::Ccm::Root_clock::disable()
 }
 
 
-/**************************
- ** Gate immplementation **
- **************************/
+/***************************************
+ ** Root_clock_divider implementation **
+ ***************************************/
 
-void Driver::Ccm::Root_clock_divider::set_rate(unsigned long rate)
+void Driver::Ccm::Root_clock_divider::rate(Rate rate)
 {
-	unsigned long div = _parent.get_rate() / rate;
+	unsigned long div = _parent.rate().value / rate.value;
 	if (!div || div > 64) {
-		Genode::error("Cannot set divider ", name(), " to ", div);
+		Genode::error("Cannot set divider ", name, " to ", div);
 		return;
 	}
 	write<Target_reg::Post_div>(div-1);
 }
 
 
-unsigned long Driver::Ccm::Root_clock_divider::get_rate() const
+Driver::Clock::Rate Driver::Ccm::Root_clock_divider::rate() const
 {
-	return _parent.get_rate() / (read<Target_reg::Post_div>()+1);
+	return {_parent.rate().value / (read<Target_reg::Post_div>()+1)};
 };
 
 
@@ -348,7 +325,7 @@ unsigned long Driver::Ccm::Root_clock_divider::get_rate() const
  ** Gate immplementation **
  **************************/
 
-void Driver::Ccm::Gate::enable()
+void Driver::Ccm::Gate::_enable()
 {
 	/* enable the parent clock implictly */
 	_parent.enable();
@@ -356,7 +333,7 @@ void Driver::Ccm::Gate::enable()
 }
 
 
-void Driver::Ccm::Gate::disable()
+void Driver::Ccm::Gate::_disable()
 {
 	/* disable the parent clock implictly */
 	_parent.disable();
@@ -368,7 +345,8 @@ void Driver::Ccm::Gate::disable()
  ** CCM interface **
  *******************/
 
-Driver::Ccm::Ccm(Genode::Env & env) : env(env)
+Driver::Ccm::Ccm(Genode::Env & env, Clocks & clocks)
+	: env(env), clocks(clocks)
 {
 	audio_pll1_clk.disable();
 	audio_pll2_clk.disable();
@@ -461,8 +439,8 @@ Driver::Ccm::Ccm(Genode::Env & env) : env(env)
 	display_hdmi_clk_root.disable();
 
 	/* increase NOC clock for better DDR performance */
-	noc_clk_root.set_parent("system_pll1_clk");
-	noc_clk_root.set_rate(800000000);
+	noc_clk_root.parent("system_pll1_clk");
+	noc_clk_root.rate({800000000});
 
 	pllout.write<Pllout_monitor::Config::Ref_sel>(Pllout_monitor::Config::Ref_sel::SYS_PLL1);
 	pllout.write<Pllout_monitor::Sccg_divider::System_pll_1>(0b111);

@@ -25,5 +25,6 @@ $(CUSTOM_TARGET_DEPS):
 	$(VERBOSE)ln -s $(FWI_CONTRIB_DIR)/firmware-imx-8.1/firmware/ddr/synopsys/lpddr4_pmu_train_1d_imem.bin $(PWD)/$(PRG_REL_DIR)/mkimage/iMX8M/
 	$(VERBOSE)ln -s $(FWI_CONTRIB_DIR)/firmware-imx-8.1/firmware/ddr/synopsys/lpddr4_pmu_train_2d_dmem.bin $(PWD)/$(PRG_REL_DIR)/mkimage/iMX8M/
 	$(VERBOSE)ln -s $(FWI_CONTRIB_DIR)/firmware-imx-8.1/firmware/ddr/synopsys/lpddr4_pmu_train_2d_imem.bin $(PWD)/$(PRG_REL_DIR)/mkimage/iMX8M/
+	$(VERBOSE)echo "#define MKIMAGE_COMMIT 0x1" > $(PWD)/$(PRG_REL_DIR)/mkimage/src/build_info.h
 	$(MAKE) -C $(PWD)/$(PRG_REL_DIR)/mkimage SOC=iMX8M flash_evk
 	$(VERBOSE)cp $(PWD)/$(PRG_REL_DIR)/mkimage/iMX8M/flash.bin $@

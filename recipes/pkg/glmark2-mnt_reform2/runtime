@@ -1,0 +1,95 @@
+<runtime ram="200M" caps="1000" binary="init">
+
+	<requires>
+		<gui/>
+		<timer/>
+		<platform label="gpu"/>
+	</requires>
+
+	<content>
+		<rom label="expat.lib.so"/>
+		<rom label="glapi.lib.so"/>
+		<rom label="glmark2"/>
+		<rom label="glmark2_assets.tar"/>
+		<rom label="imx8mq_gpu_drv"/>
+		<rom label="imx8mq_gpu_drv-mnt-reform2.dtb"/>
+		<rom label="jpeg.lib.so"/>
+		<rom label="ld.lib.so"/>
+		<rom label="libc.lib.so"/>
+		<rom label="libdrm.lib.so"/>
+		<rom label="libm.lib.so"/>
+		<rom label="libpng.lib.so"/>
+		<rom label="init"/>
+		<rom label="mesa.lib.so"/>
+		<rom label="mesa_gpu-etnaviv.lib.so"/>
+		<rom label="stdcxx.lib.so"/>
+		<rom label="vfs.lib.so"/>
+		<rom label="zlib.lib.so"/>
+ 		<rom label="egl.lib.so"/>
+	</content>
+
+	<config ld_verbose="yes">
+
+		<parent-provides>
+			<service name="ROM"/>
+			<service name="PD"/>
+			<service name="RM"/>
+			<service name="CPU"/>
+			<service name="LOG"/>
+			<service name="Platform"/>
+			<service name="Timer"/>
+			<service name="Gui"/>
+		</parent-provides>
+
+		<start name="imx8mq_gpu_drv" caps="300">
+			<resource name="RAM" quantum="76M"/>
+			<provides>
+				<service name="Gpu"/>
+			</provides>
+			<route>
+				<service name="ROM" label="dtb">
+					<parent label="imx8mq_gpu_drv-mnt-reform2.dtb"/>
+				</service>
+				<service name="Platform">
+					<parent label="gpu"/>
+				</service>
+				<any-service> <parent/> </any-service>
+			</route>
+		</start>
+
+		<start name="glmark2" caps="500">
+			<resource name="RAM" quantum="116M"/>
+			<config>
+				<vfs>
+					<dir name="dev"> <log/> </dir>
+					<dir name="data">
+						<tar name="glmark2_assets.tar"/>
+					</dir>
+				</vfs>
+				<libc stdout="/dev/log" stderr="/dev/log"/>
+				<arg value="glmark2"/>
+				<arg value="-b"/>
+				<arg value=":duration=2.0"/>
+				<arg value="-s"/>
+				<arg value="800x600"/>
+				<env key="GALLIUM_HUD" value="fps,draw-calls"/>
+			</config>
+			<route>
+				<service name="Gpu">
+					<child name="imx8mq_gpu_drv"/>
+				</service>
+				<service name="ROM" label="mesa_gpu_drv.lib.so">
+					<parent label="mesa_gpu-etnaviv.lib.so"/>
+				</service>
+				<service name="ROM" label="libEGL.so">
+					<parent label="mesa.lib.so"/>
+				</service>
+				<service name="ROM" label="libGLESv2.so">
+					<parent label="mesa.lib.so"/>
+				</service>
+				<any-service> <parent/> <any-child/> </any-service>
+			</route>
+		</start>
+	</config>
+
+</runtime>

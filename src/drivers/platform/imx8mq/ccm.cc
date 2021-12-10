@@ -230,17 +230,19 @@ void Driver::Ccm::Sccg_pll::_disable()
 
 void Driver::Ccm::Root_clock::rate(Rate rate)
 {
-	uint32_t pre_div   = 0;
-	uint32_t post_div  = 0;
-	int      deviation = (int)(~0U >> 1);
+	uint8_t       pre_div   = 0;
+	uint8_t       post_div  = 0;
+	unsigned long deviation = ~0UL;
 
 	unsigned long parent_rate =
 		_ref_clks[read<Target_reg::Ref_sel>()].ref.rate().value;
 
-	for (unsigned pre = 0; pre < (1<<3); pre++) {
-		for (unsigned post = 0; post < (1<<6); post++) {
-			int diff = (parent_rate / (pre+1)) / (post+1) - rate.value;
-			if (abs(diff) < abs(deviation)) {
+	for (uint8_t pre = 0; deviation && (pre < (1U<<3)); pre++) {
+		for (uint8_t post = 0; deviation && (post < (1U<<6)); post++) {
+			unsigned long diff = (parent_rate / (pre+1)) / (post+1);
+			diff = (diff > rate.value) ? diff - rate.value
+			                           : rate.value - diff;
+			if (diff < deviation) {
 				pre_div   = pre;
 				post_div  = post;
 				deviation = diff;
@@ -306,12 +308,12 @@ void Driver::Ccm::Root_clock::_disable()
 
 void Driver::Ccm::Root_clock_divider::rate(Rate rate)
 {
-	unsigned long div = _parent.rate().value / rate.value;
-	if (!div || div > 64) {
+	uint32_t div = (uint32_t) ((_parent.rate().value / rate.value) - 1);
+	if (div > 64) {
 		Genode::error("Cannot set divider ", name, " to ", div);
 		return;
 	}
-	write<Target_reg::Post_div>(div-1);
+	write<Target_reg::Post_div>(div);
 }
 
 

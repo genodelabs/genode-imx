@@ -75,9 +75,9 @@ struct Gpu::Operation
 	Virtual_address gpu_vaddr;
 	unsigned        mode;
 
-	unsigned long  size;
-	Buffer_id      id;
-	Sequence_number seqno;
+	uint32_t           size;
+	Buffer_id          id;
+	Sequence_number    seqno;
 	Mapping_attributes mapping_attrs;
 
 	int lx_mapping_attrs() const
@@ -525,7 +525,7 @@ extern "C" int run_lx_user_task(void *p)
 			}
 			case OP::WAIT:
 			{
-				uint32_t const fence_id = r.operation.seqno.value;
+				uint32_t const fence_id = (uint32_t) r.operation.seqno.value;
 
 				if (lx_drm_ioctl_etnaviv_wait_fence(args.drm, fence_id))
 					break;
@@ -787,11 +787,16 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 		Genode::Dataspace_capability alloc_buffer(Gpu::Buffer_id id,
 		                                          Genode::size_t size) override
 		{
+			Genode::Dataspace_capability cap { };
+
+			if (size > ~0U) {
+				error("Allocation of buffers > 4G not supported!");
+				return cap;
+			}
+
 			Gpu::Request r = Gpu::Request::create(Gpu::Operation::Type::ALLOC);
 			r.operation.id   = id;
-			r.operation.size = size;
-
-			Genode::Dataspace_capability cap { };
+			r.operation.size = (uint32_t) size;
 
 			auto success = [&] (Gpu::Request const &request) {
 				cap = _buffers.lookup_buffer(request.operation.id);

@@ -22,9 +22,9 @@
 #include <usb.h>
 
 struct usb_find_request {
-	unsigned long       bus;
-	unsigned long       dev;
-	struct usb_device * ret;
+	genode_usb_bus_num_t bus;
+	genode_usb_dev_num_t dev;
+	struct usb_device  * ret;
 };
 
 static int check_usb_device(struct usb_device *usb_dev, void * data)
@@ -35,7 +35,8 @@ static int check_usb_device(struct usb_device *usb_dev, void * data)
 	return 0;
 }
 
-static struct usb_device * find_usb_device(unsigned long bus, unsigned long dev)
+static struct usb_device * find_usb_device(genode_usb_bus_num_t bus,
+                                           genode_usb_dev_num_t dev)
 {
 	struct usb_find_request req = { bus, dev, NULL };
 	usb_for_each_dev(&req, check_usb_device);
@@ -43,7 +44,8 @@ static struct usb_device * find_usb_device(unsigned long bus, unsigned long dev)
 }
 
 
-static struct usb_interface * interface(unsigned long bus, unsigned long dev,
+static struct usb_interface * interface(genode_usb_bus_num_t bus,
+                                        genode_usb_dev_num_t dev,
                                         unsigned index)
 {
 	struct usb_device * udev = find_usb_device(bus, dev);
@@ -61,7 +63,8 @@ static struct usb_interface * interface(unsigned long bus, unsigned long dev,
 }
 
 
-static unsigned config_descriptor(unsigned long bus, unsigned long dev,
+static unsigned config_descriptor(genode_usb_bus_num_t bus,
+                                  genode_usb_dev_num_t dev,
                                   void * dev_desc, void *conf_desc)
 {
 	struct usb_device * udev = find_usb_device(bus, dev);
@@ -79,14 +82,16 @@ static unsigned config_descriptor(unsigned long bus, unsigned long dev,
 }
 
 
-static int alt_settings(unsigned long bus, unsigned long dev, unsigned index)
+static int alt_settings(genode_usb_bus_num_t bus, genode_usb_dev_num_t dev,
+                        unsigned index)
 {
 	struct usb_interface * iface = interface(bus, dev, index);
 	return (iface) ? iface->num_altsetting : -1;
 }
 
 
-static int interface_descriptor(unsigned long bus, unsigned long dev,
+static int interface_descriptor(genode_usb_bus_num_t bus,
+                                genode_usb_dev_num_t dev,
                                 unsigned index, unsigned setting,
                                 void * buf, unsigned long size, int * active)
 {
@@ -103,7 +108,8 @@ static int interface_descriptor(unsigned long bus, unsigned long dev,
 }
 
 
-static int interface_extra(unsigned long bus, unsigned long dev,
+static int interface_extra(genode_usb_bus_num_t bus,
+                           genode_usb_dev_num_t dev,
                            unsigned index, unsigned setting,
                            void * buf, unsigned long size)
 {
@@ -119,7 +125,8 @@ static int interface_extra(unsigned long bus, unsigned long dev,
 }
 
 
-static int endpoint_descriptor(unsigned long bus, unsigned long dev,
+static int endpoint_descriptor(genode_usb_bus_num_t bus,
+                               genode_usb_dev_num_t dev,
                                unsigned iface_num, unsigned setting,
                                unsigned endp, void * buf, unsigned long size)
 {

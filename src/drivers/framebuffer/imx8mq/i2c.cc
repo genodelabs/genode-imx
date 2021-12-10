@@ -27,7 +27,8 @@ static I2c::Connection & i2c()
 
 extern "C" unsigned char lx_emul_i2c_read_byte(unsigned char addr)
 {
-	Transaction t(Message(Message::WRITE, addr), Message(Message::READ, 0));
+	Transaction t(Message(Message::WRITE, addr),
+	              Message(Message::READ, (unsigned char)0U));
 	i2c().transmit(t);
 	return t.value(1).value(0);
 }

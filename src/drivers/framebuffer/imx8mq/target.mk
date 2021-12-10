@@ -18,8 +18,9 @@ CC_OPT_i2c_imx += -DKBUILD_BASENAME='"i2c_imx"'
 CC_OPT_i2c_imx += -DKBUILD_MODNAME='"i2c_imx"'
 
 # Turn off some warnings
-CC_OPT_drivers/gpu/drm/drm_plane_helper    += -Wno-uninitialized
-CC_OPT_drivers/gpu/drm/imx/cdn-mhdp-imxdrv += -Wno-unused-variable
+CC_OPT_drivers/gpu/drm/bridge/cadence/cdns-mhdp-audio += -Wno-unused-function
+CC_OPT_drivers/gpu/drm/drm_plane_helper               += -Wno-uninitialized
+CC_OPT_drivers/gpu/drm/imx/cdn-mhdp-imxdrv            += -Wno-unused-variable
 
 # Lx_emul specific to driver
 SRC_C += lx_emul/shadow/kernel/softirq.c

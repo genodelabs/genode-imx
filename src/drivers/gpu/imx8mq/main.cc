@@ -862,6 +862,17 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 			Genode::warning(__func__, ": not implemented");
 			return false;
 		}
+
+		Gpu::Buffer_capability export_buffer(Gpu::Buffer_id) override
+		{
+			Genode::warning(__func__, ": not implemented");
+			return Gpu::Buffer_capability();
+		}
+
+		void import_buffer(Gpu::Buffer_capability, Gpu::Buffer_id) override
+		{
+			Genode::warning(__func__, ": not implemented");
+		}
 };
 
 

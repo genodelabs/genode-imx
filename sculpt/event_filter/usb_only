@@ -28,5 +28,6 @@
 			<include rom="special.chargen"/>
 		</chargen>
 	</output>
-	<policy label="usb"   input="usb"/>
+	<policy label="usb" input="usb"/>
 </config>
+

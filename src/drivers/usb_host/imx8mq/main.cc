@@ -43,7 +43,9 @@ genode_usb_allocate_peer_buffer(unsigned long size)
 
 extern "C" void genode_usb_free_peer_buffer(struct genode_attached_dataspace * ptr)
 {
-	Lx_kit::env().memory.free(static_cast<Attached_dataspace*>(ptr));
+	Attached_dataspace & ds = *static_cast<Attached_dataspace*>(ptr);
+	lx_emul_forget_pages(ds.local_addr<void>(), ds.size());
+	Lx_kit::env().memory.free_dataspace(ds.local_addr<void>());
 }
 
 

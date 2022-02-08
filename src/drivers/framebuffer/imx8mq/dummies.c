@@ -21,19 +21,6 @@ unsigned long __must_check __arch_clear_user(void __user *to, unsigned long n)
 }
 
 
-#include <asm-generic/delay.h>
-#include <linux/delay.h>
-
-void __const_udelay(unsigned long xloops)
-{
-	unsigned long usecs = xloops / 0x10C7UL;
-	if (usecs < 100)
-		lx_emul_time_udelay(usecs);
-	else
-		usleep_range(usecs, usecs * 10);
-}
-
-
 #include <linux/serial_core.h>
 
 const struct earlycon_id __earlycon_table[] = { };
@@ -651,22 +638,3 @@ void unregister_handler_proc(unsigned int irq,struct irqaction * action)
 {
 	lx_emul_trace(__func__);
 }
-
-
-#include <linux/sched/wake_q.h>
-
-void wake_q_add(struct wake_q_head * head,struct task_struct * task)
-{
-	lx_emul_trace(__func__);
-	wake_up_process(task);
-}
-
-
-#include <linux/sched/wake_q.h>
-
-void wake_up_q(struct wake_q_head * head)
-{
-	lx_emul_trace(__func__);
-}
-
-

@@ -7,6 +7,7 @@ MIRROR_FROM_DDE_DIR  := src/include/lx_emul \
                         src/include/lx_kit \
                         src/include/lx_user \
                         src/include/spec/arm_64/lx_kit \
+                        src/include/spec/arm_64/lx_emul \
                         src/lib/lx_emul \
                         src/lib/lx_kit
 

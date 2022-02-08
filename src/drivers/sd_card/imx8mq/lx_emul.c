@@ -13,6 +13,18 @@
 
 #include <lx_emul.h>
 
+
+#include <linux/gfp.h>
+
+struct page * __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order,
+                                     int preferred_nid, nodemask_t * nodemask)
+{
+	unsigned const num_pages = (1 << order);
+	void *   const ptr = lx_emul_mem_alloc_aligned(PAGE_SIZE*num_pages, PAGE_SIZE);
+	return lx_emul_virt_to_pages(ptr, num_pages);
+}
+
+
 #include <asm-generic/delay.h>
 
 void __const_udelay(unsigned long xloops)
@@ -74,12 +86,3 @@ nodemask_t node_states[NR_NODE_STATES] __read_mostly = {
 #include <linux/nodemask.h>
 
 unsigned int nr_node_ids = MAX_NUMNODES;
-
-
-#include <linux/sched/wake_q.h>
-
-void wake_q_add(struct wake_q_head * head,struct task_struct * task)
-{
-	wake_up_process(task);
-}
-

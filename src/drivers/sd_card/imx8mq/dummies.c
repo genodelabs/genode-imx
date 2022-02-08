@@ -708,14 +708,6 @@ DEFINE_PER_CPU(struct vm_event_state, vm_event_states) = {{0}};
 EXPORT_PER_CPU_SYMBOL(vm_event_states);
 
 
-#include <linux/sched/wake_q.h>
-
-void wake_up_q(struct wake_q_head * head)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/pm_wakeup.h>
 
 struct wakeup_source * wakeup_source_register(struct device * dev,const char * name)

@@ -45,6 +45,7 @@ SRC_C   += lx_emul/shadow/mm/page_alloc.c
 SRC_C   += lx_emul/shadow/mm/percpu.c
 SRC_C   += lx_emul/shadow/mm/slab_common.c
 SRC_C   += lx_emul/shadow/mm/slub.c
+SRC_C   += lx_emul/spec/arm/start.c
 SRC_C   += lx_emul/virt_to_page.c
 
 SRC_CC  += lx_kit/console.cc
@@ -62,6 +63,7 @@ DDE_LINUX_DIR := $(subst /src/include/lx_kit,,$(call select_from_repositories,sr
 INC_DIR += $(REP_DIR)/src/include/imx8mq
 INC_DIR += $(DDE_LINUX_DIR)/src/include
 INC_DIR += $(DDE_LINUX_DIR)/src/include/spec/arm_64
+INC_DIR += $(DDE_LINUX_DIR)/src/include/spec/arm_64/lx_emul/shadow
 INC_DIR += $(DDE_LINUX_DIR)/src/include/lx_emul/shadow
 
 vpath lx_emul/common_dummies.c $(REP_DIR)/src/lib/imx8mq
@@ -99,6 +101,12 @@ CC_C_OPT += -Wno-pointer-sign -Wno-stringop-truncation -Wno-array-bounds -Wno-st
 CC_C_OPT += -Wno-restrict -Wno-maybe-uninitialized -Werror=date-time
 CC_C_OPT += -Werror=incompatible-pointer-types -Werror=designated-init
 CC_C_OPT += -Wno-packed-not-aligned
+
+#
+# Quirk needed as task->state has been renamed to task->__state in Linux 5.14
+# and we are on >= 5.14 in lx_emul
+#
+CC_C_OPT += -Dstate=__state
 
 INC_DIR += $(LX_BUILD_DIR)/lib
 

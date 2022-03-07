@@ -45,6 +45,7 @@ struct Driver_manager::Main
 		_usb_drv_config.enabled(true);
 		_usb_devices.sigh(_usb_update_handler);
 		_usb_policy.sigh(_usb_update_handler);
+		_handle_usb_devices_update();
 	}
 };
 

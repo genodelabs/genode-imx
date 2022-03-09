@@ -16,6 +16,7 @@
 #include <base/env.h>
 
 #include <lx_emul/init.h>
+#include <lx_emul/usb.h>
 #include <lx_kit/env.h>
 #include <lx_kit/init.h>
 #include <lx_user/io.h>
@@ -23,9 +24,6 @@
 #include <genode_c_api/usb.h>
 
 using namespace Genode;
-
-
-extern struct genode_usb_rpc_callbacks genode_usb_rpc_callbacks_obj;
 
 
 struct Main : private Entrypoint::Io_progress_handler
@@ -57,7 +55,7 @@ struct Main : private Entrypoint::Io_progress_handler
 		genode_usb_init(genode_env_ptr(env),
 		                genode_allocator_ptr(sliced_heap),
 		                genode_signal_handler_ptr(signal_handler),
-		                &genode_usb_rpc_callbacks_obj);
+		                &lx_emul_usb_rpc_callbacks);
 
 		lx_emul_start_kernel(dtb_rom.local_addr<void>());
 

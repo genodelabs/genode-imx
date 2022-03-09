@@ -7,7 +7,7 @@ SRC_CC  += time.cc
 SRC_CC  += lx_emul/shared_dma_buffer.cc
 SRC_C   += dummies.c
 SRC_C   += lx_emul.c
-SRC_C   += usb.c
+SRC_C   += lx_emul/usb.c
 SRC_C   += $(notdir $(wildcard $(PRG_DIR)/generated_dummies.c))
 
 CC_OPT_drivers/usb/dwc3/trace      += -I$(LX_CONTRIB_DIR)/drivers/usb/dwc3

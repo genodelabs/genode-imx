@@ -15,7 +15,6 @@ SRC_CC  += lx_emul/time.cc
 
 SRC_C   += lx_emul/clocksource.c
 SRC_C   += lx_emul/common_dummies.c
-SRC_C   += lx_emul/irqchip.c
 SRC_C   += lx_emul/start.c
 SRC_C   += lx_emul/shadow/arch/arm64/kernel/smp.c
 SRC_C   += lx_emul/shadow/arch/arm64/mm/ioremap.c
@@ -45,6 +44,7 @@ SRC_C   += lx_emul/shadow/mm/page_alloc.c
 SRC_C   += lx_emul/shadow/mm/percpu.c
 SRC_C   += lx_emul/shadow/mm/slab_common.c
 SRC_C   += lx_emul/shadow/mm/slub.c
+SRC_C   += lx_emul/spec/arm/irqchip.c
 SRC_C   += lx_emul/spec/arm/start.c
 SRC_C   += lx_emul/virt_to_page.c
 
@@ -53,6 +53,7 @@ SRC_CC  += lx_kit/device.cc
 SRC_CC  += lx_kit/env.cc
 SRC_CC  += lx_kit/init.cc
 SRC_CC  += lx_kit/memory.cc
+SRC_CC  += lx_kit/memory_dma.cc
 SRC_CC  += lx_kit/scheduler.cc
 SRC_CC  += lx_kit/task.cc
 SRC_CC  += lx_kit/timeout.cc

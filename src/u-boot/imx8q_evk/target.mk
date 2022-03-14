@@ -6,8 +6,10 @@ ATF_CONTRIB_DIR    := $(call select_from_ports,imx8q_evk_uboot)/atf
 IMG_CONTRIB_DIR    := $(call select_from_ports,imx8q_evk_uboot)/mkimage
 FWI_CONTRIB_DIR    := $(call select_from_ports,imx8q_evk_uboot)/firmware
 
+# do not confuse third-party sub-makes
 unexport BOARD
 unexport MAKEFLAGS
+unexport .SHELLFLAGS
 
 $(CUSTOM_TARGET_DEPS):
 	$(MAKE) -C $(UBOOT_CONTRIB_DIR) O=$(PWD)/$(PRG_REL_DIR)/uboot ARCH=arm CROSS_COMPILE=$(CROSS_DEV_PREFIX) imx8mq_evk_defconfig

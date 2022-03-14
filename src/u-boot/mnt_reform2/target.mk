@@ -3,8 +3,10 @@ REQUIRES            = arm_v8a
 CUSTOM_TARGET_DEPS  = flash.bin
 UBOOT_CONTRIB_DIR  := $(call select_from_ports,mnt_reform2_uboot)/uboot
 
+# do not confuse third-party sub-makes
 unexport BOARD
 unexport MAKEFLAGS
+unexport .SHELLFLAGS
 
 $(CUSTOM_TARGET_DEPS):
 	cp $(UBOOT_CONTRIB_DIR)/bl31-iMX8MQ.bin $(PWD)/$(PRG_REL_DIR)/

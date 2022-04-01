@@ -998,6 +998,7 @@ struct Driver::Main : private Entrypoint::Io_progress_handler
 		log("--- i.MX 8MQ GPU driver started ---");
 
 		Lx_kit::initialize(_env);
+		_env.exec_static_constructors();
 
 		lx_user_task_args = &_worker_args;
 

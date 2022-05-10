@@ -71,14 +71,6 @@ int __pm_runtime_suspend(struct device * dev,int rpmflags)
 }
 
 
-#include <asm-generic/delay.h>
-
-void __udelay(unsigned long usecs)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/rwlock_api_smp.h>
 
 unsigned long __lockfunc _raw_read_lock_irqsave(rwlock_t * lock)

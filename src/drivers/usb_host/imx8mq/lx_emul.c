@@ -23,6 +23,14 @@ void __const_udelay(unsigned long xloops)
 }
 
 
+#include <asm-generic/delay.h>
+
+void __udelay(unsigned long usecs)
+{
+	lx_emul_time_udelay(usecs);
+}
+
+
 #include <linux/cpumask.h>
 
 atomic_t __num_online_cpus = ATOMIC_INIT(1);

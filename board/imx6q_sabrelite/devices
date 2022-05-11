@@ -1,0 +1,13 @@
+<devices>
+	<device name="mmc0" type="fsl,imx6q-usdhc">
+		<io_mem address="0x0219c000" size="0x4000"/>
+		<irq    number="57"/>
+	</device>
+
+	<device name="fec" type="fsl,imx6q-fec">
+		<io_mem   address="0x2188000" size="0x4000"/>
+		<irq      number="150"/>
+		<irq      number="151"/>
+		<property name="mii"        value="rgmii"/>
+	</device>
+</devices>

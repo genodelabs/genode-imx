@@ -2,7 +2,8 @@ assert_spec arm_v8a
 
 create_boot_directory
 import_from_depot [depot_user]/src/[base_src] \
-                  [depot_user]/src/init
+                  [depot_user]/src/init \
+                  [depot_user]/raw/imx8q_evk-devices
 
 build {
 	drivers/framebuffer/imx8mq
@@ -39,53 +40,6 @@ install_config {
 		<resource name="RAM" quantum="1M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config>
-
-			<device name="dcss" type="nxp,imx8mq-dcss">
-				<io_mem address="0x32e00000" size="0x2d000"/>
-				<io_mem address="0x32e2f000" size="0x1000"/>
-				<clock  name="display_apb_clk_root"
-				        driver_name="apb"/>
-				<clock  name="display_axi_clk_root"
-				        parent="system_pll1_clk"
-				        rate="800000000"
-				        driver_name="axi"/>
-				<clock  name="display_rtrm_clk_root"
-				        parent="system_pll1_clk"
-				        rate="400000000"
-				        driver_name="rtrm"/>
-				<clock  name="video_pll2_clk"
-				        parent="hdmi_phy_27m_clk"
-				        rate="148500000"
-				        driver_name="pix"/>
-				<clock  name="display_dtrc_clk_root"
-				        driver_name="dtrc"/>
-				<clock  name="video_pll2_clk"
-				        driver_name="pll_src"/>
-				<clock  name="hdmi_phy_27m_clk"
-				        driver_name="pll_phy_ref"/>
-				<clock  name="video_pll1_clk"
-				        parent="25m_ref_clk"
-				        rate="25000000"/>
-				<clock  name="dc_pixel_clk_root"
-				        parent="video_pll1_clk"
-				        rate="594000000"/>
-				<power-domain name="mipi"/>
-			</device>
-
-			<device name="hdmi" type="cdn,imx8mq-hdmi">
-				<io_mem address="0x32c00000" size="0x100000"/>
-				<io_mem address="0x32e40000" size="0x40000"/>
-				<irq    number="48"/>
-				<irq    number="57"/>
-			</device>
-
-			<device name="irqsteer" type="fsl,imx-irqsteer">
-				<io_mem address="0x32e2d000" size="0x1000"/>
-				<irq    number="50" />
-				<clock  name="display_apb_clk_root"
-				        driver_name="ipg"/>
-			</device>
-
 			<policy label="fb_drv -> " info="yes">
 				<device name="dcss"/>
 				<device name="hdmi"/>

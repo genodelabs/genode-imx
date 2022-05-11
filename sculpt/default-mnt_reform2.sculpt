@@ -1,6 +1,7 @@
 drivers: mnt_reform2
 
 # supplemental depot content added to the system image
+import: raw/mnt_reform2-devices
 import: src/arm_driver_manager
 import: src/event_filter
 import: src/fec_nic_drv

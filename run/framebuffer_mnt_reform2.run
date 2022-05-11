@@ -2,7 +2,8 @@ assert_spec arm_v8a
 
 create_boot_directory
 import_from_depot [depot_user]/src/[base_src] \
-                  [depot_user]/src/init
+                  [depot_user]/src/init \
+                  [depot_user]/raw/mnt_reform2-devices
 
 build {
 	drivers/platform/imx8mq
@@ -37,152 +38,9 @@ install_config {
 
 	<start name="platform_drv" caps="150" managing_system="yes">
 		<binary name="imx8mq_platform_drv"/>
-		<resource name="RAM" quantum="1M"/>
+		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config>
-
-			<!-- GPIO banks -->
-			<device name="gpio1">
-				<io_mem address="0x30200000" size="0x10000"/>
-				<irq number="96"/>
-				<irq number="97"/>
-			</device>
-			<device name="gpio2">
-				<io_mem address="0x30210000" size="0x10000"/>
-				<irq number="98"/>
-				<irq number="99"/>
-			</device>
-			<device name="gpio3">
-				<io_mem address="0x30220000" size="0x10000"/>
-				<irq number="100"/>
-				<irq number="101"/>
-			</device>
-			<device name="gpio4">
-				<io_mem address="0x30230000" size="0x10000"/>
-				<irq number="102"/>
-				<irq number="103"/>
-			</device>
-			<device name="gpio5">
-				<io_mem address="0x30240000" size="0x10000"/>
-				<irq number="104"/>
-				<irq number="105"/>
-			</device>
-
-			<device name="lcd" type="fsl,imx28-lcdif">
-				<io_mem address="0x30320000" size="0x10000"/>
-				<io_mem address="0x307f0000" size="0x3000"/>
-				<irq    number="37"/>
-				<clock name="lcdif_pixel_clk_root"
-				       parent="video_pll1_clk"
-				       rate="594000000"
-				       driver_name="pix"/>
-			</device>
-
-			<device name="mipi_dsi" type="fsl,imx8mq-nwl-dsi">
-				<io_mem       address="0x30a00000" size="0x1000"/>
-				<irq          number="66"/>
-				<power-domain name="mipi"/>
-				<clock        name="mipi_dsi_phy_ref_clk_root"
-				              driver_name="phy_ref"/>
-
-				<clock        name="mipi_dsi_esc_rx_clk_root"
-				              parent="system_pll1_div10"
-				              rate="80000000"
-				              driver_name="rx_esc"/>
-
-				<clock        name="mipi_dsi_core_clk_root"
-				              parent="system_pll1_div3"
-				              rate="266000000"
-				              driver_name="core"/>
-
-				<clock        name="mipi_dsi_esc_clk_root"
-				              rate="20000000"
-				              driver_name="tx_esc"/>
-
-				<clock        name="lcdif_pixel_clk_root"
-				              driver_name="lcdif"/>
-			</device>
-
-			<device name="pclk" type="reset-pin,pclk">
-				<reset-domain name="mipi_dsi_pclk"/>
-			</device>
-
-			<device name="esc" type="reset-pin,esc">
-				<reset-domain name="mipi_dsi_esc"/>
-				<reset-domain name="mipi_dsi_byte"/>
-			</device>
-
-			<device name="dpi" type="reset-pin,dpi">
-				<reset-domain name="mipi_dsi_dpi"/>
-			</device>
-
-			<device name="mipi_dsi_phy" type="fsl,imx8mq-mipi-dphy">
-				<clock name="video_pll1_clk"
-				       parent="25m_ref_clk"
-				       rate="1200000000" />
-				<clock name="mipi_dsi_phy_ref_clk_root"
-				       parent="video_pll1_clk"
-				       rate="24000000"
-				       driver_name="phy_ref"/>
-			</device>
-
-			<device name="dcss" type="nxp,imx8mq-dcss">
-				<io_mem address="0x32e00000" size="0x2d000"/>
-				<io_mem address="0x32e2f000" size="0x1000"/>
-				<clock  name="display_apb_clk_root"
-				        driver_name="apb"/>
-				<clock  name="display_axi_clk_root"
-				        parent="system_pll1_clk"
-				        rate="800000000"
-				        driver_name="axi"/>
-				<clock  name="display_rtrm_clk_root"
-				        parent="system_pll1_clk"
-				        rate="400000000"
-				        driver_name="rtrm"/>
-				<clock  name="video_pll1_clk"
-				        parent="25m_ref_clk"
-				        rate="1200000000" />
-				<clock  name="display_dtrc_clk_root"
-				        driver_name="dtrc"/>
-				<clock  name="dc_pixel_clk_root"
-				        parent="video_pll1_clk"
-				        rate="118800000"
-				        driver_name="pix"/>
-				<clock  name="video_pll2_clk"
-				        parent="27m_ref_clk"
-				        driver_name="pll_src"/>
-				<clock  name="27m_ref_clk"
-				        driver_name="pll_phy_ref"/>
-			</device>
-
-			<device name="hdmi" type="cdn,imx8mq-hdmi">
-				<io_mem address="0x32c00000" size="0x100000"/>
-				<io_mem address="0x32e40000" size="0x40000"/>
-				<irq    number="48"/>
-				<irq    number="57"/>
-			</device>
-
-			<device name="irqsteer" type="fsl,imx-irqsteer">
-				<io_mem address="0x32e2d000" size="0x1000"/>
-				<irq    number="50" />
-				<clock  name="display_apb_clk_root"
-				        driver_name="ipg"/>
-			</device>
-
-			<device name="i2c" type="fsl,imx21-i2c">
-				<io_mem address="0x30a50000" size="0x10000"/>
-				<irq    number="70" />
-				<clock  name="i2c4_clk_root" driver_name=""/>
-				<clock  name="i2c4_gate"/>
-			</device>
-
-			<device name="pwm">
-				<io_mem address="0x30670000" size="0x10000"/>
-				<irq    number="114"/>
-				<clock  name="pwm2_clk_root"/>
-				<clock  name="pwm2_gate"/>
-			</device>
-
 			<policy label="fb_drv -> " info="yes">
 				<device name="dcss"/>
 				<device name="hdmi"/>

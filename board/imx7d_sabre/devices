@@ -1,0 +1,15 @@
+<devices>
+	<device name="fec0" type="fsl,imx6sx-fec">
+		<io_mem   address="0x30be0000" size="0x4000"/>
+		<irq      number="152"/>
+		<irq      number="153"/>
+		<property name="mii"        value="rgmii"/>
+	</device>
+
+	<device name="fec1" type="fsl,imx6sx-fec">
+		<io_mem   address="0x30bf0000" size="0x4000"/>
+		<irq      number="134"/>
+		<irq      number="135"/>
+		<property name="mii"        value="rgmii"/>
+	</device>
+</devices>

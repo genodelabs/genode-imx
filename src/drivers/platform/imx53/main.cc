@@ -16,42 +16,40 @@
 #include <iomux.h>
 #include <ccm.h>
 #include <src.h>
-#include <root.h>
+#include <common.h>
 
 namespace Driver { struct Main; };
 
 struct Driver::Main
 {
-	void update_config();
+	Env                  & _env;
+	Attached_rom_dataspace _config_rom     { _env, "config"        };
+	Common                 _common         { _env, _config_rom     };
+	Signal_handler<Main>   _config_handler { _env.ep(), *this,
+	                                         &Main::_handle_config };
 
-	Env                  & env;
-	Heap                   heap           { env.ram(), env.rm()   };
-	Sliced_heap            sliced_heap    { env.ram(), env.rm()   };
-	Attached_rom_dataspace config         { env, "config"         };
-	Device_model           devices        { heap                  };
-	Iomux                  iomux          { env                   };
-	Ccm                    ccm            { env, devices.clocks() };
-	Src                    src            { env, devices.resets() };
-	Signal_handler<Main>   config_handler { env.ep(), *this,
-	                                      &Main::update_config };
-	Driver::Root           root           { env, sliced_heap, config, devices };
+	Iomux iomux { _env };
+	Ccm   ccm   { _env, _common.devices().clocks() };
+	Src   src   { _env, _common.devices().resets() };
+
+	void _handle_config();
 
 	Main(Genode::Env & e)
-	: env(e)
+	: _env(e)
 	{
-		devices.update(config.xml());
-		config.sigh(config_handler);
-		env.parent().announce(env.ep().manage(root));
+		_config_rom.sigh(_config_handler);
+		_handle_config();
+		_common.announce_service();
 	}
 };
 
 
-void Driver::Main::update_config()
+void Driver::Main::_handle_config()
 {
-	config.update();
-	devices.update(config.xml());
-	root.update_policy();
+	_config_rom.update();
+	_common.handle_config(_config_rom.xml());
 }
+
 
 void Component::construct(Genode::Env &env) {
 	static Driver::Main main(env); }

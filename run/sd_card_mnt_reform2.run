@@ -5,7 +5,8 @@ import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/src/imx8mq_platform_drv \
                   [depot_user]/src/imx8mq_sd_card_drv \
                   [depot_user]/src/init \
-                  [depot_user]/src/report_rom
+                  [depot_user]/src/report_rom \
+                  [depot_user]/raw/imx8q_evk-devices
 
 build { app/block_tester }
 
@@ -23,33 +24,9 @@ install_config {
 	<default caps="100"/>
 
 	<start name="imx8mq_platform_drv" managing_system="yes">
-		<resource name="RAM" quantum="1M"/>
+		<resource name="RAM" quantum="2M"/>
 		<provides><service name="Platform"/></provides>
 		<config>
-			<device name="usdhc1" type="fsl,imx7d-usdhc">
-				<io_mem address="0x30b40000" size="0x10000"/>
-				<irq    number="54"/>
-				<clock  name="ipg_clk_root"
-				        driver_name="ipg"/>
-				<clock  name="nand_usdhc_bus_clk_root"
-				        driver_name="ahb"/>
-				<clock  name="usdhc1_clk_root"
-				        driver_name="per"/>
-				<clock  name="usdhc1_gate"/>
-			</device>
-			<device name="usdhc2" type="fsl,imx7d-usdhc">
-				<io_mem address="0x30b50000" size="0x10000"/>
-				<irq    number="55"/>
-				<clock  name="ipg_clk_root"
-				        driver_name="ipg"/>
-				<clock  name="nand_usdhc_bus_clk_root"
-				        driver_name="ahb"/>
-				<clock  name="usdhc2_clk_root"
-				        rate="200000000"
-				        driver_name="per"/>
-				<clock  name="usdhc2_gate"/>
-			</device>
-
 			<policy label="sd_card_drv -> " info="yes">
 				<device name="usdhc1"/>
 				<device name="usdhc2"/>

@@ -2,7 +2,8 @@ assert_spec arm_v8a
 
 create_boot_directory
 import_from_depot [depot_user]/src/[base_src] \
-                  [depot_user]/src/init
+                  [depot_user]/src/init \
+                  [depot_user]/raw/imx8q_evk-devices
 
 build {
 	drivers/usb_hid
@@ -36,62 +37,14 @@ install_config {
 
 	<start name="platform_drv" caps="150" managing_system="yes">
 		<binary name="imx8mq_platform_drv"/>
-		<resource name="RAM" quantum="1M"/>
+		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config>
-
-			<device name="dwc3_usb_0" type="snps,dwc3">
-				<io_mem       address="0x38100000" size="0x10000"/>
-				<irq          number="72"/>
-				<power-domain name="usb_otg_1"/>
-				<clock        name="usb_ctrl1_gate"
-				              driver_name="bus_early"/>
-				<clock        name="usb_core_ref_clk_root"
-				              parent="system_pll1_div8"
-				              rate="100000000"
-				              driver_name="ref"/>
-				<clock        name="usb_bus_clk_root"
-				              parent="system_pll2_div2"
-				              rate="500000000"
-				              driver_name="ref"/>
-			</device>
-
-			<device name="phy_0" type="fsl,imx8mq-usb-phy">
-				<io_mem address="0x381f0040" size="0x40"/>
-				<clock  name="usb_phy1_gate"
-				        driver_name="phy"/>
-				<clock  name="usb_phy_ref_clk_root"
-				        parent="system_pll1_div8"
-				        rate="100000000"/>
-			</device>
-
-			<device name="dwc3_usb_1" type="snps,dwc3">
-				<io_mem       address="0x38200000" size="0x10000"/>
-				<irq          number="73"/>
-				<power-domain name="usb_otg_2"/>
-				<clock        name="usb_ctrl2_gate"
-				              driver_name="bus_early"/>
-				<clock        name="usb_core_ref_clk_root"
-				              parent="system_pll1_div8"
-				              rate="100000000"
-				              driver_name="ref"/>
-				<clock        name="usb_bus_clk_root"
-				              parent="system_pll2_div2"
-				              rate="500000000"
-				              driver_name="ref"/>
-			</device>
-
-			<device name="phy_1" type="fsl,imx8mq-usb-phy">
-				<io_mem address="0x382f0040" size="0x40"/>
-				<clock  name="usb_phy2_gate"
-				        driver_name="phy"/>
-				<clock  name="usb_phy_ref_clk_root"
-				        parent="system_pll1_div8"
-				        rate="100000000"/>
-			</device>
 			<policy label="usb_host_drv -> " info="yes">
-				<device name="dwc3_usb_0"/>
-				<device name="phy_0"/>
+				<device name="usb_host_1"/>
+				<device name="usb_phy_1"/>
+				<device name="usb_host_2"/>
+				<device name="usb_phy_2"/>
 			</policy>
 		</config>
 		<route> <any-service> <parent/> </any-service> </route>

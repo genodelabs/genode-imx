@@ -251,4 +251,40 @@
 		              rate="800000000"
 		              driver_name="reg"/>
 	</device>
+
+	<device name="pcie_1">
+		<io_mem       address="0x33800000" size="0x400000"/>
+		<io_mem       address="0x18000000" size="0x8000000"/>
+		<irq          number="154"/>
+		<irq          number="153"/>
+		<irq          number="152"/>
+		<irq          number="151"/>
+		<power-domain name="pcie_1"/>
+		<clock        name="pcie1_ctrl_clk_root"
+		              parent="system_pll2_div4"/>
+		<clock        name="pcie1_phy_clk_root"
+		              parent="system_pll2_div10"/>
+		<clock        name="pcie1_aux_clk_root"/>
+		<clock        name="pcie_gate"/>
+		<reset-domain name="pcie_1_phy"/>
+		<reset-domain name="pcie_1_core"/>
+	</device>
+
+	<device name="pcie_2">
+		<io_mem       address="0x33c00000" size="0x400000"/>
+		<io_mem       address="0x20000000" size="0x8000000"/>
+		<irq          number="109"/>
+		<irq          number="108"/>
+		<irq          number="107"/>
+		<irq          number="106"/>
+		<power-domain name="pcie_2"/>
+		<clock        name="pcie2_ctrl_clk_root"
+		              parent="system_pll2_div4"/>
+		<clock        name="pcie2_phy_clk_root"
+		              parent="system_pll2_div10"/>
+		<clock        name="pcie2_aux_clk_root"/>
+		<clock        name="pcie2_gate"/>
+		<reset-domain name="pcie_2_phy"/>
+		<reset-domain name="pcie_2_core"/>
+	</device>
 </devices>

@@ -64,8 +64,8 @@ DDE_LINUX_DIR := $(subst /src/include/lx_kit,,$(call select_from_repositories,sr
 INC_DIR += $(REP_DIR)/src/include/imx8mq
 INC_DIR += $(DDE_LINUX_DIR)/src/include
 INC_DIR += $(DDE_LINUX_DIR)/src/include/spec/arm_64
-INC_DIR += $(DDE_LINUX_DIR)/src/include/spec/arm_64/lx_emul/shadow
-INC_DIR += $(DDE_LINUX_DIR)/src/include/lx_emul/shadow
+INC_DIR += $(DDE_LINUX_DIR)/src/include/lx_emul/shadow/arch/arm64/include
+INC_DIR += $(DDE_LINUX_DIR)/src/include/lx_emul/shadow/include
 
 vpath lx_emul/common_dummies.c $(REP_DIR)/src/lib/imx8mq
 vpath % $(DDE_LINUX_DIR)/src/lib

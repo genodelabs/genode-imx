@@ -3,7 +3,7 @@ assert_spec arm_v8a
 create_boot_directory
 import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/src/init \
-                  [depot_user]/raw/imx8q_evk-devices
+                  [depot_user]/raw/mnt_reform2-devices
 
 build {
 	drivers/usb_hid

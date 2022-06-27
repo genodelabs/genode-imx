@@ -124,14 +124,6 @@ const char * _parse_integer_fixup_radix(const char * s,unsigned int * base)
 }
 
 
-#include <linux/kernel_stat.h>
-
-void account_idle_ticks(unsigned long ticks)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/random.h>
 
 void add_bootloader_randomness(const void * buf,unsigned int size)
@@ -220,14 +212,6 @@ void * bsearch(const void * key,const void * base,size_t num,size_t size,cmp_fun
 #include <linux/kernel.h>
 
 void bust_spinlocks(int yes)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sched/nohz.h>
-
-void calc_load_nohz_stop(void)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1432,14 +1416,6 @@ notrace void touch_softlockup_watchdog(void)
 }
 
 
-#include <linux/nmi.h>
-
-notrace void touch_softlockup_watchdog_sched(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/trace_events.h>
 
 void trace_event_buffer_commit(struct trace_event_buffer * fbuffer)
@@ -1590,14 +1566,6 @@ void * vmap(struct page ** pages,unsigned int count,unsigned long flags,pgprot_t
 #include <linux/sched/wake_q.h>
 
 void wake_q_add_safe(struct wake_q_head * head,struct task_struct * task)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sched/nohz.h>
-
-void wake_up_nohz_cpu(int cpu)
 {
 	lx_emul_trace_and_stop(__func__);
 }

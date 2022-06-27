@@ -610,3 +610,67 @@ void sysfs_unmerge_group(struct kobject * kobj,const struct attribute_group * gr
 {
 	lx_emul_trace(__func__);
 }
+
+
+#include <linux/sched/nohz.h>
+
+void calc_load_nohz_start(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sched/nohz.h>
+
+void calc_load_nohz_stop(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sched/nohz.h>
+
+void nohz_balance_enter_idle(int cpu)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/vmstat.h>
+
+void quiet_vmstat(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/irq_work.h>
+
+bool irq_work_needs_cpu(void)
+{
+	return false;
+}
+
+
+#include <linux/nmi.h>
+
+notrace void touch_softlockup_watchdog_sched(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/kernel_stat.h>
+
+void account_idle_ticks(unsigned long ticks)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sched/nohz.h>
+
+void wake_up_nohz_cpu(int cpu)
+{
+	lx_emul_trace(__func__);
+}

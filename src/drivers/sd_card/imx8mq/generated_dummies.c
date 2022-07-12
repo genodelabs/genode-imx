@@ -97,14 +97,6 @@ pid_t __task_pid_nr_ns(struct task_struct * task,enum pid_type type,struct pid_n
 }
 
 
-#include <linux/interrupt.h>
-
-void __tasklet_schedule(struct tasklet_struct * t)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <asm-generic/delay.h>
 
 void __udelay(unsigned long usecs)

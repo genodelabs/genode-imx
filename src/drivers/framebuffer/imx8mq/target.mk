@@ -23,9 +23,6 @@ CC_OPT_drivers/gpu/drm/bridge/cadence/cdns-mhdp-audio += -Wno-unused-function
 CC_OPT_drivers/gpu/drm/drm_plane_helper               += -Wno-uninitialized
 CC_OPT_drivers/gpu/drm/imx/cdn-mhdp-imxdrv            += -Wno-unused-variable
 
-# Lx_emul specific to driver
-SRC_C += lx_emul/shadow/kernel/softirq.c
-
 # Driver-specific device-tree binary data
 BOARDS                   := mnt_reform2 imx8q_evk
 DTS_PATH(mnt_reform2)    := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts

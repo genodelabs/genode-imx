@@ -86,14 +86,6 @@ pid_t __task_pid_nr_ns(struct task_struct * task,enum pid_type type,struct pid_n
 }
 
 
-#include <linux/interrupt.h>
-
-void __tasklet_schedule(struct tasklet_struct * t)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/fs.h>
 
 void __unregister_chrdev(unsigned int major,unsigned int baseminor,unsigned int count,const char * name)
@@ -1568,4 +1560,29 @@ void * vmap(struct page ** pages,unsigned int count,unsigned long flags,pgprot_t
 void wake_q_add_safe(struct wake_q_head * head,struct task_struct * task)
 {
 	lx_emul_trace_and_stop(__func__);
+}
+
+
+void rcu_irq_enter(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+void rcu_irq_exit(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+void rcu_softirq_qs(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+int idle_cpu(int cpu)
+{
+	lx_emul_trace(__func__);
+	return 1;
 }

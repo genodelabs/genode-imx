@@ -10,9 +10,6 @@ SRC_C   := dummies.c
 SRC_C   += lx_emul.c
 SRC_C   += $(notdir $(wildcard $(PRG_DIR)/generated_dummies.c))
 
-# Lx_emul specific to driver
-SRC_C += lx_emul/shadow/kernel/softirq.c
-
 # Driver-specific device-tree binary data
 BOARDS                   := mnt_reform2 imx8q_evk
 DTS_PATH(mnt_reform2)    := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts

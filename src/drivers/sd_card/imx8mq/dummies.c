@@ -787,3 +787,28 @@ void wake_up_nohz_cpu(int cpu)
 {
 	lx_emul_trace(__func__);
 }
+
+
+void rcu_irq_enter(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+void rcu_irq_exit(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+void rcu_softirq_qs(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+int idle_cpu(int cpu)
+{
+	lx_emul_trace(__func__);
+	return 1;
+}

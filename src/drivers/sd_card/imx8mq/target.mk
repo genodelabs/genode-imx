@@ -10,9 +10,6 @@ SRC_C   += dummies.c
 SRC_C   += lx_emul.c
 SRC_C   += $(notdir $(wildcard $(PRG_DIR)/generated_dummies.c))
 
-# Lx_emul specific to driver
-SRC_C += lx_emul/shadow/kernel/softirq.c
-
 #
 # Genode C-API backends
 #

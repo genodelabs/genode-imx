@@ -857,6 +857,12 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 			Genode::warning(__func__, ": not implemented");
 		}
 
+		Gpu::addr_t query_buffer_ppgtt(Gpu::Buffer_id) override
+		{
+			Genode::warning(__func__, ": not implemented");
+			return (Gpu::addr_t)-1;
+		}
+
 		bool set_tiling(Gpu::Buffer_id, unsigned) override
 		{
 			Genode::warning(__func__, ": not implemented");

@@ -10,4 +10,5 @@ _/src/init
 _/src/mesa
 _/src/stdcxx
 _/src/vfs
+_/src/vfs_gpu
 _/src/zlib

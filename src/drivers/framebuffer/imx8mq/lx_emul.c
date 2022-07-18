@@ -37,10 +37,3 @@ struct page * __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order,
 	return lx_emul_virt_to_pages(ptr, num_pages);
 }
 
-
-#include <linux/kallsyms.h>
-
-int sprint_symbol_no_offset(char * buffer, unsigned long address)
-{
-	return sprintf(buffer, "0x%lx", address);
-}

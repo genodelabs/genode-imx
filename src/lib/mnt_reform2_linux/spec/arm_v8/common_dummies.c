@@ -381,3 +381,31 @@ EXPORT_SYMBOL(vabits_actual);
 #include <linux/tracepoint-defs.h>
 
 const struct trace_print_flags vmaflag_names[]  = { {0,NULL}};
+
+
+#include <linux/kallsyms.h>
+
+int sprint_backtrace(char * buffer,unsigned long address)
+{
+	lx_emul_trace(__func__);
+	*buffer = '\0';
+	return 0;
+}
+
+
+#include <linux/kallsyms.h>
+
+int sprint_symbol(char * buffer,unsigned long address)
+{
+	lx_emul_trace(__func__);
+	*buffer = '\0';
+	return 0;
+}
+
+
+#include <linux/kallsyms.h>
+
+int sprint_symbol_no_offset(char * buffer,unsigned long address)
+{
+	return sprintf(buffer, "0x%lx", address);
+}

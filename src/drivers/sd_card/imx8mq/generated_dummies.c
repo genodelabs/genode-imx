@@ -1547,30 +1547,6 @@ const struct soc_device_attribute * soc_device_match(const struct soc_device_att
 }
 
 
-#include <linux/kallsyms.h>
-
-int sprint_backtrace(char * buffer,unsigned long address)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/kallsyms.h>
-
-int sprint_symbol(char * buffer,unsigned long address)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/kallsyms.h>
-
-int sprint_symbol_no_offset(char * buffer,unsigned long address)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/jump_label.h>
 
 bool static_key_initialized;

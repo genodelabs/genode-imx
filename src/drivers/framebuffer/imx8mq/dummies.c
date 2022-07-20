@@ -727,3 +727,11 @@ int idle_cpu(int cpu)
 	lx_emul_trace(__func__);
 	return 1;
 }
+
+
+#include <linux/wait_bit.h>
+
+void __init wait_bit_init(void)
+{
+	lx_emul_trace(__func__);
+}

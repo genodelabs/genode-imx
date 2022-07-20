@@ -214,14 +214,6 @@ void __check_object_size(const void * ptr,unsigned long n,bool to_user)
 }
 
 
-#include <linux/rwlock_api_smp.h>
-
-void __lockfunc _raw_read_lock(rwlock_t * lock)
-{
-	lx_emul_trace(__func__);
-}
-
-
 void __lockfunc _raw_read_unlock(rwlock_t * lock)
 {
 	lx_emul_trace(__func__);
@@ -363,6 +355,14 @@ void account_idle_ticks(unsigned long ticks)
 #include <linux/sched/nohz.h>
 
 void wake_up_nohz_cpu(int cpu)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/wait_bit.h>
+
+void __init wait_bit_init(void)
 {
 	lx_emul_trace(__func__);
 }

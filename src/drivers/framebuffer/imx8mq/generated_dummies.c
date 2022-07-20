@@ -165,14 +165,6 @@ const char * _parse_integer_fixup_radix(const char * s,unsigned int * base)
 
 #include <linux/rwlock_api_smp.h>
 
-void __lockfunc _raw_read_lock(rwlock_t * lock)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/rwlock_api_smp.h>
-
 void __lockfunc _raw_read_unlock(rwlock_t * lock)
 {
 	lx_emul_trace_and_stop(__func__);

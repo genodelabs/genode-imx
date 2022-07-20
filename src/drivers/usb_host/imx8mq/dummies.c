@@ -71,23 +71,6 @@ int __pm_runtime_suspend(struct device * dev,int rpmflags)
 }
 
 
-#include <linux/rwlock_api_smp.h>
-
-unsigned long __lockfunc _raw_read_lock_irqsave(rwlock_t * lock)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
-#include <linux/rwlock_api_smp.h>
-
-void __lockfunc _raw_read_unlock_irqrestore(rwlock_t * lock,unsigned long flags)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/random.h>
 
 void add_device_randomness(const void * buf,unsigned int size)
@@ -671,6 +654,14 @@ void account_idle_ticks(unsigned long ticks)
 #include <linux/sched/nohz.h>
 
 void wake_up_nohz_cpu(int cpu)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/wait_bit.h>
+
+void __init wait_bit_init(void)
 {
 	lx_emul_trace(__func__);
 }

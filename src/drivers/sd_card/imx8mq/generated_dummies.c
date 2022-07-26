@@ -748,14 +748,6 @@ bool has_capability_noaudit(struct task_struct * t,int cap)
 }
 
 
-#include <linux/sched/isolation.h>
-
-bool housekeeping_enabled(enum hk_flags flags)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/vmstat.h>
 
 void inc_zone_page_state(struct page * page,enum zone_stat_item item)
@@ -1792,6 +1784,14 @@ int unregister_restart_handler(struct notifier_block * nb)
 #include <linux/uuid.h>
 
 const u8 uuid_index[16] = {};
+
+
+#include <linux/vmalloc.h>
+
+void vfree(const void * addr)
+{
+	lx_emul_trace_and_stop(__func__);
+}
 
 
 #include <linux/sched/wake_q.h>

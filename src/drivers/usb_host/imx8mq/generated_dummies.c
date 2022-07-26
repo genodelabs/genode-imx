@@ -230,14 +230,6 @@ void bust_spinlocks(int yes)
 }
 
 
-#include <linux/rcupdate.h>
-
-void call_rcu(struct rcu_head * head,rcu_callback_t func)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/srcu.h>
 
 void call_srcu(struct srcu_struct * ssp,struct rcu_head * rhp,rcu_callback_t func)
@@ -540,14 +532,6 @@ const u8 guid_index[16] = {};
 #include <linux/capability.h>
 
 bool has_capability_noaudit(struct task_struct * t,int cap)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sched/isolation.h>
-
-bool housekeeping_enabled(enum hk_flags flags)
 {
 	lx_emul_trace_and_stop(__func__);
 }

@@ -156,14 +156,6 @@ EXPORT_SYMBOL(arm64_use_ng_mappings);
 char __initdata boot_command_line[] = { 0 };
 
 
-#include <linux/rcupdate.h>
-
-void call_rcu(struct rcu_head * head,rcu_callback_t func)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/capability.h>
 
 bool capable(int cap)
@@ -640,92 +632,11 @@ void unregister_handler_proc(unsigned int irq,struct irqaction * action)
 }
 
 
-#include <linux/irq_work.h>
-
-bool irq_work_needs_cpu(void)
-{
-	return false;
-}
-
-
-#include <linux/sched/nohz.h>
-
-void calc_load_nohz_start(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/sched/nohz.h>
-
-void calc_load_nohz_stop(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/sched/nohz.h>
-
-void nohz_balance_enter_idle(int cpu)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/vmstat.h>
-
-void quiet_vmstat(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/nmi.h>
 
 notrace void touch_softlockup_watchdog_sched(void)
 {
 	lx_emul_trace(__func__);
-}
-
-
-#include <linux/kernel_stat.h>
-
-void account_idle_ticks(unsigned long ticks)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/sched/nohz.h>
-
-void wake_up_nohz_cpu(int cpu)
-{
-	lx_emul_trace(__func__);
-}
-
-
-void rcu_irq_enter(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-void rcu_irq_exit(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-void rcu_softirq_qs(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-int idle_cpu(int cpu)
-{
-	lx_emul_trace(__func__);
-	return 1;
 }
 
 

@@ -31,11 +31,6 @@ void __udelay(unsigned long usecs)
 }
 
 
-#include <linux/cpumask.h>
-
-atomic_t __num_online_cpus = ATOMIC_INIT(1);
-
-
 #include <linux/dma-mapping.h>
 
 dma_addr_t dma_map_page_attrs(struct device * dev,

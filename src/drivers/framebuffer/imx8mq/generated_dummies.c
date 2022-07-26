@@ -889,14 +889,6 @@ bool has_capability_noaudit(struct task_struct * t,int cap)
 }
 
 
-#include <linux/sched/isolation.h>
-
-bool housekeeping_enabled(enum hk_flags flags)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/hwspinlock.h>
 
 int hwspin_lock_free(struct hwspinlock * hwlock)

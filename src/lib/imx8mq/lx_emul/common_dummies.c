@@ -127,14 +127,6 @@ bool debugfs_initialized(void)
 }
 
 
-#include <linux/sched.h>
-
-void do_set_cpus_allowed(struct task_struct * p,const struct cpumask * new_mask)
-{
-	lx_emul_trace(__func__);
-}
-
-
 extern int dpm_sysfs_add(struct device * dev);
 int dpm_sysfs_add(struct device * dev)
 {
@@ -171,16 +163,6 @@ int __must_check get_random_bytes_arch(void * buf,int nbytes)
 #include <linux/tracepoint-defs.h>
 
 const struct trace_print_flags gfpflag_names[]  = { {0,NULL}};
-
-
-#include <linux/sched/isolation.h>
-
-const struct cpumask * housekeeping_cpumask(enum hk_flags flags)
-{
-	static struct cpumask mask;
-	lx_emul_trace(__func__);
-	return &mask;
-}
 
 
 #include <linux/sched/signal.h>
@@ -222,12 +204,6 @@ int kobject_uevent(struct kobject * kobj,enum kobject_action action)
 	lx_emul_trace(__func__);
 	return 0;
 }
-
-
-#include <linux/kernel_stat.h>
-#include <linux/stat.h>
-
-struct kernel_stat kstat;
 
 
 s64 memstart_addr __ro_after_init = 0;

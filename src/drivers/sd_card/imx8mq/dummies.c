@@ -101,11 +101,6 @@ int __invalidate_device(struct block_device * bdev,bool kill_dirty)
 }
 
 
-#include <linux/atomic.h>
-
-atomic_t __num_online_cpus;
-
-
 #include <linux/threads.h>
 
 unsigned long __per_cpu_offset[NR_CPUS] = { 0UL };
@@ -308,14 +303,6 @@ int blkcg_init_queue(struct request_queue * q)
 #include <linux/blkdev.h>
 
 void blkdev_put(struct block_device * bdev,fmode_t mode)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/rcupdate.h>
-
-void call_rcu(struct rcu_head * head,rcu_callback_t func)
 {
 	lx_emul_trace(__func__);
 }
@@ -725,92 +712,11 @@ void wakeup_source_unregister(struct wakeup_source * ws)
 }
 
 
-#include <linux/irq_work.h>
-
-bool irq_work_needs_cpu(void)
-{
-	return false;
-}
-
-
-#include <linux/sched/nohz.h>
-
-void calc_load_nohz_start(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/sched/nohz.h>
-
-void calc_load_nohz_stop(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/vmstat.h>
-
-void quiet_vmstat(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/sched/nohz.h>
-
-void nohz_balance_enter_idle(int cpu)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/nmi.h>
 
 notrace void touch_softlockup_watchdog_sched(void)
 {
 	lx_emul_trace(__func__);
-}
-
-
-#include <linux/kernel_stat.h>
-
-void account_idle_ticks(unsigned long ticks)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/sched/nohz.h>
-
-void wake_up_nohz_cpu(int cpu)
-{
-	lx_emul_trace(__func__);
-}
-
-
-void rcu_irq_enter(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-void rcu_irq_exit(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-void rcu_softirq_qs(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-int idle_cpu(int cpu)
-{
-	lx_emul_trace(__func__);
-	return 1;
 }
 
 

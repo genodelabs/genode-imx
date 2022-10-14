@@ -1,17 +1,7 @@
 drivers: imx8q_evk
 
 # supplemental depot content added to the system image
-import: raw/imx8q_evk-devices
-import: src/arm_driver_manager
-import: src/event_filter
-import: src/fec_nic_drv
-import: src/imx8mq_fb_drv
-import: src/imx8mq_platform_drv
-import: src/imx8mq_sd_card_drv
-import: src/imx8mq_usb_host_drv
-import: src/rom_reporter
-import: src/usb_block_drv
-import: src/usb_hid_drv
+import: pkg/drivers_managed-imx8q_evk
 
 # selection of launcher-menu entries
 launcher: shared_fs

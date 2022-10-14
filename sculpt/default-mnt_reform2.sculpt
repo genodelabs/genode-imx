@@ -1,20 +1,7 @@
 drivers: mnt_reform2
 
 # supplemental depot content added to the system image
-import: raw/mnt_reform2-devices
-import: src/arm_driver_manager
-import: src/event_filter
-import: src/fec_nic_drv
-import: src/imx8mq_fb_drv
-import: src/imx8mq_gpio_drv
-import: src/imx8mq_i2c_drv
-import: src/imx8mq_platform_drv
-import: src/imx8mq_pwm_drv
-import: src/imx8mq_sd_card_drv
-import: src/imx8mq_usb_host_drv
-import: src/usb_block_drv
-import: src/usb_hid_drv
-import: src/rom_reporter
+import: pkg/drivers_managed-mnt_reform2
 
 # selection of launcher-menu entries
 launcher: shared_fs

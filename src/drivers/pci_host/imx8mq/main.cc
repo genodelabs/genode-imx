@@ -12,6 +12,7 @@
  */
 
 #include <base/component.h>
+#include <base/heap.h>
 #include <base/log.h>
 #include <gpio_session/connection.h>
 #include <os/reporter.h>
@@ -374,6 +375,12 @@ struct Scanner
 		Config::Device::access_t device = pci_dev.cfg.read<Config::Device>();
 		Config::Class_code_rev_id::Class_code::access_t dclass =
 			pci_dev.cfg.read<Config::Class_code_rev_id::Class_code>();
+		Config::Class_code_rev_id::Revision::access_t revision =
+			pci_dev.cfg.read<Config::Class_code_rev_id::Revision>();
+		Config_type0::Subsystem_vendor::access_t sub_vendor =
+			pci_dev.cfg.read<Config_type0::Subsystem_vendor>();
+		Config_type0::Subsystem_device::access_t sub_device =
+			pci_dev.cfg.read<Config_type0::Subsystem_device>();
 
 		generator.node("device", [&]
 		{
@@ -382,14 +389,17 @@ struct Scanner
 
 			generator.node("pci-config", [&]
 			{
-				generator.attribute("address",   String<16>(Hex(dev_cfg_space)));
-				generator.attribute("bus",       String<16>(Hex(dev_bdf.bus)));
-				generator.attribute("device",    String<16>(Hex(dev_bdf.dev)));
-				generator.attribute("function",  String<16>(Hex(dev_bdf.fn)));
-				generator.attribute("vendor_id", String<16>(Hex(vendor)));
-				generator.attribute("device_id", String<16>(Hex(device)));
-				generator.attribute("class",     String<16>(Hex(dclass)));
-				generator.attribute("bridge",    "no");
+				generator.attribute("address",       String<16>(Hex(dev_cfg_space)));
+				generator.attribute("bus",           String<16>(Hex(dev_bdf.bus)));
+				generator.attribute("device",        String<16>(Hex(dev_bdf.dev)));
+				generator.attribute("function",      String<16>(Hex(dev_bdf.fn)));
+				generator.attribute("vendor_id",     String<16>(Hex(vendor)));
+				generator.attribute("device_id",     String<16>(Hex(device)));
+				generator.attribute("class",         String<16>(Hex(dclass)));
+				generator.attribute("revision",      String<16>(Hex(revision)));
+				generator.attribute("sub_vendor_id", String<16>(Hex(sub_vendor)));
+				generator.attribute("sub_device_id", String<16>(Hex(sub_device)));
+				generator.attribute("bridge", "no");
 			});
 
 			generator.node("io_mem", [&]
@@ -397,6 +407,7 @@ struct Scanner
 				generator.attribute("address", String<16>(Hex(dev_io_mem)));
 				generator.attribute("size",
 				              String<16>(Hex(Pcie_controller::MEMORY_PER_DEVICE)));
+				generator.attribute("pci_bar", 0U);
 			});
 
 			generator.node("irq", [&]
@@ -411,6 +422,7 @@ struct Scanner
 struct Main
 {
 	Env & env;
+	Heap  heap { env.ram(), env.rm() };
 
 	/* Dummy wait for GPIO settings being settled */
 	Reconstructible<Gpio::Connection> gpio { env, 255 };
@@ -420,7 +432,6 @@ struct Main
 	Expanding_reporter     reporter { env,
 	                                  "devices",
 	                                  "devices" };
-	Constructible<Scanner> scanner  {};
 
 	Main(Env & env) : env(env)
 	{
@@ -434,9 +445,7 @@ struct Main
 			{
 				xml.for_each_sub_node("device", [&] (Xml_node xml)
 				{
-					scanner.construct(bus, xml, platform,
-					                  timer, generator);
-					scanner.destruct();
+					new (heap) Scanner(bus, xml, platform, timer, generator);
 					bus += Pcie_controller::BUS_COUNT_PER_CONTROLLER;
 				});
 			});

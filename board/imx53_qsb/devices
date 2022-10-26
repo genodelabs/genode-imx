@@ -11,8 +11,10 @@
 	</device>
 
 	<device name="fec" type="fsl,imx25-fec">
-		<io_mem   address="0x63fec000" size="0x4000"/>
-		<irq      number="87"/>
-		<property name="mii" value="rmii"/>
+		<io_mem address="0x63fec000" size="0x4000"/>
+		<irq    number="87"/>
+		<clock  name="fec" driver_name="ipg"/>
+		<clock  name="fec" driver_name="ahb"/>
+		<clock  name="fec" driver_name="ptp"/>
 	</device>
 </devices>

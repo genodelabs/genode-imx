@@ -1,0 +1,7 @@
+base
+os
+platform_session
+timer_session
+uplink_session
+nic_session
+genode_c_api

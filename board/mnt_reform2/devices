@@ -217,15 +217,17 @@
 	</device>
 
 	<device name="fec" type="fsl,imx6sx-fec">
-		<io_mem   address="0x30be0000" size="0x4000"/>
+		<io_mem   address="0x30be0000" size="0x10000"/>
+		<irq      number="153"/>
 		<irq      number="152"/>
 		<irq      number="151"/>
 		<irq      number="150"/>
 		<clock name="enet_axi_clk_root"/>
-		<clock name="enet_timer_clk_root"/>
-		<clock name="enet_ref_clk_root"/>
-		<clock name="enet_phy_ref_clk_root"/>
-		<clock name="enet1_gate"/>
+		<clock name="enet_timer_clk_root" driver_name="ptp"/>
+		<clock name="enet_ref_clk_root" driver_name="enet_clk_ref"/>
+		<clock name="enet_phy_ref_clk_root" driver_name="enet_out"/>
+		<clock name="enet1_gate" driver_name="ipg"/>
+		<clock name="enet1_gate" driver_name="ahb"/>
 		<property name="mii" value="rgmii-id"/>
 	</device>
 
@@ -255,10 +257,10 @@
 	<device name="pcie_1">
 		<io_mem       address="0x33800000" size="0x400000"/>
 		<io_mem       address="0x18000000" size="0x8000000"/>
+		<irq          number="157"/>
+		<irq          number="156"/>
+		<irq          number="155"/>
 		<irq          number="154"/>
-		<irq          number="153"/>
-		<irq          number="152"/>
-		<irq          number="151"/>
 		<power-domain name="pcie_1"/>
 		<clock        name="pcie1_ctrl_clk_root"
 		              parent="system_pll2_div4"/>

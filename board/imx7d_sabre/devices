@@ -1,15 +1,27 @@
 <devices>
 	<device name="fec0" type="fsl,imx6sx-fec">
-		<io_mem   address="0x30be0000" size="0x4000"/>
-		<irq      number="152"/>
-		<irq      number="153"/>
-		<property name="mii"        value="rgmii"/>
+		<io_mem address="0x30be0000" size="0x10000"/>
+		<irq    number="152"/>
+		<irq    number="150"/>
+		<irq    number="151"/>
+		<irq    number="153"/>
+		<clock  name="ipg_clk_root"           driver_name="ipg"/>
+		<clock  name="enet_axi_clk_root"      driver_name="ahb"/>
+		<clock  name="enet1_time_clk_root"    driver_name="ptp"/>
+		<clock  name="enet_pll_div8"          driver_name="enet_clk_ref"/>
+		<clock  name="enet_phy_ref_clk_root"  driver_name="enet_out"/>
 	</device>
 
 	<device name="fec1" type="fsl,imx6sx-fec">
-		<io_mem   address="0x30bf0000" size="0x4000"/>
-		<irq      number="134"/>
-		<irq      number="135"/>
-		<property name="mii"        value="rgmii"/>
+		<io_mem address="0x30bf0000" size="0x10000"/>
+		<irq    number="134"/>
+		<irq    number="132"/>
+		<irq    number="133"/>
+		<irq    number="135"/>
+		<clock  name="ipg_clk_root"           driver_name="ipg"/>
+		<clock  name="enet_axi_clk_root"      driver_name="ahb"/>
+		<clock  name="enet2_time_clk_root"    driver_name="ptp"/>
+		<clock  name="enet_pll_div8"          driver_name="enet_clk_ref"/>
+		<clock  name="enet_phy_ref_clk_root"  driver_name="enet_out"/>
 	</device>
 </devices>

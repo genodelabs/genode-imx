@@ -22,9 +22,12 @@
 	</device>
 
 	<device name="fec" type="fsl,imx6q-fec">
-		<io_mem   address="0x2188000" size="0x4000"/>
-		<irq      number="150"/>
-		<irq      number="151"/>
-		<property name="mii"        value="rgmii"/>
+		<io_mem address="0x2188000" size="0x4000"/>
+		<irq    number="150"/>
+		<irq    number="151"/>
+		<clock  name="enet"     driver_name="ipg"/>
+		<clock  name="enet"     driver_name="ahb"/>
+		<clock  name="enet_ref" driver_name="ptp"/>
+		<clock  name="enet_ref" driver_name="enet_out"/>
 	</device>
 </devices>

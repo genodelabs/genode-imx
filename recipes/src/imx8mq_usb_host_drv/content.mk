@@ -1,4 +1,4 @@
-DRIVER := usb_host
+DRIVER := usb_host/imx8mq
 
 MIRROR_FROM_OS_DIR := src/lib/genode_c_api/usb.cc
 

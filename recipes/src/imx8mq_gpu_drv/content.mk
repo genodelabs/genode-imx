@@ -1,4 +1,4 @@
-DRIVER := gpu
+DRIVER := gpu/imx8mq
 
 MIRROR_FROM_OS_DIR := include/gpu/info_etnaviv.h
 

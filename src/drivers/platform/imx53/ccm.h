@@ -55,6 +55,11 @@ struct Driver::Ccm : Genode::Attached_mmio
 		struct I2c_3 : Bitfield<22, 2> { };
 	};
 
+	struct Ccgr2 : Register<0x70, 32>
+	{
+		struct Fec : Bitfield<24, 2> { };
+	};
+
 	struct Ccgr5 : Register<0x7c, 32>
 	{
 		struct Ipu : Bitfield<10, 2> { };
@@ -106,11 +111,31 @@ struct Driver::Ccm : Genode::Attached_mmio
 		}
 	};
 
+	struct Fec_clock : public Clock
+	{
+		Ccm & _ccm;
+
+		Fec_clock(Clocks                 & clocks,
+		          Clock::Name const      & name,
+		          Ccm                    & ccm)
+		: Clock(clocks, name), _ccm(ccm) {}
+
+		void _enable() override {
+			_ccm.write<Ccgr2::Fec>(0x3); }
+
+		void _disable() override {
+			_ccm.write<Ccgr2::Fec>(0); }
+
+		Rate rate() const override {
+			return Rate { 66666667 }; }
+	};
+
 	Clocks  & _clocks;
 	Ipu_clock _ipu  { _clocks, *this };
 	I2c_clock _i2c1 { _clocks, "i2c1", *this, Ccgr1::I2c_1::mask(), 3};
 	I2c_clock _i2c2 { _clocks, "i2c2", *this, Ccgr1::I2c_2::mask(), 3};
 	I2c_clock _i2c3 { _clocks, "i2c3", *this, Ccgr1::I2c_3::mask(), 3};
+	Fec_clock _fec  { _clocks, "fec",  *this};
 
 	enum {
 		CCM_MMIO_BASE = 0x53fd4000,

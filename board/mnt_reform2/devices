@@ -254,7 +254,7 @@
 		              driver_name="reg"/>
 	</device>
 
-	<device name="pcie_1">
+	<device name="pcie_1" leave_operational="yes">
 		<io_mem       address="0x33800000" size="0x400000"/>
 		<io_mem       address="0x18000000" size="0x8000000"/>
 		<irq          number="157"/>
@@ -272,7 +272,7 @@
 		<reset-domain name="pcie_1_core"/>
 	</device>
 
-	<device name="pcie_2">
+	<device name="pcie_2" leave_operational="yes">
 		<io_mem       address="0x33c00000" size="0x400000"/>
 		<io_mem       address="0x20000000" size="0x8000000"/>
 		<irq          number="109"/>

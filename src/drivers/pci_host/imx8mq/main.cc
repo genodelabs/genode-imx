@@ -12,7 +12,6 @@
  */
 
 #include <base/component.h>
-#include <base/heap.h>
 #include <base/log.h>
 #include <gpio_session/connection.h>
 #include <os/reporter.h>
@@ -422,7 +421,6 @@ struct Scanner
 struct Main
 {
 	Env & env;
-	Heap  heap { env.ram(), env.rm() };
 
 	/* Dummy wait for GPIO settings being settled */
 	Reconstructible<Gpio::Connection> gpio { env, 255 };
@@ -432,6 +430,7 @@ struct Main
 	Expanding_reporter     reporter { env,
 	                                  "devices",
 	                                  "devices" };
+	Constructible<Scanner> scanner {};
 
 	Main(Env & env) : env(env)
 	{
@@ -445,8 +444,9 @@ struct Main
 			{
 				xml.for_each_sub_node("device", [&] (Xml_node xml)
 				{
-					new (heap) Scanner(bus, xml, platform, timer, generator);
+					scanner.construct(bus, xml, platform, timer, generator);
 					bus += Pcie_controller::BUS_COUNT_PER_CONTROLLER;
+					scanner.destruct();
 				});
 			});
 		});

@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2022-10-21
+ * \date   2022-10-31
  */
 
 #include <lx_emul.h>
@@ -60,14 +60,6 @@ void __gnet_stats_copy_basic(const seqcount_t * running,struct gnet_stats_basic_
 #include <net/gen_stats.h>
 
 void __gnet_stats_copy_queue(struct gnet_stats_queue * qstats,const struct gnet_stats_queue __percpu * cpu,const struct gnet_stats_queue * q,__u32 qlen)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/percpu.h>
-
-bool __is_kernel_percpu_address(unsigned long addr,unsigned long * can_addr)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -140,19 +132,6 @@ void * __vmalloc_node(unsigned long size,unsigned long align,gfp_t gfp_mask,int 
 {
 	lx_emul_trace_and_stop(__func__);
 }
-
-
-#include <linux/spinlock_api_smp.h>
-
-void __lockfunc _raw_spin_lock_nested(raw_spinlock_t * lock,int subclass)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <asm-generic/sections.h>
-
-char _text[], _stext[], _etext[] = {};
 
 
 #include <linux/random.h>
@@ -240,41 +219,6 @@ int console_printk[] = {};
 #include <linux/console.h>
 
 void console_unblank(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void debug_mutex_add_waiter(struct mutex * lock,struct mutex_waiter * waiter,struct task_struct * task);
-void debug_mutex_add_waiter(struct mutex * lock,struct mutex_waiter * waiter,struct task_struct * task)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void debug_mutex_free_waiter(struct mutex_waiter * waiter);
-void debug_mutex_free_waiter(struct mutex_waiter * waiter)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void debug_mutex_lock_common(struct mutex * lock,struct mutex_waiter * waiter);
-void debug_mutex_lock_common(struct mutex * lock,struct mutex_waiter * waiter)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void debug_mutex_unlock(struct mutex * lock);
-void debug_mutex_unlock(struct mutex * lock)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void debug_mutex_wake_waiter(struct mutex * lock,struct mutex_waiter * waiter);
-void debug_mutex_wake_waiter(struct mutex * lock,struct mutex_waiter * waiter)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -613,11 +557,6 @@ void imx6q_cpuidle_fec_irqs_unused(void)
 struct user_namespace init_user_ns;
 
 
-#include <linux/utsname.h>
-
-struct uts_namespace init_uts_ns;
-
-
 #include <linux/init.h>
 
 bool initcall_debug;
@@ -694,25 +633,9 @@ void irq_work_tick(void)
 }
 
 
-#include <linux/percpu.h>
-
-bool is_kernel_percpu_address(unsigned long addr)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/property.h>
 
 bool is_software_node(const struct fwnode_handle * fwnode)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/kallsyms.h>
-
-const char * kallsyms_lookup(unsigned long addr,unsigned long * symbolsize,unsigned long * offset,char ** modname,char * namebuf)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -758,6 +681,14 @@ void kmsg_dump(enum kmsg_dump_reason reason)
 #include <linux/kobject.h>
 
 int kobject_synth_uevent(struct kobject * kobj,const char * buf,size_t count)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/kobject.h>
+
+int kobject_uevent_env(struct kobject * kobj,enum kobject_action action,char * envp_ext[])
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -853,16 +784,16 @@ ssize_t memory_read_from_buffer(void * to,size_t count,loff_t * ppos,const void 
 }
 
 
-extern void mutex_remove_waiter(struct mutex * lock,struct mutex_waiter * waiter,struct task_struct * task);
-void mutex_remove_waiter(struct mutex * lock,struct mutex_waiter * waiter,struct task_struct * task)
+#include <linux/net.h>
+
+int net_ratelimit(void)
 {
 	lx_emul_trace_and_stop(__func__);
 }
 
 
-#include <linux/net.h>
-
-int net_ratelimit(void)
+extern int netdev_change_owner(struct net_device * ndev,const struct net * net_old,const struct net * net_new);
+int netdev_change_owner(struct net_device * ndev,const struct net * net_old,const struct net * net_new)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -904,6 +835,11 @@ loff_t no_llseek(struct file * file,loff_t offset,int whence)
 }
 
 
+#include <linux/nodemask.h>
+
+nodemask_t node_states[NR_NODE_STATES] = {};
+
+
 #include <linux/irq.h>
 
 void note_interrupt(struct irq_desc * desc,irqreturn_t action_ret)
@@ -928,11 +864,6 @@ void on_each_cpu(smp_call_func_t func,void * info,int wait)
 }
 
 
-#include <linux/printk.h>
-
-int oops_in_progress;	/* If set, an oops, panic(), BUG() or die() is in progress */
-
-
 #include <linux/reboot.h>
 
 enum reboot_mode panic_reboot_mode;
@@ -946,6 +877,16 @@ const struct kernel_param_ops param_ops_byte;
 #include <linux/genhd.h>
 
 struct device_type part_type;
+
+
+#include <linux/initrd.h>
+
+unsigned long phys_initrd_size;
+
+
+#include <linux/initrd.h>
+
+phys_addr_t phys_initrd_start;
 
 
 #include <linux/printk.h>
@@ -1004,11 +945,6 @@ void rcu_barrier(void)
 }
 
 
-#include <linux/rcupdate.h>
-
-struct lockdep_map rcu_bh_lock_map;
-
-
 #include <linux/rcutree.h>
 
 void rcu_irq_enter_irqson(void)
@@ -1023,11 +959,6 @@ void rcu_irq_exit_irqson(void)
 {
 	lx_emul_trace_and_stop(__func__);
 }
-
-
-#include <linux/rcupdate.h>
-
-struct lockdep_map rcu_lock_map;
 
 
 #include <linux/regulator/driver.h>
@@ -1142,6 +1073,14 @@ void rtc_time64_to_tm(time64_t time,struct rtc_time * tm)
 #include <linux/rtnetlink.h>
 
 struct sk_buff * rtmsg_ifinfo_build_skb(int type,struct net_device * dev,unsigned int change,u32 event,gfp_t flags,int * new_nsid,int new_ifindex)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/rtnetlink.h>
+
+void rtmsg_ifinfo_newnet(int type,struct net_device * dev,unsigned int change,gfp_t flags,int * new_nsid,int new_ifindex)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1437,6 +1376,22 @@ void sysfs_remove_dir(struct kobject * kobj)
 #include <linux/sysfs.h>
 
 void sysfs_remove_groups(struct kobject * kobj,const struct attribute_group ** groups)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_rename_dir_ns(struct kobject * kobj,const char * new_name,const void * new_ns)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_rename_link_ns(struct kobject * kobj,struct kobject * targ,const char * old,const char * new,const void * new_ns)
 {
 	lx_emul_trace_and_stop(__func__);
 }

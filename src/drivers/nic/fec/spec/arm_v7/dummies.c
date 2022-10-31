@@ -13,6 +13,21 @@
 
 #include <lx_emul.h>
 
+
+extern void __bad_cmpxchg(volatile void *ptr, int size);
+void __bad_cmpxchg(volatile void *ptr, int size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern void __bad_xchg(volatile void * ptr, int size);
+void __bad_xchg(volatile void * ptr, int size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 asmlinkage void __div0(void);
 asmlinkage void __div0(void)
 {

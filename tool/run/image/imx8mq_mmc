@@ -42,7 +42,7 @@ proc run_image {elf_img} {
 	set last_sector [expr ((($part_offset / 512) + ($disk_size_kb*2)) - 1)]
 	exec dd if=/dev/zero of=[run_dir].empty bs=512 count=64 2>/dev/null
 	exec cat [run_dir].ext2 [run_dir].empty > [run_dir].img
-	exec $sgdisk --move-second-header [run_dir].img
+	exec $sgdisk --move-second-header [run_dir].img 2>&1 >/dev/null
 	exec $sgdisk --new=1:$first_sector:$last_sector [run_dir].img
 	exec $sgdisk --change-name=1:GENODE [run_dir].img
 	exec $sgdisk --hybrid [run_dir].img

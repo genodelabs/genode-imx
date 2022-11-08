@@ -1,0 +1,18 @@
+--- linux/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
++++ linux/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
+@@ -457,6 +457,15 @@ &uart1 {
+ 	status = "okay";
+ };
+ 
++&usb3_phy0 {
++	status = "okay";
++};
++
++&usb_dwc3_0 {
++	dr_mode = "host";
++	status = "okay";
++};
++
+ &usb3_phy1 {
+ 	status = "okay";
+ };

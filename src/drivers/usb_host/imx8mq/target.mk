@@ -26,6 +26,6 @@ BOARDS                   := mnt_reform2 imx8q_evk
 DTS_PATH(mnt_reform2)    := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
 DTS_EXTRACT(mnt_reform2) := --select usb_dwc3_0 --select usb_dwc3_1
 DTS_PATH(imx8q_evk)      := arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-DTS_EXTRACT(imx8q_evk)   := --select usb_dwc3_1
+DTS_EXTRACT(imx8q_evk)   := --select usb_dwc3_0 --select usb_dwc3_1
 
 include $(REP_DIR)/src/drivers/linux_mnt_reform2_drv_target_arm_v8.inc

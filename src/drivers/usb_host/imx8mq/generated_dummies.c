@@ -137,22 +137,6 @@ void __unregister_chrdev(unsigned int major,unsigned int baseminor,unsigned int 
 }
 
 
-#include <linux/rwlock_api_smp.h>
-
-unsigned long __lockfunc _raw_write_lock_irqsave(rwlock_t * lock)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/rwlock_api_smp.h>
-
-void __lockfunc _raw_write_unlock_irqrestore(rwlock_t * lock,unsigned long flags)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/random.h>
 
 void add_bootloader_randomness(const void * buf,unsigned int size)

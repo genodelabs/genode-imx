@@ -214,12 +214,6 @@ void __check_object_size(const void * ptr,unsigned long n,bool to_user)
 }
 
 
-void __lockfunc _raw_read_unlock(rwlock_t * lock)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/dma-mapping.h>
 
 size_t dma_max_mapping_size(struct device * dev)

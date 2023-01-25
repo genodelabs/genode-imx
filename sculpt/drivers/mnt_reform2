@@ -96,7 +96,7 @@
 
 	<start name="platform_drv" caps="300" managing_system="yes">
 		<binary name="imx8mq_platform_drv"/>
-		<resource name="RAM" quantum="2M"/>
+		<resource name="RAM" quantum="3M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config>
 			<report devices="yes"/>

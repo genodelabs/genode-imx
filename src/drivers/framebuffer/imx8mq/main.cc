@@ -66,11 +66,13 @@ struct Framebuffer::Driver
 				_base(base) {}
 	};
 
-	Constructible<Fb> fb {};
+	enum { MAX_SCREENS = 2 };
+	Constructible<Fb> fb[MAX_SCREENS] {};
 
 	void handle_timer()
 	{
-		if (fb.constructed()) { fb->paint(); }
+		for (unsigned i = 0; i < MAX_SCREENS; i++)
+			 if (fb[i].constructed()) fb[i]->paint();
 	}
 
 	Signal_handler<Driver> timer_handler { env.ep(), *this,
@@ -108,10 +110,17 @@ static Framebuffer::Driver & driver(Genode::Env & env)
 extern "C" void lx_emul_framebuffer_ready(void * base, unsigned long,
                                           unsigned xres, unsigned yres)
 {
-	Genode::Env & env = Lx_kit::env().env;
-	driver(env).fb.construct(env, base, xres, yres);
+	for (unsigned i = 0; i < Framebuffer::Driver::MAX_SCREENS; i++) {
+		Genode::Env & env = Lx_kit::env().env;
 
-	Genode::log("--- i.MX 8MQ framebuffer driver initialized ---");
+		if (driver(env).fb[i].constructed())
+			continue;
+
+		driver(env).fb[i].construct(env, base, xres, yres);
+
+		Genode::log("--- i.MX 8MQ framebuffer driver screen ", i, " initialized ---");
+		return;
+	}
 }
 
 

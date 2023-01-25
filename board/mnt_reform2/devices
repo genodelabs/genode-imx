@@ -104,12 +104,14 @@
 		        driver_name="dtrc"/>
 		<clock  name="dc_pixel_clk_root"
 		        parent="video_pll1_clk"
-		        rate="118800000"
+		        rate="118800000"/>
+		<clock  name="video_pll2_clk"
+		        parent="hdmi_phy_27m_clk"
+		        rate="148500000"
 		        driver_name="pix"/>
 		<clock  name="video_pll2_clk"
-		        parent="27m_ref_clk"
 		        driver_name="pll_src"/>
-		<clock  name="27m_ref_clk"
+		<clock  name="hdmi_phy_27m_clk"
 		        driver_name="pll_phy_ref"/>
 	</device>
 

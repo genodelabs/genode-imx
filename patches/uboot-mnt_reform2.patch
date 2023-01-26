@@ -7,9 +7,9 @@ index 89ebf8e08b..3269cdccee 100644
  #ifdef MNTREFORM_BOOT_RISCOS
  	env_set("bootcmd", "usb start; usb reset; ext4load mmc 1 ${loadaddr} /RISCOSIMX8M; go ${loadaddr} 32");
 +#elif MNTREFORM_BOOT_GENODE
-+	env_set("bootcmd", "ext4load mmc 1 0x51000000 /uImage; bootm start 0x51000000; bootm loados; bootm go");
++	env_set("bootcmd", "ext4load mmc 1 0x51000000 /boot/uImage; bootm start 0x51000000; bootm loados; bootm go");
 +#elif MNTREFORM_BOOT_GENODE_FROM_EMMC
-+	env_set("bootcmd", "ext4load mmc 0 0x51000000 /uImage; bootm start 0x51000000; bootm loados; bootm go");
++	env_set("bootcmd", "ext4load mmc 0 0x51000000 /boot/uImage; bootm start 0x51000000; bootm loados; bootm go");
  #elif MNTREFORM_BOOT_EMMC
  	// boot rescue system from eMMC
  	env_set("bootargs", "noinitrd root=/dev/mmcblk0p1 rootwait rw console=ttymxc0,115200 console=tty1 cma=512M pci=nomsi init=/sbin/reform-init");

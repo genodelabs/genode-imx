@@ -27,7 +27,7 @@ index 4b04801fd4..3b9b47d0c0 100644
 -	"fdt_file=fsl-imx8mq-evk.dtb\0" \
 -	"initrd_addr=0x43800000\0"		\
 -	"initrd_high=0xffffffffffffffff\0" \
-+	"image=uImage\0" \
++	"image=/boot/uImage\0" \
  	"mmcdev="__stringify(CONFIG_SYS_MMC_ENV_DEV)"\0" \
  	"mmcpart=" __stringify(CONFIG_SYS_MMC_IMG_LOAD_PART) "\0" \
 -	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \

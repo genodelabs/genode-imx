@@ -444,9 +444,11 @@ struct Main
 			{
 				xml.for_each_sub_node("device", [&] (Xml_node xml)
 				{
-					scanner.construct(bus, xml, platform, timer, generator);
-					bus += Pcie_controller::BUS_COUNT_PER_CONTROLLER;
-					scanner.destruct();
+					try {
+						scanner.construct(bus, xml, platform, timer, generator);
+						bus += Pcie_controller::BUS_COUNT_PER_CONTROLLER;
+						scanner.destruct();
+					} catch (...) {}
 				});
 			});
 		});

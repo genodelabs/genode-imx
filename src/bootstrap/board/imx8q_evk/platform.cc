@@ -199,7 +199,7 @@ Bootstrap::Platform::Board::Board()
 	ccm.write<Ccm_reg::Target_root_0>(0x14000000);
 	pll.write<Pll_reg::Pll_arm_1>(0x4a);
 
-	unsigned long v = pll.read<Pll_reg::Pll_arm_0>();
+	Pll_reg::Pll_arm_0::access_t v = pll.read<Pll_reg::Pll_arm_0>();
 	pll.write<Pll_reg::Pll_arm_0>(v & 0xffffffe0);
 	v = pll.read<Pll_reg::Pll_arm_0>();
 	pll.write<Pll_reg::Pll_arm_0>(v | (1<<12));

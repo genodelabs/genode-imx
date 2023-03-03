@@ -13,16 +13,6 @@
 
 #include <lx_emul.h>
 
-#ifdef CONFIG_ARM64
-#include <asm/delay.h>
-
-void __const_udelay(unsigned long xloops)
-{
-	lx_emul_time_udelay(xloops / 0x10C7UL);
-}
-#endif
-
-
 #include <linux/fs.h>
 
 int alloc_chrdev_region(dev_t * dev,unsigned baseminor,unsigned count,const char * name)

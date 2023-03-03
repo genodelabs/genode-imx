@@ -22,13 +22,3 @@
 
 /* fix for missing include in linux/irqdesc.h */
 #include <linux/irq.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void lx_emul_time_udelay(unsigned long usec);
-
-#ifdef __cplusplus
-}
-#endif

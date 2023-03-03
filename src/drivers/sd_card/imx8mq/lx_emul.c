@@ -25,14 +25,6 @@ struct page * __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order,
 }
 
 
-#include <asm-generic/delay.h>
-
-void __const_udelay(unsigned long xloops)
-{
-	lx_emul_time_udelay(xloops / 0x10C7UL);
-}
-
-
 #include <linux/fs.h>
 
 int alloc_chrdev_region(dev_t * dev,unsigned baseminor,unsigned count,const char * name)

@@ -97,14 +97,6 @@ pid_t __task_pid_nr_ns(struct task_struct * task,enum pid_type type,struct pid_n
 }
 
 
-#include <asm-generic/delay.h>
-
-void __udelay(unsigned long usecs)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 extern unsigned int _parse_integer(const char * s,unsigned int base,unsigned long long * p);
 unsigned int _parse_integer(const char * s,unsigned int base,unsigned long long * p)
 {

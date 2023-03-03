@@ -5,7 +5,6 @@ INC_DIR  = $(PRG_DIR)
 SRC_CC   = i2c.cc
 SRC_CC  += main.cc
 SRC_CC  += reset.cc
-SRC_CC  += time.cc
 SRC_C    = dummies.c
 SRC_C   += fb.c
 SRC_C   += i2c_imx.c

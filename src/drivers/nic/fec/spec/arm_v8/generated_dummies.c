@@ -150,14 +150,6 @@ pid_t __task_pid_nr_ns(struct task_struct * task,enum pid_type type,struct pid_n
 }
 
 
-#include <asm-generic/delay.h>
-
-void __udelay(unsigned long usecs)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/vmalloc.h>
 
 void * __vmalloc_node(unsigned long size,unsigned long align,gfp_t gfp_mask,int node,const void * caller)

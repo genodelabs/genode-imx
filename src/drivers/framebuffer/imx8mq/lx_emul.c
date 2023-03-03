@@ -14,19 +14,6 @@
 #include <lx_emul.h>
 
 
-#include <asm-generic/delay.h>
-#include <linux/delay.h>
-
-void __const_udelay(unsigned long xloops)
-{
-	unsigned long usecs = xloops / 0x10C7UL;
-	if (usecs < 100)
-		lx_emul_time_udelay(usecs);
-	else
-		usleep_range(usecs, usecs * 10);
-}
-
-
 #include <linux/gfp.h>
 
 struct page * __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order,

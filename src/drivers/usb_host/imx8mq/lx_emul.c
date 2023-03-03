@@ -15,22 +15,6 @@
 #include <linux/slab.h>
 
 
-#include <asm-generic/delay.h>
-
-void __const_udelay(unsigned long xloops)
-{
-	lx_emul_time_udelay(xloops / 0x10C7UL);
-}
-
-
-#include <asm-generic/delay.h>
-
-void __udelay(unsigned long usecs)
-{
-	lx_emul_time_udelay(usecs);
-}
-
-
 #include <linux/dma-mapping.h>
 
 dma_addr_t dma_map_page_attrs(struct device * dev,

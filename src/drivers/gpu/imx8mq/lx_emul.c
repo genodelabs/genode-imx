@@ -38,14 +38,6 @@ void lx_user_init(void)
 }
 
 
-#include <asm-generic/delay.h>
-
-void __const_udelay(unsigned long xloops)
-{
-	lx_emul_time_udelay(xloops / 0x10C7UL);
-}
-
-
 #include <drm/drm_device.h>
 
 extern struct drm_device *lx_drm_dev;

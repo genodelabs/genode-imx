@@ -30,8 +30,6 @@
 extern "C" {
 #endif
 
-void lx_emul_time_udelay(unsigned long usec);
-
 void lx_user_wait_and_dispatch(void);
 
 #ifdef __cplusplus

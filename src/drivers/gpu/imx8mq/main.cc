@@ -974,7 +974,7 @@ namespace Driver {
 } /* namespace Driver */
 
 
-struct Driver::Main : private Entrypoint::Io_progress_handler
+struct Driver::Main
 {
 	Env                    &_env;
 	Attached_rom_dataspace  _config_rom     { _env, "config" };
@@ -982,13 +982,11 @@ struct Driver::Main : private Entrypoint::Io_progress_handler
 	using Dtb_name = Genode::String<64>;
 	Dtb_name _dtb_name { _config_rom.xml().attribute_value("dtb", Dtb_name("dtb")) };
 
-	Attached_rom_dataspace  _dtb_rom        { _env, _dtb_name.string() };
+	Attached_rom_dataspace  _dtb_rom     { _env, _dtb_name.string() };
 
-	Io_signal_handler<Main> _signal_handler { _env.ep(), *this,
+	Signal_handler<Main>    _signal_handler { _env.ep(), *this,
 	                                          &Main::_handle_signal };
 	Sliced_heap             _sliced_heap    { _env.ram(), _env.rm() };
-
-	void handle_io_progress() override { }
 
 	void _handle_signal()
 	{
@@ -1007,8 +1005,6 @@ struct Driver::Main : private Entrypoint::Io_progress_handler
 		lx_emul_start_kernel(_dtb_rom.local_addr<void>());
 
 		lx_emul_announce_gpu_session();
-
-		_env.ep().register_io_progress_handler(*this);
 	}
 };
 

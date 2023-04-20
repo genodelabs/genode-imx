@@ -90,3 +90,13 @@ void dma_unmap_page_attrs(struct device * dev,
 }
 
 
+#include <linux/pci.h>
+
+void lx_emul_register_pci_fixup(void (*fn)(struct pci_dev*),
+                                const char * name)
+{
+	/* remove when enabling proper PCI support in the driver */
+}
+
+
+bool arm64_use_ng_mappings;

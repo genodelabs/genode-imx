@@ -371,6 +371,14 @@ void dma_pool_destroy(struct dma_pool * pool)
 }
 
 
+#include <linux/dmi.h>
+
+int dmi_check_system(const struct dmi_system_id *list)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/printk.h>
 
 asmlinkage __visible void dump_stack(void)
@@ -903,6 +911,14 @@ void pci_free_irq_vectors(struct pci_dev * dev)
 #include <linux/pci.h>
 
 struct pci_dev * pci_get_device(unsigned int vendor,unsigned int device,struct pci_dev * from)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/pci.h>
+
+void __iomem *pci_ioremap_bar(struct pci_dev *pdev, int bar)
 {
 	lx_emul_trace_and_stop(__func__);
 }

@@ -1,0 +1,26 @@
+LICENSE   := GPLv2
+VERSION   := 6.1.20
+DOWNLOADS := linux-imx.archive reform-debian-packages.git
+
+URL(linux-imx) := https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-$(VERSION).tar.xz
+SHA(linux-imx) := 76322de8c01a3c63b42c4d1e9b9e7d1897ddb91276e10d73d1f9df3562f031f0
+DIR(linux-imx) := linux-imx
+
+URL(reform-debian-packages) := https://source.mnt.re/reform/reform-debian-packages.git
+REV(reform-debian-packages) := 13a7ab054c80f646e0c66f47b655e71fbd33d0cb
+DIR(reform-debian-packages) := reform
+
+default: reform-debian-packages.git linux-imx.archive
+	cd linux-imx; for p in ../reform/linux/patches/*.patch; do patch -p1 < $$p; done; cd ..
+	cp reform/linux/*.dts linux-imx/arch/arm64/boot/dts/freescale/
+
+#
+# Unfortunately, we have to check manually whether the target linux archive got already
+# unpacked and eventually have to delete it. Otherwise newly created files by the patches
+# stand in the way when re-applying the patches.
+#
+
+linux-imx.archive: delete_target
+
+delete_target:
+	@if [ -d linux-imx ]; then rm -r linux-imx; fi

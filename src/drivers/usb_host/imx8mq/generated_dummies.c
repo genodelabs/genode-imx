@@ -15,14 +15,6 @@ int ___ratelimit(struct ratelimit_state * rs,const char * func)
 }
 
 
-#include <linux/thread_info.h>
-
-void __check_object_size(const void * ptr,unsigned long n,bool to_user)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/clk-provider.h>
 
 const char * __clk_get_name(const struct clk * clk)
@@ -65,14 +57,6 @@ const struct earlycon_id __earlycon_table[] = {};
 const struct earlycon_id __earlycon_table_end[] = {};
 
 
-#include <linux/gfp.h>
-
-unsigned long __get_free_pages(gfp_t gfp_mask,unsigned int order)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/suspend.h>
 
 void __pm_pr_dbg(bool defer,const char * fmt,...)
@@ -84,14 +68,6 @@ void __pm_pr_dbg(bool defer,const char * fmt,...)
 #include <linux/printk.h>
 
 int __printk_ratelimit(const char * func)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/cred.h>
-
-void __put_cred(struct cred * cred)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -267,14 +243,6 @@ void console_unblank(void)
 }
 
 
-#include <linux/fs.h>
-
-struct timespec64 current_time(struct inode * inode)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/debugfs.h>
 
 ssize_t debugfs_attr_read(struct file * file,char __user * buf,size_t len,loff_t * ppos)
@@ -434,14 +402,6 @@ struct trace_event_functions exit_syscall_print_funcs;
 #include <linux/kobject.h>
 
 struct kobject *firmware_kobj;
-
-
-#include <linux/gfp.h>
-
-void free_pages(unsigned long addr,unsigned int order)
-{
-	lx_emul_trace_and_stop(__func__);
-}
 
 
 #include <linux/freezer.h>
@@ -623,14 +583,6 @@ struct kobject *kernel_kobj;
 #include <linux/kgdb.h>
 
 void kgdb_panic(const char * msg)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sched/signal.h>
-
-int kill_pid_usb_asyncio(int sig,int errno,sigval_t addr,struct pid * pid,const struct cred * cred)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1112,14 +1064,6 @@ void printk_safe_flush_on_panic(void)
 #include <linux/proc_fs.h>
 
 struct proc_dir_entry * proc_create(const char * name,umode_t mode,struct proc_dir_entry * parent,const struct proc_ops * proc_ops)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/pid.h>
-
-void put_pid(struct pid * pid)
 {
 	lx_emul_trace_and_stop(__func__);
 }

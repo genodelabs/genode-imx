@@ -100,3 +100,64 @@ void lx_emul_register_pci_fixup(void (*fn)(struct pci_dev*),
 
 
 bool arm64_use_ng_mappings;
+
+
+#include <linux/cdev.h>
+#include <lx_emul/usb.h>
+
+void cdev_init(struct cdev * cdev, const struct file_operations * fops)
+{
+	lx_emul_usb_register_devio(fops);
+}
+
+
+unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n);
+unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n)
+{
+	memcpy(to, from, n);
+	return 0;
+}
+
+
+unsigned long __must_check __arch_copy_to_user(void __user *to, const void *from, unsigned long n);
+unsigned long __must_check __arch_copy_to_user(void __user *to, const void *from, unsigned long n)
+{
+	memcpy(to, from, n);
+	return 0;
+}
+
+
+#include <linux/gfp.h>
+#include <linux/mm.h>
+
+struct page * __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order,
+                                     int preferred_nid, nodemask_t * nodemask)
+{
+	unsigned const num_pages = (1 << order);
+	void *   const ptr = lx_emul_mem_alloc_aligned(PAGE_SIZE*num_pages, PAGE_SIZE);
+	return lx_emul_virt_to_pages(ptr, num_pages);
+}
+
+
+void free_pages(unsigned long addr,unsigned int order)
+{
+	if (addr != 0ul)
+		__free_pages(virt_to_page((void *)addr), order);
+}
+
+
+unsigned long __get_free_pages(gfp_t gfp_mask, unsigned int order)
+{
+	struct page *page = __alloc_pages(gfp_mask, order, 0);
+
+	if (!page)
+		return 0;
+
+	return (unsigned long)page_address(page);
+}
+
+
+struct page *alloc_pages_current(gfp_t gfp, unsigned order)
+{
+	return __alloc_pages(gfp, order, 0);
+}

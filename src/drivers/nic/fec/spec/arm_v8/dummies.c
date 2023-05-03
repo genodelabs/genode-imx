@@ -15,6 +15,20 @@
 
 #include <linux/of_iommu.h>
 
+unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n);
+unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+unsigned long __must_check __arch_copy_to_user(void __user *to, const void *from, unsigned long n);
+unsigned long __must_check __arch_copy_to_user(void __user *to, const void *from, unsigned long n)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 const struct iommu_ops * of_iommu_configure(struct device * dev,struct device_node * master_np,const u32 * id)
 {
 	static struct iommu_ops ops;

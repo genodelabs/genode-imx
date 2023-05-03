@@ -87,14 +87,6 @@ void add_interrupt_randomness(int irq,int irq_flags)
 }
 
 
-#include <linux/gfp.h>
-
-struct page *alloc_pages_current(gfp_t gfp, unsigned order)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/dma-map-ops.h>
 
 void arch_setup_dma_ops(struct device * dev,u64 dma_base,u64 size,const struct iommu_ops * iommu,bool coherent)
@@ -117,14 +109,6 @@ int cdev_add(struct cdev * p,dev_t dev,unsigned count)
 {
 	lx_emul_trace(__func__);
 	return 0;
-}
-
-
-#include <linux/cdev.h>
-
-void cdev_init(struct cdev * cdev,const struct file_operations * fops)
-{
-	lx_emul_trace(__func__);
 }
 
 
@@ -578,6 +562,40 @@ notrace void touch_softlockup_watchdog_sched(void)
 #include <linux/wait_bit.h>
 
 void __init wait_bit_init(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/fs.h>
+
+struct timespec64 current_time(struct inode * inode)
+{
+	struct timespec64 ret = { 0 };
+	lx_emul_trace(__func__);
+	return ret;
+}
+
+
+#include <linux/pid.h>
+
+void put_pid(struct pid * pid)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/cred.h>
+
+void __put_cred(struct cred * cred)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/thread_info.h>
+
+void __check_object_size(const void * ptr,unsigned long n,bool to_user)
 {
 	lx_emul_trace(__func__);
 }

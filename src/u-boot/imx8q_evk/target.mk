@@ -13,9 +13,9 @@ unexport .SHELLFLAGS
 
 $(CUSTOM_TARGET_DEPS):
 	$(MAKE) -C $(UBOOT_CONTRIB_DIR) O=$(PWD)/$(PRG_REL_DIR)/uboot ARCH=arm CROSS_COMPILE=$(CROSS_DEV_PREFIX) imx8mq_evk_defconfig
-	$(MAKE) -C $(UBOOT_CONTRIB_DIR) O=$(PWD)/$(PRG_REL_DIR)/uboot ARCH=arm CROSS_COMPILE=$(CROSS_DEV_PREFIX)
+	$(MAKE) -C $(UBOOT_CONTRIB_DIR) O=$(PWD)/$(PRG_REL_DIR)/uboot LDFLAGS=--no-warn-rwx-segments ARCH=arm CROSS_COMPILE=$(CROSS_DEV_PREFIX)
 	$(VERBOSE)cp -r $(ATF_CONTRIB_DIR) $(PWD)/$(PRG_REL_DIR)/atf
-	$(MAKE) -C $(PWD)/$(PRG_REL_DIR)/atf PLAT=imx8mq CROSS_COMPILE=$(CROSS_DEV_PREFIX) bl31
+	$(MAKE) -C $(PWD)/$(PRG_REL_DIR)/atf LDFLAGS=--no-warn-rwx-segments PLAT=imx8mq CROSS_COMPILE=$(CROSS_DEV_PREFIX) bl31
 	$(VERBOSE)cp -r $(IMG_CONTRIB_DIR) $(PWD)/$(PRG_REL_DIR)/mkimage
 	$(VERBOSE)ln -s $(PWD)/$(PRG_REL_DIR)/uboot/tools/mkimage $(PWD)/$(PRG_REL_DIR)/mkimage/iMX8M/mkimage_uboot
 	$(VERBOSE)ln -s $(PWD)/$(PRG_REL_DIR)/uboot/spl/u-boot-spl.bin $(PWD)/$(PRG_REL_DIR)/mkimage/iMX8M/

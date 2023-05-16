@@ -1,0 +1,40 @@
+diff --git a/plat/imx/common/imx8m/hab.c b/plat/imx/common/imx8m/hab.c
+index 8a99bbc..4023d86 100644
+--- a/plat/imx/common/imx8m/hab.c
++++ b/plat/imx/common/imx8m/hab.c
+@@ -51,6 +51,9 @@ enum hab_target {
+ 	HAB_TGT_ANY		= 0x55,
+ };
+ 
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Warray-bounds"
++
+ typedef enum hab_status hab_rvt_report_event_t(enum hab_status, uint32_t,
+ 		uint8_t* , size_t*);
+ typedef enum hab_status hab_rvt_report_status_t(enum hab_config *,
+@@ -125,3 +128,4 @@ int imx_hab_handler(uint32_t smc_fid, u_register_t x1, u_register_t x2,
+ 	return 0;
+ }
+ 
++#pragma GCC diagnostic pop
+diff --git a/plat/imx/imx8mq/src.c b/plat/imx/imx8mq/src.c
+index 696f68b..0c46584 100644
+--- a/plat/imx/imx8mq/src.c
++++ b/plat/imx/imx8mq/src.c
+@@ -55,6 +55,8 @@ int imx_soc_handler(uint32_t smc_fid, u_register_t x1, u_register_t x2,
+ 	uint32_t val;
+ 	uint32_t rom_version;
+ 
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Warray-bounds"
+ 	val = mmio_read_32(IMX_ANAMIX_BASE + DIGPROG);
+ 	rom_version = mmio_read_8(IMX_ROM_BASE + SW_INFO_A0);
+ 	if (rom_version != 0x10) {
+@@ -69,6 +71,7 @@ int imx_soc_handler(uint32_t smc_fid, u_register_t x1, u_register_t x2,
+ 			val |= 0x21;
+ 		}
+ 	}
++#pragma GCC diagnostic pop
+ 
+ 	return val;
+ }

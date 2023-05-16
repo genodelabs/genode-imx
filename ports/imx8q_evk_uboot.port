@@ -6,8 +6,6 @@ URL(uboot)    := https://github.com/alex-ab/uboot-imx/tarball/85bdcc7
 NAME(uboot)   := uboot.tgz
 DIR(uboot)    := uboot
 SHA(uboot)    := f7371176e36d346dd9256c40e489c22f8d3d8f0f543177063fccaa7e9479225e
-PATCHES       := patches/uboot-imx8q_evk.patch
-PATCH_OPT     := -p1 --directory=uboot
 
 URL(atf)      := https://github.com/alex-ab/imx-atf/tarball/413e93e
 NAME(atf)     := atf.tgz
@@ -25,3 +23,11 @@ DIR(firmware  := firmware
 
 default: firmware.file
 	$(VERBOSE)rm -rf firmware; mkdir -p firmware; cd firmware; sh ../firmware-imx-8.1.bin --auto-accept
+
+PATCHES += patches/uboot-imx8q_evk.patch
+PATCHES += patches/uboot-imx8q_evk-redundant-decl.patch
+PATCHES += patches/uboot-imx8q_evk-atf.patch
+
+PATCH_OPT(patches/uboot-imx8q_evk.patch)                := -p1 --directory=uboot
+PATCH_OPT(patches/uboot-imx8q_evk-redundant-decl.patch) := -p1 --directory=uboot
+PATCH_OPT(patches/uboot-imx8q_evk-atf.patch)            := -p1 --directory=atf

@@ -28,9 +28,9 @@ namespace Hw::Imx8q_evk_board {
 		UART_BASE  = 0x30860000,
 		UART_SIZE  = 0x1000,
 		UART_CLOCK = 250000000,
-
-		NR_OF_CPUS = 4,
 	};
+
+	static constexpr Genode::size_t NR_OF_CPUS = 4;
 
 	namespace Cpu_mmio {
 		enum {

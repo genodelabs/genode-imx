@@ -327,14 +327,6 @@ void dma_resv_init(struct dma_resv * obj)
 }
 
 
-#include <linux/dma-mapping.h>
-
-int dma_supported(struct device *dev, u64 mask)
-{
-	return 1;
-}
-
-
 #include <linux/fb.h>
 
 int fb_get_options(const char * name,char ** option)
@@ -563,14 +555,6 @@ struct regulator * regulator_get_optional(struct device * dev,const char * id)
 {
 	lx_emul_trace(__func__);
 	return NULL;
-}
-
-
-#include <linux/sched.h>
-
-void sched_set_fifo(struct task_struct * p)
-{
-	lx_emul_trace(__func__);
 }
 
 

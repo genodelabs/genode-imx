@@ -1126,14 +1126,6 @@ int rtnl_unicast(struct sk_buff * skb,struct net * net,u32 pid)
 }
 
 
-#include <linux/sched.h>
-
-void sched_set_fifo(struct task_struct * p)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/seq_file.h>
 
 loff_t seq_lseek(struct file * file,loff_t offset,int whence)

@@ -1435,14 +1435,6 @@ int rtnl_unicast(struct sk_buff * skb,struct net * net,u32 pid)
 char *saved_command_line;
 
 
-#include <linux/sched.h>
-
-void sched_set_fifo(struct task_struct * p)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/seq_file.h>
 
 void seq_escape(struct seq_file * m,const char * s,const char * esc)

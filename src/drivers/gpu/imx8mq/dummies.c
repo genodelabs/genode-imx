@@ -198,14 +198,6 @@ struct thermal_cooling_device * thermal_of_cooling_device_register(struct device
 }
 
 
-#include <linux/sched.h>
-
-void sched_set_fifo(struct task_struct * p)
-{
-	lx_emul_trace(__func__);
-}
-
-
 void sched_set_fifo_low(struct task_struct * p)
 {
 	lx_emul_trace(__func__);

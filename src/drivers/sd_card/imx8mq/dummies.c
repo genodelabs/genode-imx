@@ -373,14 +373,6 @@ int devtmpfs_delete_node(struct device * dev)
 }
 
 
-#include <linux/dma-mapping.h>
-
-int dma_supported(struct device *dev, u64 mask)
-{
-	return 1;
-}
-
-
 extern void dpm_sysfs_remove(struct device * dev);
 void dpm_sysfs_remove(struct device * dev)
 {
@@ -613,14 +605,6 @@ int register_pm_notifier(struct notifier_block * nb)
 {
 	lx_emul_trace(__func__);
 	return 0;
-}
-
-
-#include <linux/sched.h>
-
-void sched_set_fifo(struct task_struct * p)
-{
-	lx_emul_trace(__func__);
 }
 
 

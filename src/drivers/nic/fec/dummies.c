@@ -182,14 +182,6 @@ void dpm_sysfs_remove(struct device * dev)
 }
 
 
-#include <linux/gfp.h>
-
-void free_pages(unsigned long addr,unsigned int order)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/kernel.h>
 
 char * get_options(const char * str,int nints,int * ints)

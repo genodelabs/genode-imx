@@ -41,14 +41,6 @@ unsigned long __fdget(unsigned int fd)
 }
 
 
-#include <linux/gfp.h>
-
-unsigned long __get_free_pages(gfp_t gfp_mask,unsigned int order)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <asm-generic/percpu.h>
 
 unsigned long __per_cpu_offset[NR_CPUS] = {};
@@ -435,14 +427,6 @@ struct file * fget(unsigned int fd)
 #include <linux/kobject.h>
 
 struct kobject *firmware_kobj;
-
-
-#include <linux/gfp.h>
-
-void free_pages(unsigned long addr,unsigned int order)
-{
-	lx_emul_trace_and_stop(__func__);
-}
 
 
 #include <linux/freezer.h>

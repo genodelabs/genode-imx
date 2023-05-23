@@ -15,23 +15,6 @@
 #include <linux/slab.h>
 
 
-#include <linux/dma-mapping.h>
-
-dma_addr_t dma_map_page_attrs(struct device * dev,
-                              struct page * page,
-                              size_t offset,
-                              size_t size,
-                              enum dma_data_direction dir,
-                              unsigned long attrs)
-{
-	dma_addr_t    const dma_addr  = page_to_phys(page);
-	unsigned long const virt_addr = (unsigned long)page_to_virt(page);
-
-	lx_emul_mem_cache_clean_invalidate((void *)(virt_addr + offset), size);
-	return dma_addr + offset;
-}
-
-
 #include <linux/dmapool.h>
 
 struct dma_pool { size_t size; };
@@ -60,33 +43,6 @@ struct dma_pool * dma_pool_create(const char * name,
 void dma_pool_free(struct dma_pool * pool,void * vaddr,dma_addr_t dma)
 {
 	lx_emul_mem_free(vaddr);
-}
-
-
-#include <linux/dma-mapping.h>
-
-int dma_supported(struct device * dev,u64 mask)
-{
-	lx_emul_trace(__func__);
-	return 1;
-}
-
-
-#include <linux/dma-mapping.h>
-
-void dma_unmap_page_attrs(struct device * dev,
-                          dma_addr_t addr,
-                          size_t size,
-                          enum dma_data_direction dir,
-                          unsigned long attrs)
-{
-	unsigned long const virt_addr = lx_emul_mem_virt_addr((void*)addr);
-
-	if (!virt_addr)
-		return;
-
-	if (dir == DMA_FROM_DEVICE)
-		lx_emul_mem_cache_invalidate((void *)virt_addr, size);
 }
 
 
@@ -136,24 +92,6 @@ struct page * __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order,
 	unsigned const num_pages = (1 << order);
 	void *   const ptr = lx_emul_mem_alloc_aligned(PAGE_SIZE*num_pages, PAGE_SIZE);
 	return lx_emul_virt_to_pages(ptr, num_pages);
-}
-
-
-void free_pages(unsigned long addr,unsigned int order)
-{
-	if (addr != 0ul)
-		__free_pages(virt_to_page((void *)addr), order);
-}
-
-
-unsigned long __get_free_pages(gfp_t gfp_mask, unsigned int order)
-{
-	struct page *page = __alloc_pages(gfp_mask, order, 0);
-
-	if (!page)
-		return 0;
-
-	return (unsigned long)page_address(page);
 }
 
 

@@ -1183,14 +1183,6 @@ void rtc_time64_to_tm(time64_t time,struct rtc_time * tm)
 char *saved_command_line;
 
 
-#include <linux/sched.h>
-
-void sched_set_fifo(struct task_struct * p)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/seq_file.h>
 
 void seq_escape(struct seq_file * m,const char * s,const char * esc)

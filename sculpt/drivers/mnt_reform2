@@ -98,7 +98,7 @@
 		<binary name="imx8mq_platform_drv"/>
 		<resource name="RAM" quantum="3M"/>
 		<provides> <service name="Platform"/> </provides>
-		<config>
+		<config ld_verbose="yes">
 			<report devices="yes"/>
 			<policy label="fb_drv -> " info="yes">
 				<device name="dcss"/>
@@ -155,6 +155,10 @@
 
 			<policy label="dynamic -> nvme_drv -> " info="yes">
 				<pci class="NVME"/>
+			</policy>
+
+			<policy label="runtime -> wifi" info="yes">
+				<pci class="WIFI"/>
 			</policy>
 		</config>
 		<route>

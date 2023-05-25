@@ -1,0 +1,337 @@
+#
+# Configure wireless lan
+#
+
+proc wifi_ssid { } {
+	return $::env(GENODE_WIFI_SSID)
+}
+
+proc wifi_psk { } {
+	return $::env(GENODE_WIFI_PSK)
+}
+
+#
+# widi_drv config generator (supporting a network list)
+#
+# You may script your tests with this function in the dynamic_rom config below.
+# The syntax for the networks parameter is
+#
+#   { ssid protection passphrase explicit_scan }
+#
+# Example dynamic_rom config:
+#
+#   {<inline description="auto-connect both networks">
+#   } [wifi_config 30 5 no [list "net1 WPA2 net1_psk no" "net2 WPA2 net2_psk no"]] {
+#   </inline>
+#   <inline description="aquto-connect both, but net2 explicitly">
+#   } [wifi_config 30 5 no [list "net1 WPA2 net1_psk no" "net2 WPA2 net2_psk yes"]] {
+#   </inline>}
+
+set wifi_verbose       false
+set wifi_verbose_state false
+
+proc wifi_config { connected_scan_interval scan_interval rfkill networks } {
+	global wifi_verbose
+	global wifi_verbose_state
+
+	set    config "<wifi_config"
+	append config " verbose=\"$wifi_verbose\""
+	append config " verbose_state=\"$wifi_verbose_state\""
+	append config " connected_scan_interval=\"$connected_scan_interval\""
+	append config " scan_interval=\"$scan_interval\""
+	append config " rfkill=\"$rfkill\""
+	append config ">\n"
+	foreach n $networks {
+		append config "  <network"
+		append config " ssid=\"[lindex $n 0]\""
+		append config " protection=\"[lindex $n 1]\""
+		append config " passphrase=\"[lindex $n 2]\""
+		append config " explicit_scan=\"[lindex $n 3]\""
+		append config "/>\n"
+	}
+	append config "</wifi_config>\n"
+
+	return $config
+}
+
+create_boot_directory
+
+import_from_depot [depot_user]/src/[base_src] \
+                  [depot_user]/src/init \
+                  [depot_user]/src/report_rom \
+                  [depot_user]/src/rom_filter \
+                  [depot_user]/src/dynamic_rom \
+                  [depot_user]/src/nic_router \
+                  [depot_user]/src/dummy_rtc_drv \
+                  [depot_user]/src/imx8mq_platform_drv \
+                  [depot_user]/src/imx8mq_gpio_drv \
+                  [depot_user]/src/imx8mq_pci_host_drv \
+                  [depot_user]/pkg/imx8mq_wifi \
+                  [depot_user]/raw/mnt_reform2-devices
+
+#
+# Build
+#
+
+set build_components {
+	test/lwip/http_srv
+	lib/vfs_wifi
+	lib/vfs_jitterentropy
+	lib/vfs_lwip
+}
+
+build $build_components
+
+
+#
+# Generate config
+#
+
+append config {
+<config verbose="yes" prio_levels="2">
+	<parent-provides>
+		<service name="ROM"/>
+		<service name="IRQ"/>
+		<service name="IO_MEM"/>
+		<service name="IO_PORT"/>
+		<service name="PD"/>
+		<service name="RM"/>
+		<service name="CPU"/>
+		<service name="LOG"/>
+	</parent-provides>
+	<default-route>
+		<any-service> <parent/> <any-child/> </any-service>
+	</default-route>
+	<default caps="100"/>
+
+	<start name="timer">
+		<resource name="RAM" quantum="1M"/>
+		<provides> <service name="Timer"/> </provides>
+	</start>
+
+	<start name="report_rom">
+		<resource name="RAM" quantum="2M"/>
+		<provides> <service name="Report"/> <service name="ROM"/> </provides>
+		<config verbose="no">
+			<policy label="rom_filter -> pci_devices" report="imx8mq_pci_host_drv -> devices"/>
+		</config>
+	</start>
+
+	<start name="rom_filter" caps="70">
+		<resource name="RAM" quantum="1M"/>
+		<provides> <service name="ROM" /> </provides>
+		<config buffer="32K">
+			<input name="devices"/>
+			<input name="pci_devices"/>
+			<output node="devices">
+				<input name="devices"     skip_toplevel="yes"/>
+				<input name="pci_devices" skip_toplevel="yes"/>
+			</output>
+		</config>
+		<route>
+			<service name="ROM" label="pci_devices"> <child name="report_rom"/> </service>
+			<service name="LOG"> <parent/> </service>
+			<service name="PD">  <parent/> </service>
+			<service name="CPU"> <parent/> </service>
+			<service name="ROM"> <parent/> </service>
+		</route>
+	</start>
+
+	<start name="platform_drv" caps="300" managing_system="yes">
+		<binary name="imx8mq_platform_drv"/>
+		<resource name="RAM" quantum="2M"/>
+		<provides> <service name="Platform"/> </provides>
+		<config>
+			<policy label="gpio_drv -> " info="yes">
+				<device name="gpio1"/>
+				<device name="gpio2"/>
+				<device name="gpio3"/>
+				<device name="gpio4"/>
+				<device name="gpio5"/>
+			</policy>
+
+			<policy label="imx8mq_pci_host_drv -> " info="yes">
+				<device name="pcie_1"/>
+				<!-- <device name="pcie_2"/> -->
+			</policy>
+
+			<policy label="wifi_drv -> " info="yes">
+				<pci class="WIFI"/>
+			</policy>
+		</config>
+		<route>
+			<service name="Report" label="devices"> <parent label="devices"/> </service>
+			<service name="ROM" label="devices"> <child name="rom_filter"/> </service>
+			<service name="Timer">    <child name="timer"/>        </service>
+			<any-service> <parent/> </any-service>
+		</route>
+	</start>
+
+	<start name="gpio_drv" caps="150">
+		<binary name="imx_gpio_drv"/>
+		<resource name="RAM" quantum="2M"/>
+		<provides><service name="Gpio"/></provides>
+		<route>
+			<service name="RM">       <parent/> </service>
+			<service name="ROM">      <parent/> </service>
+			<service name="PD">       <parent/> </service>
+			<service name="CPU">      <parent/> </service>
+			<service name="LOG">      <parent/> </service>
+			<service name="Platform"> <child name="platform_drv"/> </service>
+		</route>
+		<config>
+			<gpio num="87"  mode="O" value="1"/>
+			<gpio num="135" mode="O" value="1"/>
+		</config>
+	</start>
+
+	<start name="imx8mq_pci_host_drv">
+		<resource name="RAM" quantum="1M"/>
+		<route>
+			<service name="RM">       <parent/> </service>
+			<service name="ROM">      <parent/> </service>
+			<service name="PD">       <parent/> </service>
+			<service name="CPU">      <parent/> </service>
+			<service name="LOG">      <parent/> </service>
+			<service name="Timer">    <child name="timer"/>        </service>
+			<service name="Report">   <child name="report_rom"/>   </service>
+			<service name="Platform"> <child name="platform_drv"/> </service>
+			<service name="Gpio">     <child name="gpio_drv"/>     </service>
+		</route>
+	</start>
+
+	<start name="dummy_rtc_drv">
+		<resource name="RAM" quantum="1M"/>
+		<provides> <service name="Rtc"/> </provides>
+		<config year="2023" month="01" day="19" hour="16" minute="0" second="0"/>
+		<route>
+			<any-service> <parent/> </any-service>
+		</route>
+	</start>
+
+	<start name="test-lwip_httpsrv">
+		<resource name="RAM" quantum="128M"/>
+		<config>
+			<libc stdout="/dev/null" stderr="/dev/log" socket="/socket"/>
+			<vfs>
+				<dir name="dev"> <log/> <null/> </dir>
+				<dir name="socket"> <lwip dhcp="yes"/> </dir>
+			</vfs>
+		</config>
+		<route>
+			<service name="Nic"> <child name="nic_router"/> </service>
+			<any-service> <parent/> <any-child/> </any-service>
+		</route>
+	</start>
+
+	<start name="state_report_rom">
+		<binary name="report_rom"/>
+		<resource name="RAM" quantum="2M"/>
+		<provides> <service name="Report"/> <service name="ROM"/> </provides>
+		<config verbose="no"/>
+	</start>
+
+	<start name="accesspoints_report_rom">
+		<binary name="report_rom"/>
+		<resource name="RAM" quantum="2M"/>
+		<provides> <service name="Report"/> <service name="ROM"/> </provides>
+		<config verbose="no"/>
+	</start>
+
+	<start name="config_rom">
+		<binary name="dynamic_rom"/>
+		<resource name="RAM" quantum="4M"/>
+		<provides><service name="ROM"/></provides>
+		<config verbose="yes">
+			<rom name="wifi_config">
+				<inline description="disconnect">
+} [wifi_config 30 5 no {}] {
+				</inline>
+				<sleep milliseconds="15000"/>
+				<inline description="connect">
+} [wifi_config 30 5 no [list "[wifi_ssid] WPA2 [wifi_psk] yes"]] {
+				</inline>
+				<sleep milliseconds="600000"/>
+				<inline description="rfkill block">
+} [wifi_config 30 5 yes [list "[wifi_ssid] WPA2 [wifi_psk] yes"]] {
+				</inline>
+				<sleep milliseconds="30000"/>
+				<inline description="rfkill unblock">
+} [wifi_config 30 5 no [list "[wifi_ssid] WPA2 [wifi_psk] yes"]] {
+				</inline>
+				<sleep milliseconds="30000"/>
+			</rom>
+		</config>
+	</start>
+
+	<start name="nic_router" caps="150">
+		<resource name="RAM" quantum="8M"/>
+		<provides>
+			<service name="Nic"/>
+			<service name="Uplink"/>
+		</provides>
+		<config verbose="no" verbose_domain_state="yes" dhcp_discover_timeout_sec="10" dhcp_request_timeout_sec="6">
+
+			<policy label_prefix="test-lwip_httpsrv" domain="downlink"/>
+			<policy label_prefix="wifi_drv"          domain="uplink"/>
+
+			<domain name="uplink" verbose_packets="no" verbose_packet_drop="no" icmp_echo_server="yes">
+
+				<nat domain="downlink" tcp-ports="16384"/>
+				<tcp-forward port="443" domain="downlink" to="10.0.3.2"/>
+				<tcp-forward port="80"  domain="downlink" to="10.0.3.2"/>
+
+			</domain>
+
+			<domain name="downlink" verbose_packets="no" verbose_packet_drop="no" interface="10.0.3.1/24">
+
+				<dhcp-server ip_first="10.0.3.2" ip_last="10.0.3.2"/>
+
+			</domain>
+
+		</config>
+	</start>
+
+	<start name="devices_report_rom">
+		<binary name="report_rom"/>
+		<resource name="RAM" quantum="1200K"/>
+		<provides> <service name="Report"/> <service name="ROM"/> </provides>
+		<config verbose="yes"/>
+	</start>
+
+	<start name="wifi_drv" caps="250" priority="-1">
+		<resource name="RAM" quantum="32M"/>
+		<config ld_verbose="yes">
+			<report mac_address="true"/>
+			<libc stdout="/dev/log" stderr="/dev/log" rtc="/dev/rtc" rng="/dev/urandom"/>
+			<vfs>
+				<dir name="dev"> <log/> <null/> <rtc/>
+					<jitterentropy name="random"/>
+					<jitterentropy name="urandom"/>
+					<wifi/>
+				</dir>
+				<dir name="firmware">
+					<tar name="wifi_firmware.tar"/>
+				</dir>
+			</vfs>
+		</config>
+		<route>
+			<service name="Uplink"> <child name="nic_router"/> </service>
+			<service name="Rtc"> <any-child/> </service>
+			<service name="Report" label="accesspoints"> <child name="accesspoints_report_rom"/> </service>
+			<service name="Report" label="state"> <child name="state_report_rom"/> </service>
+			<service name="Report" label="devices"> <child name="devices_report_rom"/> </service>
+			<service name="ROM" label="wifi_config"> <child name="config_rom"/> </service>
+			<service name="ROM" label="wifi.lib.so"> <parent label="imx8mq_wifi.lib.so"/> </service>
+			<service name="ROM" label="wifi_firmware.tar"> <parent label="imx8mq_wifi_firmware.tar"/> </service>
+			<any-service> <parent/> <any-child/> </any-service>
+		</route>
+	</start>
+</config>
+}
+
+install_config $config
+build_boot_image [build_artifacts]
+run_genode_until forever
+
+# vi: set ft=tcl :

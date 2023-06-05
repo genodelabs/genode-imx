@@ -3,10 +3,10 @@ drivers: mnt_reform2
 # supplemental depot content added to the system image
 import: pkg/drivers_managed-mnt_reform2 pkg/imx8mq_wifi
 
-build: drivers/platform/imx8mq
-
 # selection of launcher-menu entries
-launcher: shared_fs
+launcher:
 
-depot: genodelabs cnuke alex-ab mstein nfeske cproc chelmuth jschlatow
-depot: ssumpf skalk
+deploy: empty
+presets: empty window_manager falkon_web_browser debian_installer
+
+depot: genodelabs alex-ab cproc skalk

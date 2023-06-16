@@ -649,7 +649,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 			_worker_args.completed_request = &_completed_request;
 
 			lx_emul_task_unblock(_lx_user_task);
-			Lx_kit::env().scheduler.schedule();
+			Lx_kit::env().scheduler.execute();
 
 			for (;;) {
 				if (_completed_request.matches(request)
@@ -657,6 +657,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 					break;
 
 				_ep.wait_and_dispatch_one_io_signal();
+				Lx_kit::env().scheduler.execute();
 			}
 
 			if (_completed_request.success)
@@ -990,7 +991,7 @@ struct Driver::Main
 
 	void _handle_signal()
 	{
-		Lx_kit::env().scheduler.schedule();
+		Lx_kit::env().scheduler.execute();
 	}
 
 	Main(Env &env) : _env { env }

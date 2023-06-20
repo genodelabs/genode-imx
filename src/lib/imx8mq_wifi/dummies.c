@@ -71,14 +71,6 @@ unsigned long __must_check __arch_copy_to_user(void __user *to, const void *from
 }
 
 
-#include <linux/prandom.h>
-
-u32 __get_random_u32_below(u32 ceil)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/random.h>
 
 u16 get_random_u16(void)

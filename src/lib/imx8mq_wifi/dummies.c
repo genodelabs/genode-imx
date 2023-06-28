@@ -221,14 +221,6 @@ void update_vsyscall(struct timekeeper * tk)
 }
 
 
-#include <linux/of_clk.h>
-
-void __init of_clk_init(const struct of_device_id * matches)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/proc_ns.h>
 
 int proc_alloc_inum(unsigned int * inum)

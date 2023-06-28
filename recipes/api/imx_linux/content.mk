@@ -6,6 +6,7 @@ MIRRORED_FROM_DDE_LINUX := src/lib/lx_emul \
                            src/lib/lx_kit \
                            src/include/lx_emul \
                            src/include/lx_user \
+                           src/include/spec/arm/lx_kit \
                            src/include/spec/arm_64/lx_kit \
                            src/include/lx_kit \
                            lib/import/import-lx_emul_common.inc
@@ -20,8 +21,10 @@ $(MIRRORED_FROM_DDE_LINUX):
 #
 
 MIRRORED_FROM_REP_DIR := lib/mk/imx_lx_emul.mk \
+                         lib/mk/spec/arm_v7/imx_linux_generated.mk \
                          lib/mk/spec/arm_v8/imx_linux_generated.mk \
                          lib/import/import-imx_lx_emul.mk \
+                         src/imx_linux/arm_v7a/target.inc \
                          src/imx_linux/arm_v8a/target.inc
 
 content: $(MIRRORED_FROM_REP_DIR)
@@ -37,116 +40,13 @@ PORT_DIR := $(call port_dir,$(REP_DIR)/ports/linux-imx)
 LX_REL_DIR := linux-imx
 LX_ABS_DIR := $(addsuffix /$(LX_REL_DIR),$(PORT_DIR))
 
-# ingredients needed for creating a Linux build directory / generated headers
-LX_FILES += Kbuild \
-            Makefile \
-            arch/arm64/Makefile \
-            arch/arm64/boot/dts \
-            arch/arm64/configs \
-            arch/arm64/include/asm/Kbuild \
-            arch/arm64/include/uapi/asm/Kbuild \
-            arch/arm64/tools/Makefile \
-            arch/arm64/tools/cpucaps \
-            arch/arm64/tools/gen-cpucaps.awk \
-            arch/arm64/tools/gen-sysreg.awk \
-            arch/arm64/tools/sysreg \
-            arch/x86/entry/syscalls/syscall_32.tbl \
-            include/asm-generic/Kbuild \
-            include/linux/compiler-version.h \
-            include/linux/kbuild.h \
-            include/linux/license.h \
-            include/uapi/Kbuild \
-            include/uapi/asm-generic/Kbuild \
-            kernel/configs/tiny-base.config \
-            kernel/configs/tiny.config \
-            scripts/Kbuild.include \
-            scripts/Makefile \
-            scripts/Makefile.asm-generic \
-            scripts/Makefile.build \
-            scripts/Makefile.compiler \
-            scripts/Makefile.extrawarn \
-            scripts/Makefile.host \
-            scripts/Makefile.lib \
-            scripts/as-version.sh \
-            scripts/asn1_compiler.c \
-            scripts/basic/Makefile \
-            scripts/basic/fixdep.c \
-            scripts/cc-version.sh \
-            scripts/check-local-export \
-            scripts/checksyscalls.sh \
-            scripts/config \
-            scripts/dtc \
-            scripts/kconfig/merge_config.sh \
-            scripts/ld-version.sh \
-            scripts/min-tool-version.sh \
-            scripts/mkcompile_h \
-            scripts/mod \
-            scripts/pahole-flags.sh \
-            scripts/pahole-version.sh \
-            scripts/remove-stale-files \
-            scripts/setlocalversion \
-            scripts/sorttable.c \
-            scripts/sorttable.h \
-            scripts/subarch.include \
-            tools/include/tools
-
-LX_SCRIPTS_KCONFIG_FILES := $(notdir $(wildcard $(LX_ABS_DIR)/scripts/kconfig/*.c)) \
-                            $(notdir $(wildcard $(LX_ABS_DIR)/scripts/kconfig/*.h)) \
-                            Makefile lexer.l parser.y
-LX_FILES += $(addprefix scripts/kconfig/,$(LX_SCRIPTS_KCONFIG_FILES)) \
-
 LX_FILES += $(shell cd $(LX_ABS_DIR); find -name "Kconfig*" -printf "%P\n")
-
-# needed for generated/asm-offsets.h
-LX_FILES += arch/arm64/include/asm/boot.h \
-            arch/arm64/include/asm/current.h \
-            arch/arm64/include/asm/fixmap.h \
-            arch/arm64/include/asm/irqflags.h \
-            arch/arm64/include/asm/memory.h \
-            arch/arm64/include/asm/mte.h \
-            arch/arm64/include/asm/page.h \
-            arch/arm64/include/asm/pgtable.h \
-            arch/arm64/include/asm/signal32.h \
-            arch/arm64/include/asm/smp_plat.h \
-            arch/arm64/include/asm/spinlock.h \
-            arch/arm64/include/asm/suspend.h \
-            arch/arm64/kernel/asm-offsets.c \
-            include/acpi \
-            include/asm-generic/current.h \
-            include/asm-generic/fixmap.h \
-            include/asm-generic/memory_model.h \
-            include/asm-generic/pgtable_uffd.h \
-            include/asm-generic/qrwlock.h \
-            include/asm-generic/qspinlock.h \
-            include/linux/arm-smccc.h \
-            include/linux/arm_sdei.h \
-            include/linux/cper.h \
-            include/linux/page_table_check.h \
-            include/linux/pgtable.h \
-            include/uapi/linux/arm_sdei.h \
-            kernel/bounds.c \
-            kernel/time/timeconst.bc
-
-# needed for gen_crc32table
-LX_FILES += lib/gen_crc32table.c \
-            lib/crc32.c
-
-content: linux-imx/include/linux/kvm_host.h
-linux-imx/include/linux/kvm_host.h: # cut dependencies from kvm via dummy header
-	mkdir -p $(dir $@)
-	touch $@
-
-# prevent build of vdso as side effect of the linux-build directory preparation
-content: linux-imx/arch/arm64/kernel/vdso/Makefile
-linux-imx/arch/arm64/kernel/vdso/Makefile:
-	mkdir -p $(dir $@)
-	echo "default:" > $@
-	echo "include/generated/vdso-offsets.h:" >> $@
-	echo "arch/arm64/kernel/vdso/vdso.so:" >> $@
 
 # add content listed in the repository's source.list or dep.list files
 LX_FILE_LISTS := $(shell find -H $(REP_DIR)/src/lib -name dep.list -or -name source.list)
 LX_FILES += $(shell cat $(LX_FILE_LISTS))
+LX_USB_FILE_LISTS := $(shell find -H $(REP_DIR)/src/drivers/usb_host/imx -name dep.list -or -name source.list)
+LX_FILES += $(shell cat $(LX_USB_FILE_LISTS))
 LX_FILES := $(sort $(LX_FILES))
 MIRRORED_FROM_PORT_DIR += $(addprefix $(LX_REL_DIR)/,$(LX_FILES))
 

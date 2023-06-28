@@ -64,7 +64,7 @@ import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/src/nic_router \
                   [depot_user]/src/dummy_rtc_drv \
                   [depot_user]/src/imx8mq_platform_drv \
-                  [depot_user]/src/imx8mq_gpio_drv \
+                  [depot_user]/src/imx_gpio_drv \
                   [depot_user]/src/imx8mq_pci_host_drv \
                   [depot_user]/pkg/imx8mq_wifi \
                   [depot_user]/raw/mnt_reform2-devices

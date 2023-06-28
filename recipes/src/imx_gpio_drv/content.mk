@@ -1,8 +1,7 @@
 content: src/drivers/gpio/imx include/gpio LICENSE
 
 src/drivers/gpio/imx:
-	mkdir -p $@
-	cp -r $(GENODE_DIR)/repos/os/$@/* $@/
+	$(mirror_from_rep_dir)
 
 include/gpio:
 	mkdir -p include

@@ -1,19 +1,43 @@
 <devices>
-	<device name="mxs_phy" type="fsl,imx6q-usbphy">
-		<io_mem address="0x020ca000" size="0xfff"/>
+	<device name="usbphy1" type="fsl,imx6q-usbphy">
+		<io_mem address="0x020c9000" size="0x1000"/>
+		<irq    number="76"/>
+		<clock  name="usbphy1"/>
+	</device>
+
+	<device name="usbphy2" type="fsl,imx6q-usbphy">
+		<io_mem address="0x020ca000" size="0x1000"/>
 		<irq    number="77"/>
-		<property name="fsl,anatop" value="0xdeaddead"/>
+		<clock  name="usbphy2"/>
+	</device>
+
+	<device name="usbotg" type="fsl,imx6q-usb">
+		<io_mem address="0x02184000" size="0x200"/>
+		<irq    number="75"/>
+		<clock  name="usboh3"/>
 	</device>
 
 	<device name="usbmisc_imx" type="fsl,imx6q-usbmisc">
-		<io_mem address="0x02184800" size="0x1ff"/>
+		<io_mem address="0x02184800" size="0x200"/>
+		<clock  name="usboh3"/>
 	</device>
 
-	<device name="imx_usb" type="fsl,imx6q-usb">
-		<io_mem address="0x02184200" size="0x1ff"/>
+	<device name="usbh1" type="fsl,imx6q-usb">
+		<io_mem address="0x02184200" size="0x200"/>
 		<irq    number="72"/>
-		<property  name="fsl,usbmisc" value="usbmisc_imx"/>
-		<property  name="dr_mode"     value="host"/>
+		<clock  name="usboh3"/>
+	</device>
+
+	<device name="gpio3" type="fsl,imx6q-gpio">
+		<io_mem address="0x20a4000" size="0x4000"/>
+		<irq    number="102"/>
+		<irq    number="103"/>
+	</device>
+
+	<device name="gpio7" type="fsl,imx6q-gpio">
+		<io_mem address="0x20b4000" size="0x4000"/>
+		<irq    number="110"/>
+		<irq    number="111"/>
 	</device>
 
 	<device name="mmc0" type="fsl,imx6q-usdhc">

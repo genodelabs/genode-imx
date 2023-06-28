@@ -45,20 +45,12 @@ struct Driver::Ccm : Genode::Attached_mmio
 			return Rate { 66000000 }; }
 	};
 
-	struct Enet_ref_clock : public Clock
-	{
-		Enet_ref_clock(Clocks            & clocks,
-		               Clock::Name const & name)
-		: Clock(clocks, name) {}
-
-		Rate rate() const override {
-			return Rate { 50000000 }; }
-	};
-
-
-	Clocks       & _clocks;
-	Enet_clock     _enet     { _clocks, "enet",  *this};
-	Enet_ref_clock _enet_ref { _clocks, "enet_ref"    };
+	Clocks           &_clocks;
+	Enet_clock        _enet     { _clocks, "enet",    *this };
+	Fixed_clock       _enet_ref { _clocks, "enet_ref", { 50000000  } };
+	Fixed_clock       _usboh3   { _clocks, "usboh3",   { 66000000  } };
+	Fixed_clock       _usbphy1  { _clocks, "usbphy1",  { 480000000 } };
+	Fixed_clock       _usbphy2  { _clocks, "usbphy2",  { 480000000 } };
 
 	enum {
 		CCM_MMIO_BASE = 0x020c4000,

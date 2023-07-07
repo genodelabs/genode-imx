@@ -998,7 +998,7 @@ struct Driver::Main
 	{
 		log("--- i.MX 8MQ GPU driver started ---");
 
-		Lx_kit::initialize(_env);
+		Lx_kit::initialize(_env, _signal_handler);
 		_env.exec_static_constructors();
 
 		lx_user_task_args = &_worker_args;

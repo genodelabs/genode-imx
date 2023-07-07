@@ -75,7 +75,6 @@ import_from_depot [depot_user]/src/[base_src] \
 
 set build_components {
 	test/lwip/http_srv
-	lib/vfs_wifi
 	lib/vfs_jitterentropy
 	lib/vfs_lwip
 }
@@ -308,7 +307,6 @@ append config {
 				<dir name="dev"> <log/> <null/> <rtc/>
 					<jitterentropy name="random"/>
 					<jitterentropy name="urandom"/>
-					<wifi/>
 				</dir>
 				<dir name="firmware">
 					<tar name="wifi_firmware.tar"/>

@@ -29,8 +29,18 @@ struct Gpc
 			OFF              = 0
 		};
 
-		Genode::Pd_session & pd;
-		unsigned long        id;
+		struct Control: Genode::Rpc_client<Genode::Pd_session::System_control>
+		{
+			explicit Control(Genode::Capability<Genode::Pd_session::System_control> cap)
+			: Genode::Rpc_client<Genode::Pd_session::System_control>(cap) { }
+
+			Genode::Pd_session::Managing_system_state system_control(Genode::Pd_session::Managing_system_state const &state) override
+			{
+				return call<Rpc_system_control>(state);
+			}
+		} control;
+
+		unsigned long id;
 
 		Domain(Driver::Powers     & powers,
 		       Genode::Pd_session & pd,
@@ -38,7 +48,7 @@ struct Gpc
 		       unsigned long        fn_id)
 		:
 			Power(powers, name),
-			pd(pd),
+			control(pd.system_control_cap(Genode::Affinity::Location())),
 			id(fn_id) {}
 
 		void _on() override
@@ -49,7 +59,7 @@ struct Gpc
 			state.r[2] = id;
 			state.r[3] = ON;
 
-			state = pd.managing_system(state);
+			state = control.system_control(state);
 
 			if (state.r[0] != 0)
 				Genode::error("Cannot enable power domain ", name);
@@ -63,7 +73,7 @@ struct Gpc
 			state.r[2] = id;
 			state.r[3] = OFF;
 
-			state = pd.managing_system(state);
+			state = control.system_control(state);
 
 			if (state.r[0] != 0)
 				Genode::error("Cannot disable power domain ", name);

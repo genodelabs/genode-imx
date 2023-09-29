@@ -23,7 +23,7 @@
 #include <spec/arm_v8/cpu.h>
 
 /* base-hw includes */
-#include <spec/arm_64/cpu/vm_state_virtualization.h>
+#include <spec/arm_64/cpu/vcpu_state_virtualization.h>
 
 /* base-hw Core includes */
 #include <spec/arm/virtualization/board.h>

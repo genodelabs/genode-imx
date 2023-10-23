@@ -15,14 +15,6 @@ int ___ratelimit(struct ratelimit_state * rs,const char * func)
 }
 
 
-#include <linux/clk-provider.h>
-
-const char * __clk_get_name(const struct clk * clk)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/kexec.h>
 
 void __noclone __crash_kexec(struct pt_regs * regs)

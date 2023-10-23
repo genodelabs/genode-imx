@@ -79,8 +79,7 @@
 		<route/>
 	</start>
 
-	<start ram="1G" name="debian_installer" pkg="vmm-debian-installer-arm64">
-		<affinity xpos="1" width="2"/>
+	<start name="debian_installer" pkg="vmm-debian-installer-arm64">
 		<route>
 			<service name="Nic">
 				<child name="nic_router"/>

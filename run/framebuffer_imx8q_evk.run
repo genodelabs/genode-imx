@@ -1,6 +1,7 @@
 assert_spec arm_v8a
 
 create_boot_directory
+
 import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/src/init \
                   [depot_user]/raw/imx8q_evk-devices
@@ -73,13 +74,6 @@ install_config {
 
 </config>}
 
-build_boot_image {
-	imx_gpio_drv
-	imx8mq_platform_drv
-	imx8mq_fb_drv
-	imx8q_evk_i2c_drv
-	imx8mq_fb_drv-imx8q_evk.dtb
-	test-framebuffer
-}
+build_boot_image [build_artifacts]
 
 run_genode_until forever

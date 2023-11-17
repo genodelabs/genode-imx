@@ -99,13 +99,6 @@ install_config {
 	</start>
 </config>}
 
-build_boot_image {
-	report_rom
-	usb_hid_drv
-	event_dump
-	imx8mq_platform_drv
-	imx8mq_usb_host_drv
-	imx8mq_usb_host_drv-mnt_reform2.dtb
-}
+build_boot_image [build_artifacts]
 
 run_genode_until forever

@@ -90,7 +90,7 @@ install_config {
 	</start>
 </config> }
 
-build_boot_image { block_tester }
+build_boot_image [build_artifacts]
 
 run_genode_until forever
 

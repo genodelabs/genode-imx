@@ -146,14 +146,6 @@ install_config {
 
 </config>}
 
-build_boot_image {
-	test-framebuffer
-	imx8mq_platform_drv
-	imx8mq_fb_drv
-	imx8mq_pwm_drv
-	imx_gpio_drv
-	imx8q_evk_i2c_drv
-	imx8mq_fb_drv-mnt_reform2.dtb
-}
+build_boot_image [build_artifacts]
 
 run_genode_until forever

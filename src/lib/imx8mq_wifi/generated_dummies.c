@@ -416,13 +416,6 @@ void finish_rcuwait(struct rcuwait * w)
 struct flow_dissector flow_keys_basic_dissector;
 
 
-extern void flush_dcache_page(struct page * page);
-void flush_dcache_page(struct page * page)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/gcd.h>
 
 unsigned long gcd(unsigned long a,unsigned long b)

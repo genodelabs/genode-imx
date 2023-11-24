@@ -807,3 +807,19 @@ void __crypto_xor(u8 *dst, const u8 *src1, const u8 *src2, unsigned int len)
 	while (len--)
 		*dst++ = *src1++ ^ *src2++;
 }
+
+
+/*
+ * AFAICT this function can be a NOP as its intended purpose [1]
+ * is not there in our case.
+ *
+ * [1] "This function is called when a page has been modified by the kernel.
+ *      Mark it as dirty for later flushing when mapped in user space [...]"
+ *      -- arm64/mm/flush.c
+ *
+ */
+extern void flush_dcache_page(struct page * page);
+void flush_dcache_page(struct page * page)
+{
+	lx_emul_trace(__func__);
+}

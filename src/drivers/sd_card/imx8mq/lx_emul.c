@@ -13,18 +13,6 @@
 
 #include <lx_emul.h>
 
-
-#include <linux/gfp.h>
-
-struct page * __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order,
-                                     int preferred_nid, nodemask_t * nodemask)
-{
-	unsigned const num_pages = (1 << order);
-	void *   const ptr = lx_emul_mem_alloc_aligned(PAGE_SIZE*num_pages, PAGE_SIZE);
-	return lx_emul_virt_to_pages(ptr, num_pages);
-}
-
-
 #include <linux/fs.h>
 
 int alloc_chrdev_region(dev_t * dev,unsigned baseminor,unsigned count,const char * name)

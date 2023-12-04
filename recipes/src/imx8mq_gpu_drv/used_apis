@@ -3,3 +3,4 @@ os
 platform_session
 timer_session
 gpu_session
+genode_c_api

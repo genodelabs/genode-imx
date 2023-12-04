@@ -70,25 +70,6 @@ unsigned long arm_copy_to_user(void *to, const void *from, unsigned long n)
 }
 
 
-
-#include <linux/gfp.h>
-#include <linux/mm.h>
-
-struct page * __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order,
-                                     int preferred_nid, nodemask_t * nodemask)
-{
-	unsigned const num_pages = (1 << order);
-	void *   const ptr = lx_emul_mem_alloc_aligned(PAGE_SIZE*num_pages, PAGE_SIZE);
-	return lx_emul_virt_to_pages(ptr, num_pages);
-}
-
-
-struct page *alloc_pages_current(gfp_t gfp, unsigned order)
-{
-	return __alloc_pages(gfp, order, 0, NULL);
-}
-
-
 #include <asm-generic/logic_io.h>
 #include <lx_emul/io_mem.h>
 

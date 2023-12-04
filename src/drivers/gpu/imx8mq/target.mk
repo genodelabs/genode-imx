@@ -5,6 +5,7 @@ INC_DIR := $(PRG_DIR)
 INC_DIR += $(PRG_DIR)/include/lx_emul/shadow
 SRC_CC  := main.cc
 SRC_CC  += emul.cc
+SRC_CC  += lx_emul/shared_dma_buffer.cc
 SRC_C   := dummies.c
 SRC_C   += lx_emul.c
 SRC_C   += $(notdir $(wildcard $(PRG_DIR)/generated_dummies.c))

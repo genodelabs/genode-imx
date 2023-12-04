@@ -15,14 +15,6 @@ int ___ratelimit(struct ratelimit_state * rs,const char * func)
 }
 
 
-#include <linux/gfp.h>
-
-struct page * __alloc_pages_nodemask(gfp_t gfp_mask,unsigned int order,int preferred_nid,nodemask_t * nodemask)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/kexec.h>
 
 void __noclone __crash_kexec(struct pt_regs * regs)

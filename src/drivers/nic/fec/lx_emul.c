@@ -66,8 +66,7 @@ void * kmalloc_order_trace(size_t size,gfp_t flags,unsigned int order)
 
 unsigned long get_zeroed_page(gfp_t gfp_mask)
 {
-	void * const ptr = lx_emul_mem_alloc_aligned(PAGE_SIZE, PAGE_SIZE);
-	return (unsigned long)lx_emul_virt_to_pages(ptr, 1)->virtual;
+	return (unsigned long)__alloc_pages(GFP_KERNEL, 0, 0)->virtual;
 }
 
 

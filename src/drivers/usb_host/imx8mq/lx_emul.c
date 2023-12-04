@@ -77,15 +77,6 @@ unsigned long __must_check __arch_copy_to_user(void __user *to, const void *from
 #include <linux/gfp.h>
 #include <linux/mm.h>
 
-struct page * __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order,
-                                     int preferred_nid, nodemask_t * nodemask)
-{
-	unsigned const num_pages = (1 << order);
-	void *   const ptr = lx_emul_mem_alloc_aligned(PAGE_SIZE*num_pages, PAGE_SIZE);
-	return lx_emul_virt_to_pages(ptr, num_pages);
-}
-
-
 struct page *alloc_pages_current(gfp_t gfp, unsigned order)
 {
 	return __alloc_pages(gfp, order, 0);

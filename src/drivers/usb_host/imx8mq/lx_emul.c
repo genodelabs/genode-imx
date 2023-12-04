@@ -58,15 +58,6 @@ void lx_emul_register_pci_fixup(void (*fn)(struct pci_dev*),
 bool arm64_use_ng_mappings;
 
 
-#include <linux/cdev.h>
-#include <lx_emul/usb.h>
-
-void cdev_init(struct cdev * cdev, const struct file_operations * fops)
-{
-	lx_emul_usb_register_devio(fops);
-}
-
-
 unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n);
 unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n)
 {

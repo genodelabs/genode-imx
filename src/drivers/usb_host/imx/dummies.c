@@ -617,3 +617,10 @@ int kobject_uevent_env(struct kobject * kobj,enum kobject_action action,char * e
 	return 0;
 }
 
+
+#include <linux/cdev.h>
+
+void cdev_init(struct cdev * cdev, const struct file_operations * fops)
+{
+	lx_emul_trace(__func__);
+}

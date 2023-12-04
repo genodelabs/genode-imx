@@ -52,15 +52,6 @@ void lx_emul_register_pci_fixup(void (*fn)(struct pci_dev*),
                                 const char * name) { }
 
 
-#include <linux/cdev.h>
-#include <lx_emul/usb.h>
-
-void cdev_init(struct cdev * cdev, const struct file_operations * fops)
-{
-	lx_emul_usb_register_devio(fops);
-}
-
-
 #include <asm/uaccess.h>
 
 unsigned long arm_copy_from_user(void *to, const void *from, unsigned long n)

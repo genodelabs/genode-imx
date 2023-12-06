@@ -1,4 +1,4 @@
-<config arch="" info="Chromium-based Falkon web browser">
+<config arch="" info="disposable web browser">
 
 	<common_routes>
 		<service name="ROM" label_last="ld.lib.so"> <parent/> </service>
@@ -16,13 +16,11 @@
 			<service name="ROM" label="hover">             <child name="wm"/> </service>
 			<service name="ROM" label="decorator_margins"> <child name="wm"/> </service>
 			<service name="Report">                        <child name="wm"/> </service>
-			<service name="File_system" label="recall">
-				<child name="recall_fs"/>
-			</service>
+			<service name="File_system" label="recall">    <child name="recall_fs"/> </service>
 		</route>
 	</start>
 
-	<start name="themed_decorator" priority="-1" pkg="themed_decorator">
+	<start name="motif_decorator" priority="-1" pkg="motif_decorator">
 		<route>
 			<service name="ROM" label="window_layout"> <child name="wm"/> </service>
 			<service name="ROM" label="pointer">       <child name="wm"/> </service>
@@ -41,21 +39,13 @@
 		</route>
 	</start>
 
-	<start name="fonts_fs" priority="-2" pkg="fonts_fs">
-		<route>
-			<service name="ROM" label="config">
-				<parent label="config -> managed/fonts"/>
-			</service>
-		</route>
-	</start>
-
 	<start name="recall_fs" priority="-2" pkg="recall_fs">
 		<route>
 			<service name="File_system"> <child name="default_fs_rw"/> </service>
 		</route>
 	</start>
 
-	<start name="wm_backdrop" priority="-2" pkg="sticks_blue_backdrop">
+	<start name="falkon_backdrop" priority="-2" pkg="sticks_blue_backdrop">
 		<route>
 			<service name="Gui"> <parent label="backdrop"/> </service>
 		</route>
@@ -64,12 +54,10 @@
 			<vfs>
 				<rom name="genode_logo.png"/>
 				<rom name="grid.png"/>
-				<rom name="sticks_blue.png"/>
 			</vfs>
-			<fill color="#223344" />
-			<image png="sticks_blue.png" scale="zoom" anchor="bottom_left" alpha="200"/>
-			<image png="grid.png"        tiled="yes" alpha="200" />
-			<image png="genode_logo.png" anchor="bottom_right" alpha="150"
+			<fill color="#0e1624" />
+			<image png="grid.png"        tiled="yes" alpha="100" />
+			<image png="genode_logo.png" anchor="bottom_right" alpha="50"
 			                             xpos="-20" ypos="-20" />
 		</config>
 	</start>
@@ -84,42 +72,20 @@
 		</route>
 	</start>
 
-	<start ram="1350M" name="falkon_browser" pkg="falkon">
+	<start name="falkon-jemalloc" ram="1500M" priority="-2" pkg="cproc/pkg/falkon-jemalloc/2023-10-23">
 		<affinity xpos="1" width="2"/>
 		<route>
-			<service name="Nic">
-				<child name="nic_router"/>
-			</service>
-			<service name="File_system" label="config">
-				<child name="ram_fs"/>
-			</service>
-			<service name="File_system" label="downloads">
-				<child name="ram_fs"/>
-			</service>
-			<service name="Gui">
-				<child name="wm"/>
-			</service>
-			<service name="Report" label_last="shape">
-				<child name="wm" label="shape"/>
-			</service>
-			<service name="Report" label="clipboard">
-				<child name="wm"/>
-			</service>
-			<service name="ROM" label="clipboard">
-				<child name="wm"/>
-			</service>
-			<service name="Rtc">
-				<child name="sntp_dummy_rtc"/>
-			</service>
-			<service name="Audio_out">
-				<child name="black_hole"/>
-			</service>
-			<service name="Audio_in">
-				<child name="black_hole"/>
-			</service>
-			<service name="Capture">
-				<child name="black_hole"/>
-			</service>
+			<service name="Nic">       <child name="nic_router"/>     </service>
+			<service name="Rtc">       <child name="sntp_dummy_rtc"/> </service>
+			<service name="Audio_out"> <child name="black_hole"/>     </service>
+			<service name="Audio_in">  <child name="black_hole"/>     </service>
+			<service name="Capture">   <child name="black_hole"/>     </service>
+			<service name="File_system" label="config">    <child name="ram_fs"/> </service>
+			<service name="File_system" label="downloads"> <child name="ram_fs"/> </service>
+			<service name="Gui">                           <child name="wm"/> </service>
+			<service name="Report" label_last="shape">     <child name="wm"/> </service>
+			<service name="Report" label="clipboard">      <child name="wm"/> </service>
+			<service name="ROM"    label="clipboard">      <child name="wm"/> </service>
 		</route>
 	</start>
 

@@ -7,6 +7,6 @@ import: pkg/drivers_managed-mnt_reform2 pkg/imx8mq_wifi
 launcher:
 
 deploy: empty
-presets: empty window_manager falkon_web_browser debian_installer
+presets: empty window_manager falkon_web_browser
 
 depot: genodelabs alex-ab cproc skalk

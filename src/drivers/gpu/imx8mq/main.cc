@@ -676,7 +676,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 
 			// XXX must not return prematurely
 			lx_emul_task_unblock(_lx_user_task);
-			Lx_kit::env().scheduler.schedule();
+			Lx_kit::env().scheduler.execute();
 
 			bool const success = _worker_args.local_request->success;
 			_worker_args.local_request = nullptr;

@@ -8,6 +8,7 @@ SRC_CC  += emul.cc
 SRC_CC  += lx_emul/shared_dma_buffer.cc
 SRC_C   := dummies.c
 SRC_C   += lx_emul.c
+SRC_C   += lx_user.c
 SRC_C   += $(notdir $(wildcard $(PRG_DIR)/generated_dummies.c))
 
 # Driver-specific device-tree binary data

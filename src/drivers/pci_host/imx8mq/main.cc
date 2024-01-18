@@ -24,7 +24,7 @@
 using namespace Genode;
 
 
-struct Pcie_controller : Platform::Device::Mmio
+struct Pcie_controller : Platform::Device::Mmio<0x8bc + 4>
 {
 	enum {
 		MEMORY_BASE              = 0,
@@ -86,7 +86,7 @@ struct Pcie_controller : Platform::Device::Mmio
 		struct Dbi_ro_wr_enable : Bitfield<0, 1> {};
 	};
 
-	struct Atu : Genode::Mmio
+	struct Atu : Genode::Mmio<0x1c>
 	{
 		struct Atu_region_control_1 : Register<0x0, 32>
 		{
@@ -111,7 +111,7 @@ struct Pcie_controller : Platform::Device::Mmio
 		struct Atu_lower_target_addr : Register<0x14, 32> {};
 		struct Atu_upper_target_addr : Register<0x18, 32> {};
 
-		Atu(addr_t const base) : Genode::Mmio(base) {}
+		Atu(Byte_range_ptr const range) : Mmio(range) {}
 
 		void configure_outbound(Transaction_type type,
 		                        addr_t cpu_addr, size_t size,
@@ -140,10 +140,10 @@ struct Pcie_controller : Platform::Device::Mmio
 		}
 
 		bool up() { return read<Atu_region_control_2::Enable>(); }
-	} atu[4] { { Platform::Device::Mmio::base() + 0x300000 },
-	           { Platform::Device::Mmio::base() + 0x300200 },
-	           { Platform::Device::Mmio::base() + 0x300400 },
-	           { Platform::Device::Mmio::base() + 0x300600 } };
+	} atu[4] { { Platform::Device::Mmio<SIZE>::range_at(0x300000) },
+	           { Platform::Device::Mmio<SIZE>::range_at(0x300200) },
+	           { Platform::Device::Mmio<SIZE>::range_at(0x300400) },
+	           { Platform::Device::Mmio<SIZE>::range_at(0x300600) } };
 
 	Pci::Config_type1 cfg;
 
@@ -178,13 +178,13 @@ struct Pcie_controller : Platform::Device::Mmio
 		return true;
 	}
 
-	Pcie_controller(Timer::Connection           & timer,
-	                Platform::Device            & device,
-	                Platform::Device::Mmio::Index i,
-	                Pci::bus_t                    bus,
-	                addr_t                        io_base)
+	Pcie_controller(Timer::Connection                 & timer,
+	                Platform::Device                  & device,
+	                Platform::Device::Mmio<SIZE>::Index i,
+	                Pci::bus_t                          bus,
+	                addr_t                              io_base)
 	: Mmio(device, i),
-	  cfg(base()),
+	  cfg(range()),
 	  timer(timer)
 	{
 		using namespace Pci;
@@ -269,14 +269,14 @@ struct Pcie_controller : Platform::Device::Mmio
 };
 
 
-struct Pci_device : Platform::Device::Mmio
+struct Pci_device : Platform::Device::Mmio<0>
 {
 	Pci::Config_type0 cfg;
 
 	Pci_device(Platform::Device            & device,
-	           Platform::Device::Mmio::Index i)
-	: Platform::Device::Mmio(device, i),
-	  cfg(base() + Pcie_controller::CONFIG_BASE) { }
+	           Platform::Device::Mmio<SIZE>::Index i)
+	: Platform::Device::Mmio<SIZE>(device, i),
+	  cfg(range_at(Pcie_controller::CONFIG_BASE)) { }
 
 };
 

@@ -20,7 +20,7 @@
 
 namespace Driver { struct Ccm; }
 
-struct Driver::Ccm : Genode::Attached_mmio
+struct Driver::Ccm : Genode::Attached_mmio<0x80>
 {
 	/**
 	 * Control divider register
@@ -143,7 +143,7 @@ struct Driver::Ccm : Genode::Attached_mmio
 	};
 
 	Ccm(Genode::Env &env, Clocks & clocks)
-	: Genode::Attached_mmio(env, CCM_MMIO_BASE, CCM_MMIO_SIZE),
+	: Attached_mmio(env, {(char *)CCM_MMIO_BASE, CCM_MMIO_SIZE}),
 	  _clocks(clocks) { }
 };
 

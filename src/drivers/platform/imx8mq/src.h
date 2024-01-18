@@ -20,7 +20,7 @@
 
 #include <reset.h>
 
-struct Src : Genode::Attached_mmio
+struct Src : Genode::Attached_mmio<0x4c>
 {
 	Driver::Resets & resets;
 
@@ -107,6 +107,6 @@ struct Src : Genode::Attached_mmio
 	};
 
 	Src(Genode::Env & env, Driver::Resets & resets)
-	: Attached_mmio(env, SRC_MMIO_BASE, SRC_MMIO_SIZE), resets(resets) { };
+	: Attached_mmio(env, {(char *)SRC_MMIO_BASE, SRC_MMIO_SIZE}), resets(resets) { };
 };
 

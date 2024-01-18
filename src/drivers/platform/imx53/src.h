@@ -20,7 +20,7 @@
 
 namespace Driver { struct Src; }
 
-struct Driver::Src : Genode::Attached_mmio
+struct Driver::Src : Genode::Attached_mmio<0x4>
 {
 	struct Ctrl_reg : Register<0x0, 32>
 	{
@@ -48,7 +48,7 @@ struct Driver::Src : Genode::Attached_mmio
 	};
 
 	Src(Genode::Env &env, Resets & resets)
-	: Genode::Attached_mmio(env, SRC_MMIO_BASE, SRC_MMIO_SIZE),
+	: Attached_mmio(env, {(char *)SRC_MMIO_BASE, SRC_MMIO_SIZE}),
 	  _resets(resets) {}
 };
 

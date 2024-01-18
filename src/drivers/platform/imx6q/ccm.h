@@ -19,7 +19,7 @@
 
 namespace Driver { struct Ccm; }
 
-struct Driver::Ccm : Genode::Attached_mmio
+struct Driver::Ccm : Genode::Attached_mmio<0x70>
 {
 	struct Ccgr1 : Register<0x6c, 32>
 	{
@@ -58,7 +58,7 @@ struct Driver::Ccm : Genode::Attached_mmio
 	};
 
 	Ccm(Genode::Env &env, Clocks & clocks)
-	: Genode::Attached_mmio(env, CCM_MMIO_BASE, CCM_MMIO_SIZE),
+	: Attached_mmio(env, {(char *)CCM_MMIO_BASE, CCM_MMIO_SIZE}),
 	  _clocks(clocks) { }
 };
 

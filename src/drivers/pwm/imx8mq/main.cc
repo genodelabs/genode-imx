@@ -20,7 +20,7 @@
 
 using namespace Genode;
 
-struct Pwm : Platform::Device::Mmio
+struct Pwm : Platform::Device::Mmio<0x14>
 {
 	enum Clk_src { OFF, IPG, IPG_HIGHFREQ, IPG_32K };
 
@@ -41,7 +41,7 @@ struct Pwm : Platform::Device::Mmio
 	    unsigned           period,
 	    unsigned           sample,
 	    Clk_src            clk_src)
-	: Platform::Device::Mmio(dev)
+	: Platform::Device::Mmio<SIZE>(dev)
 	{
 		write<Period>(period);
 		write<Sample>(sample);

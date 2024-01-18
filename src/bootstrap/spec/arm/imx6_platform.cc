@@ -43,7 +43,7 @@ bool Board::Cpu::errata(Board::Cpu::Errata err) {
 
 void Board::Cpu::wake_up_all_cpus(void * const entry)
 {
-	struct Src : Genode::Mmio
+	struct Src : Genode::Mmio<0x3c>
 	{
 		struct Scr  : Register<0x0,  32>
 		{
@@ -59,7 +59,7 @@ void Board::Cpu::wake_up_all_cpus(void * const entry)
 		struct Gpr5 : Register<0x30, 32> {}; /* ep core 2 */
 		struct Gpr7 : Register<0x38, 32> {}; /* ep core 3 */
 
-		Src(void * const entry) : Genode::Mmio(SRC_MMIO_BASE)
+		Src(void * const entry) : Mmio({(char *)SRC_MMIO_BASE, Mmio::SIZE})
 		{
 			write<Gpr3>((Gpr3::access_t)entry);
 			write<Gpr5>((Gpr5::access_t)entry);

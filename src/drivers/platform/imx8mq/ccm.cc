@@ -111,8 +111,8 @@ Driver::Clock::Rate Driver::Ccm::Frac_pll::rate() const
 }
 
 
-Driver::Ccm::Frac_pll::Frac_pll(Clocks & clocks, Name name, addr_t const base)
-: Clock(clocks, name), Mmio(base), _clocks(clocks)
+Driver::Ccm::Frac_pll::Frac_pll(Clocks & clocks, Name name, Byte_range_ptr const &range)
+: Clock(clocks, name), Mmio(range), _clocks(clocks)
 {
 	write<Config_reg_0::Bypass>(0);
 	write<Config_reg_0::Out_enable>(1);

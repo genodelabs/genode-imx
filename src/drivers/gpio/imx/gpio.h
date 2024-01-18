@@ -20,12 +20,12 @@
 #include <base/attached_dataspace.h>
 #include <util/mmio.h>
 
-struct Gpio_reg : Genode::Attached_dataspace, Genode::Mmio
+struct Gpio_reg : Genode::Attached_dataspace, Genode::Mmio<0x1c + 4>
 {
 	Gpio_reg(Genode::Env &env,
 	         Genode::Dataspace_capability cap)
-	: Genode::Attached_dataspace(env.rm(), cap),
-	  Genode::Mmio((Genode::addr_t)local_addr<void>()) { }
+	: Attached_dataspace(env.rm(), cap),
+	  Mmio({local_addr<char>(), size()}) { }
 
 	struct Data     : Register_array<0x0, 32, 32, 1> {};
 	struct Dir      : Register_array<0x4, 32, 32, 1> {};

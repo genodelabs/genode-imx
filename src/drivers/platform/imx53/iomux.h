@@ -18,7 +18,7 @@
 
 namespace Driver { struct Iomux; }
 
-struct Driver::Iomux : Genode::Attached_mmio
+struct Driver::Iomux : Genode::Attached_mmio<0x82c>
 {
 	struct Gpr2 : Register<0x8,32>
 	{
@@ -100,7 +100,7 @@ struct Driver::Iomux : Genode::Attached_mmio
 	}
 
 	Iomux(Genode::Env &env)
-	: Genode::Attached_mmio(env, IOMUXC_MMIO_BASE, IOMUXC_MMIO_SIZE)
+	: Attached_mmio(env, {(char *)IOMUXC_MMIO_BASE, IOMUXC_MMIO_SIZE})
 	{
 		_ipu_enable();
 		_i2c_2_enable();

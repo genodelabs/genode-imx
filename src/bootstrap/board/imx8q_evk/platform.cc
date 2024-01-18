@@ -149,10 +149,10 @@ Bootstrap::Platform::Board::Board()
 		{ 0x30340068, 0x0A       }, */
 	};
 
-	struct Gpio_reg : Genode::Mmio
+	struct Gpio_reg : Genode::Mmio<0x1c>
 	{
 		Gpio_reg(Genode::addr_t const mmio_base)
-			: Genode::Mmio(mmio_base) { }
+			: Mmio({(char *)mmio_base, Mmio::SIZE}) { }
 
 		struct Data       : Register<0x0,  32> {};
 		struct Dir        : Register<0x4,  32> {};
@@ -162,18 +162,18 @@ Bootstrap::Platform::Board::Board()
 		struct Int_stat   : Register<0x18, 32> {};
 	};
 
-	struct Ccm_reg : Genode::Mmio
+	struct Ccm_reg : Genode::Mmio<0x8004>
 	{
 		Ccm_reg(Genode::addr_t const mmio_base)
-			: Genode::Mmio(mmio_base) { }
+			: Mmio({(char *)mmio_base, Mmio::SIZE}) { }
 
 		struct Target_root_0 : Register<0x8000, 32> {};
 	};
 
-	struct Pll_reg : Genode::Mmio
+	struct Pll_reg : Genode::Mmio<0x30>
 	{
 		Pll_reg(Genode::addr_t const mmio_base)
-			: Genode::Mmio(mmio_base) { }
+			: Mmio({(char *)mmio_base, Mmio::SIZE}) { }
 
 		struct Pll_arm_0 : Register<0x28,  32> {};
 		struct Pll_arm_1 : Register<0x2c,  32> {};

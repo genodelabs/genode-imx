@@ -145,9 +145,9 @@ Bootstrap::Platform::Board::Board()
 		CCM_MMIO_BASE        = 0x30380000,
 	};
 
-	struct Ccm : Genode::Mmio
+	struct Ccm : Genode::Mmio<0x8004>
 	{
-		Ccm() : Genode::Mmio(CCM_MMIO_BASE) { }
+		Ccm() : Mmio({(char *)CCM_MMIO_BASE, Mmio::SIZE}) { }
 
 		struct Target_root_0 : Register<0x8000, 32>
 		{
@@ -160,9 +160,9 @@ Bootstrap::Platform::Board::Board()
 		};
 	} ccm;
 
-	struct Ccm_analog : Genode::Mmio
+	struct Ccm_analog : Genode::Mmio<0x30>
 	{
-		Ccm_analog() : Genode::Mmio(CCM_ANALOG_MMIO_BASE) { }
+		Ccm_analog() : Mmio({(char *)CCM_ANALOG_MMIO_BASE, Mmio::SIZE}) { }
 
 		struct Pll_arm_0 : Register<0x28, 32>
 		{

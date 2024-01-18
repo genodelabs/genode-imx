@@ -20,7 +20,7 @@
 namespace Framebuffer { struct Ipu; }
 
 
-struct Framebuffer::Ipu : Platform::Device::Mmio
+struct Framebuffer::Ipu : Platform::Device::Mmio<0x1080000 + 15 * 4 + 4>
 {
 	struct Conf            : Register<0x0,   32> { };
 
@@ -536,7 +536,7 @@ struct Framebuffer::Ipu : Platform::Device::Mmio
 		write<Srm_pri2::Dp_m_srm>(Srm_pri2::Dp_m_srm::UPDATE_NOW);
 	}
 
-	using Platform::Device::Mmio::Mmio;
+	using Platform::Device::Mmio<SIZE>::Mmio;
 };
 
 #endif /* _DRIVERS__FRAMEBUFFER__IMX53__IPU_H_ */

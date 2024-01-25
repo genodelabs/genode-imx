@@ -1,6 +1,6 @@
 SRC_C += lx_emul/shadow/arch/arm64/kernel/smp.c
 SRC_C += lx_emul/shadow/arch/arm64/mm/ioremap.c
-SRC_S += lx_kit/spec/arm_64/setjmp.S
+SRC_S += lx_kit/spec/arm_v8/setjmp.S
 
 LX_BUILD_DIR := $(REP_DIR)/src/include/mnt_reform2_linux/spec/arm_v8/lx_generated
 
@@ -10,7 +10,7 @@ vpath % $(REP_DIR)/src/lib/mnt_reform2_linux/spec/arm_v8
 
 INC_DIR += $(REP_DIR)/src/include/mnt_reform2_linux/spec/arm_v8
 INC_DIR += $(DDE_LINUX_DIR)/src/include
-INC_DIR += $(DDE_LINUX_DIR)/src/include/spec/arm_64
+INC_DIR += $(DDE_LINUX_DIR)/src/include/spec/arm_v8
 INC_DIR += $(DDE_LINUX_DIR)/src/include/lx_emul/shadow/arch/arm64/include
 INC_DIR += $(DDE_LINUX_DIR)/src/include/lx_emul/shadow/include
 

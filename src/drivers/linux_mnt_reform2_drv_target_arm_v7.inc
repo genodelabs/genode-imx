@@ -1,4 +1,4 @@
-SRC_S += lx_kit/spec/arm/setjmp.S
+SRC_S += lx_kit/spec/arm_v7/setjmp.S
 
 LX_BUILD_DIR := $(REP_DIR)/src/include/mnt_reform2_linux/spec/arm_v7/lx_generated
 
@@ -8,7 +8,7 @@ vpath % $(REP_DIR)/src/lib/mnt_reform2_linux/spec/arm_v7
 
 INC_DIR += $(REP_DIR)/src/include/mnt_reform2_linux/spec/arm_v7
 INC_DIR += $(DDE_LINUX_DIR)/src/include
-INC_DIR += $(DDE_LINUX_DIR)/src/include/spec/arm
+INC_DIR += $(DDE_LINUX_DIR)/src/include/spec/arm_v7
 INC_DIR += $(DDE_LINUX_DIR)/src/include/lx_emul/shadow/arch/arm/include
 INC_DIR += $(DDE_LINUX_DIR)/src/include/lx_emul/shadow/include
 

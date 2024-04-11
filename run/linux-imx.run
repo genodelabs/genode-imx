@@ -1,0 +1,53 @@
+assert_spec arm_v8a
+
+if {![image_uboot_use_fit]} {
+	puts "Only FIT image are suported at the moment."
+	exit 1
+}
+
+create_boot_directory
+
+build imx_linux/arm_v8a
+
+# Why not using 'build_boot_image' ?
+# > Linux iamges are not assemble the same way as a genode one.
+
+# Create expected boot directory
+exec rm -rf [run_dir]/boot
+exec mkdir -p [run_dir]/boot
+# Itb output path, must be absolute
+set itb_image [pwd]/[run_dir]/boot/image.itb
+
+# Install image tree source configuration
+set src_dir [genode_dir]/repos/imx/board/[board]
+set ramdisk_path [get_env_var LX_RAMDISK ""]
+
+# Include ramdisk file if configured
+if { [file exists $ramdisk_path] } {
+	set its_cfg linux+ramdisk.its
+	file copy -force $ramdisk_path imx_linux/arm_v8a
+} else {
+	set its_cfg linux.its
+}
+
+file copy -force $src_dir/$its_cfg imx_linux/arm_v8a
+
+# Generate FIT image, run mkimage from linux build dir
+exec mkimage -f imx_linux/arm_v8a/$its_cfg $itb_image
+
+# Export the image to the TFTP dir manually as we do not run 'build_boot_image' directive
+if {[image_uboot_use_fit]} {
+	exec {*}[load_tftp_inst_cmd] \
+		[file join [pwd] [run_dir] boot image.itb] \
+		[load_tftp_base_dir][load_tftp_offset_dir]
+} else {
+	puts "Only FIT image are suported at the moment."
+	exit 1
+}
+
+# Let run tools that the kernel started
+proc run_boot_string { } { return "Booting Linux" }
+
+run_genode_until forever
+interact
+

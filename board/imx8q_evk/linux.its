@@ -1,0 +1,63 @@
+/*
+ * \author Alice Domage <alice.domage@gapfruit.com>
+ * \brief  FIT image description for the imx8q_evk
+ * \date   2024-02-28
+ */
+
+/*
+ * Copyright (C) 2024 Genode Labs GmbH
+ * Copyright (C) 2024 gapfruit ag
+ *
+ * This file is distributed under the terms of the GNU General Public License
+ * version 2.
+ */
+
+/dts-v1/;
+
+/ {
+        description = "NXP i.MX8Q Evaluaton Kit FIT Image";
+        #address-cells = <1>;
+
+        images {
+                kernel {
+                        description = "Kernel";
+                        data = /incbin/("arch/arm64/boot/Image.gz");
+                        type = "kernel";
+                        arch = "arm64";
+                        os = "linux";
+                        compression = "gzip";
+                        load = <0x40200000>;
+                        entry = <0x40200000>;
+                        hash {
+                                algo = "sha1";
+                        };
+                };
+                fdt {
+                        description = "DTB";
+                        data = /incbin/("arch/arm64/boot/dts/freescale/imx8mq-evk.dtb");
+                        type = "flat_dt";
+                        arch = "arm64";
+                        compression = "none";
+                        load = <0x43000000>;
+                        hash {
+                                algo = "sha1";
+                        };
+                };
+        };
+
+        configurations {
+                default = "standard";
+                standard {
+                        description = "Standard Boot";
+                        kernel = "kernel";
+                        fdt = "fdt";
+                        hash {
+                                algo = "sha1";
+                        };
+                };
+        };
+
+}; 
+
+// vim: set ft=dts:
+

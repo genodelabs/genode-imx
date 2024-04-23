@@ -1,10 +1,11 @@
 drivers: imx8q_evk
 
 # supplemental depot content added to the system image
-import: pkg/drivers_managed-imx8q_evk
+import: pkg/sculpt_drivers-imx8q_evk
 
 # selection of launcher-menu entries
-launcher: shared_fs
+launcher: download_debug_info black_hole trace_logger recall_fs
 
-depot: genodelabs cnuke alex-ab mstein nfeske cproc chelmuth jschlatow
-depot: ssumpf skalk
+presets: empty nano3d window_manager falkon_web_browser
+
+depot: genodelabs cnuke alex-ab mstein nfeske cproc chelmuth jschlatow ssumpf skalk

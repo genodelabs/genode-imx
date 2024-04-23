@@ -1,7 +1,7 @@
 drivers: imx8q_evk
 
 # supplemental depot content added to the system image
-import: pkg/drivers_managed-imx8q_evk
+import: pkg/sculpt_drivers-imx8q_evk
 import: pkg/glmark2-imx8q_evk
 
 deploy: gpu-imx8q_evk

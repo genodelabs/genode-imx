@@ -1,16 +1,9 @@
-_/raw/mnt_reform2-devices
-_/src/event_filter
+_/raw/imx8q_evk-devices
 _/src/fec_nic_drv
-_/src/imx8mq_driver_manager
 _/src/imx8mq_fb_drv
-_/src/imx_gpio_drv
-_/src/imx8mq_i2c_drv
-_/src/imx8mq_pci_host_drv
 _/src/imx8mq_platform_drv
-_/src/imx8mq_pwm_drv
 _/src/imx8mq_sd_card_drv
 _/src/imx8mq_usb_host_drv
-_/src/nvme_drv
 _/src/rom_filter
 _/src/rom_reporter
 _/src/usb_block_drv

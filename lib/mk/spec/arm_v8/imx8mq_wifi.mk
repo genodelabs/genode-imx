@@ -10,7 +10,6 @@ INC_DIR += $(TARGET_LIB_DIR)
 
 SRC_CC  += dtb_helper_no_dtb.cc
 SRC_CC  += lx_emul/pci.cc
-SRC_CC  += lx_emul/pci_bus.c
 SRC_CC  += lx_emul/random.cc
 
 SRC_C   += $(notdir $(wildcard $(TARGET_LIB_DIR)/generated_dummies.c))
@@ -28,6 +27,7 @@ SRC_C   += lx_emul/shadow/mm/dmapool.c
 SRC_C   += lx_emul/shadow/mm/page_alloc.c
 SRC_C   += lx_emul/shadow/mm/vmalloc.c
 SRC_C   += lx_emul_pci.c
+SRC_C   += lx_emul/pci_bus.c
 
 
 CC_OPT_net/mac80211/trace += -I$(LX_SRC_DIR)/net/mac80211

@@ -33,5 +33,5 @@ kernel_config.tag: $(MAKEFILE_LIST)
 
 kernel_build.phony: kernel_config.tag
 	$(MSG_BUILD)Linux
-	$(VERBOSE)$(MAKE) $(LX_MK_ARGS) dtbs Image $(BUILD_OUTPUT_FILTER)
+	$(VERBOSE)$(MAKE) $(LX_MK_ARGS) dtbs Image Image.gz $(BUILD_OUTPUT_FILTER)
 

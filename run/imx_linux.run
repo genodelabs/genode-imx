@@ -1,0 +1,223 @@
+if {![image_uboot_use_fit]} {
+	puts "Only FIT image are suported at the moment."
+	exit 1
+}
+
+create_boot_directory
+
+build { imx_linux busybox }
+
+# Create expected boot directory, as we cannot use build_boot_image
+exec mkdir -p [run_dir]/boot
+
+proc architecture { } {
+	if {[have_spec "arm_v8a"]} { return "arm_v8a" }
+	if {[have_spec "arm_v7a"]} { return "arm_v7a" }
+	puts "not supported architecture!"
+	exit 1
+}
+
+# Following pathes, must be absolute
+set itb_image [pwd]/[run_dir]/boot/image.itb
+set ramdisk   [pwd]/[run_dir]/cpio
+set arch [architecture]
+
+#
+# Create script to run inside the initramfs under /etc/init.d/rcS
+#
+proc init_rcs { } {
+	set fd [open [run_dir]/rcS w]
+	puts $fd {#!bin/sh
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t tmpfs none /var
+mount -t tmpfs none /dev
+/sbin/mdev -s
+mkdir /var/log}
+	close $fd
+	return [pwd]/[run_dir]/rcS
+}
+
+set init_rcs [init_rcs]
+
+#
+# CPIO content description used by `gen_init_cpio`
+#
+proc cpio_desc { } {
+	global arch
+	global init_rcs
+	set bblist [open busybox/$arch/busybox.links r]
+	set fd     [open [run_dir]/cpio.desc w]
+
+	puts $fd "dir  /bin         0755 0 0"
+	puts $fd "dir  /dev         0755 0 0"
+	puts $fd "dir  /etc         0755 0 0"
+	puts $fd "dir  /etc/init.d  0755 0 0"
+	puts $fd "dir  /proc        0755 0 0"
+	puts $fd "dir  /root        0700 0 0"
+	puts $fd "dir  /sbin        0755 0 0"
+	puts $fd "dir  /sys         0755 0 0"
+	puts $fd "dir  /usr         0755 0 0"
+	puts $fd "dir  /usr/bin     0755 0 0"
+	puts $fd "dir  /usr/sbin    0755 0 0"
+	puts $fd "dir  /var         0755 0 0"
+	puts $fd "nod  /dev/console 0622 0 0 c 5 1"
+	puts $fd "nod  /dev/null    0666 0 0 c 1 3"
+	puts $fd "file /bin/busybox busybox/[architecture]/busybox 0755 0 0"
+	puts $fd "file /etc/init.d/rcS $init_rcs 0755 0 0"
+
+	foreach line [split [read $bblist] \n] {
+		if {[string trim $line] != ""} {
+			puts $fd "slink $line /bin/busybox 0755 0 0"
+		}
+	}
+	close $bblist
+	close $fd
+
+	return [pwd]/[run_dir]/cpio.desc
+}
+
+#
+# Create additional u-boot script that sets the kernel cmdline
+#
+proc boot_script { } {
+	set fd [open [run_dir]/boot.scr w]
+	puts $fd {setenv bootargs "console=ttymxc0,115200 root=/dev/ram ip=dhcp rdinit=/linuxrc"
+bootm  ${loadaddr}
+echo "Bad image or kernel."
+reset}
+	close $fd
+	return [pwd]/[run_dir]/boot.scr
+}
+
+set boot_scr  [boot_script]
+
+proc linux_arch { } {
+	if {[have_spec "arm_v8a"]} { return "arm64" }
+	if {[have_spec "arm_v7a"]} { return "arm" }
+	puts "not supported architecture!"
+	exit 1
+}
+
+proc load_addr { } {
+	if {[have_board "imx8q_evk"]}   { return 0x40200000 }
+	if {[have_board "mnt_reform2"]} { return 0x40200000 }
+	puts "not supported board!"
+	exit 1
+}
+
+proc dtb { } {
+	if {[have_board "imx8q_evk"]} {
+		return [pwd]/imx_linux/arm_v8a/arch/arm64/boot/dts/freescale/imx8mq-evk.dtb
+	}
+	if {[have_board "mnt_reform2"]} {
+		return [pwd]/imx_linux/arm_v8a/arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2-hdmi.dtb
+	}
+	puts "not supported board!"
+	exit 1
+}
+
+#
+# Create source file for FIT image generation
+#
+proc its_file { } {
+	global arch
+	global ramdisk
+	global boot_scr
+	set fd [open [run_dir]/image.its w]
+	set board [board]
+	set lx_arch [linux_arch]
+	set kernel_load_addr [load_addr]
+	set dtb_load_addr    [expr {$kernel_load_addr + 0x1000000}]
+	set initrd_load_addr [expr {$dtb_load_addr + 0x1000000}]
+	set dtb [dtb]
+	set kernel [pwd]/imx_linux/$arch/arch/$lx_arch/boot/Image.gz
+	puts $fd "/dts-v1/;
+/ {
+        description = \"$board FIT Image\";
+        #address-cells = <1>;
+        images {
+                kernel {
+                        description = \"Kernel\";
+                        data = /incbin/(\"$kernel\");
+                        type = \"kernel\";
+                        arch = \"$lx_arch\";
+                        os = \"linux\";
+                        compression = \"gzip\";
+                        load = <$kernel_load_addr>;
+                        entry = <$kernel_load_addr>;
+                        hash {
+                                algo = \"sha1\";
+                        };
+                };
+                fdt {
+                        description = \"DTB\";
+                        data = /incbin/(\"$dtb\");
+                        type = \"flat_dt\";
+                        arch = \"$lx_arch\";
+                        compression = \"none\";
+                        load = <$dtb_load_addr>;
+                        hash {
+                                algo = \"sha1\";
+                        };
+                };
+                ramdisk {
+                        description = \"Initial RAM Filesystem\";
+                        data = /incbin/(\"$ramdisk\");
+                        type = \"ramdisk\";
+                        os = \"linux\";
+                        arch = \"$lx_arch\";
+                        compression = \"none\";
+                        load = <$initrd_load_addr>;
+                        hash {
+                                algo = \"sha1\";
+                        };
+                };
+                bootscript {
+                        description = \"bootscript\";
+                        data = /incbin/(\"$boot_scr\");
+                        type = \"script\";
+                        compression = \"none\";
+                };
+        };
+        configurations {
+                default = \"standard\";
+                standard {
+                        description = \"Standard Boot\";
+                        kernel = \"kernel\";
+                        fdt = \"fdt\";
+                        ramdisk = \"ramdisk\";
+                        hash {
+                                algo = \"sha1\";
+                        };
+                };
+        };
+};"
+	close $fd
+	return [pwd]/[run_dir]/image.its
+}
+
+set its_cfg   [its_file]
+set cpio_desc [cpio_desc]
+
+# Create initial-ram-filesystem
+exec imx_linux/[architecture]/usr/gen_init_cpio $cpio_desc > $ramdisk
+
+# Generate FIT image
+exec mkimage -f $its_cfg $itb_image
+
+# Clean intermediate files
+exec rm $its_cfg $cpio_desc $ramdisk $init_rcs $boot_scr
+
+# Export the image to the TFTP dir manually as we do not run 'build_boot_image' directive
+if {[have_include "load/tftp"]} {
+	exec {*}[load_tftp_inst_cmd] \
+		[file join [pwd] [run_dir] boot image.itb] \
+		[load_tftp_base_dir][load_tftp_offset_dir]
+}
+
+# Trick run tools that the kernel started
+proc run_boot_string { } { return "Booting Linux" }
+
+run_genode_until forever
+interact

@@ -79,5 +79,13 @@ unsigned long __must_check __arch_copy_to_user(void __user *to, const void *from
 
 struct page *alloc_pages_current(gfp_t gfp, unsigned order)
 {
-	return __alloc_pages(gfp, order, 0);
+	return __alloc_pages(gfp, order, 0, NULL);
+}
+
+
+#include <asm-generic/softirq_stack.h>
+
+void do_softirq_own_stack(void)
+{
+	__do_softirq();
 }

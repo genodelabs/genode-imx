@@ -1,7 +1,7 @@
 /*
  * \brief  Array defining order of Linux Kernel initcalls
  * \author Automatically generated file - do no edit
- * \date   2023-05-24
+ * \date   2024-05-14
  */
 
 #pragma once
@@ -288,6 +288,7 @@ static const char * lx_emul_initcall_order[] = {
 	"__initcall_iwl_mvm_init6",
 	"__initcall_rtl_core_module_init6",
 	"__initcall_rtl88ee_driver_init6",
+	"__initcall_usbnet_init6",
 	"__initcall_dwc3_driver_init6",
 	"__initcall_dwc3_haps_driver_init6",
 	"__initcall_dwc3_of_simple_driver_init6",

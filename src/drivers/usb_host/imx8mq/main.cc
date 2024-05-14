@@ -46,7 +46,6 @@ struct Main
 	Main(Env & env) : env(env)
 	{
 		Lx_kit::initialize(env, signal_handler);
-		env.exec_static_constructors();
 
 		Genode_c_api::initialize_usb_service(env, signal_handler,
 		                                     lx_emul_shared_dma_buffer_allocate,

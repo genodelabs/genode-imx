@@ -1,0 +1,103 @@
+assert_spec arm_v8a
+
+create_boot_directory
+import_from_depot [depot_user]/src/[base_src] \
+                  [depot_user]/src/init \
+                  [depot_user]/raw/imx8q_evk-devices
+
+build {
+	drivers/usb_hid
+	server/event_dump
+	server/report_rom
+	drivers/platform/imx8mq
+	drivers/usb_host/imx8mq
+}
+
+install_config {
+<config verbose="yes">
+	<parent-provides>
+		<service name="ROM"/>
+		<service name="IRQ"/>
+		<service name="IO_MEM"/>
+		<service name="IO_PORT"/>
+		<service name="PD"/>
+		<service name="RM"/>
+		<service name="CPU"/>
+		<service name="LOG"/>
+	</parent-provides>
+	<default-route>
+		<any-service> <parent/> <any-child/> </any-service>
+	</default-route>
+	<default caps="100"/>
+
+	<start name="timer">
+		<resource name="RAM" quantum="1M"/>
+		<provides><service name="Timer"/></provides>
+	</start>
+
+	<start name="platform_drv" caps="150" managing_system="yes">
+		<binary name="imx8mq_platform_drv"/>
+		<resource name="RAM" quantum="2M"/>
+		<provides> <service name="Platform"/> </provides>
+		<config>
+			<policy label="usb_host_drv -> " info="yes">
+				<device name="usb_host_1"/>
+				<device name="usb_phy_1"/>
+				<device name="usb_host_2"/>
+				<device name="usb_phy_2"/>
+			</policy>
+		</config>
+		<route> <any-service> <parent/> </any-service> </route>
+	</start>
+
+	<start name="report_rom">
+		<resource name="RAM" quantum="2M"/>
+		<provides> <service name="Report"/> <service name="ROM"/> </provides>
+		<config verbose="yes">
+			<default-policy report="usb_host_drv -> devices"/>
+		</config>
+		<route> <any-service> <parent/> </any-service> </route>
+	</start>
+
+	<start name="usb_host_drv" caps="250">
+		<binary name="imx8mq_usb_host_drv"/>
+		<resource name="RAM" quantum="40M"/>
+		<provides> <service name="Usb"/> </provides>
+		<route>
+			<service name="ROM" label="dtb"> <parent label="imx8mq_usb_host_drv-imx8q_evk.dtb"/> </service>
+			<service name="RM">       <parent/> </service>
+			<service name="ROM">      <parent/> </service>
+			<service name="PD">       <parent/> </service>
+			<service name="CPU">      <parent/> </service>
+			<service name="LOG">      <parent/> </service>
+			<service name="Timer">    <child name="timer"/>        </service>
+			<service name="Report">   <child name="report_rom"/>   </service>
+			<service name="Platform"> <child name="platform_drv"/> </service>
+		</route>
+		<config>
+			<policy label_prefix="usb_hid_drv"><device class="0x3"/></policy>
+		</config>
+	</start>
+
+	<start name="usb_hid_drv" caps="140">
+		<resource name="RAM" quantum="11M"/>
+		<route>
+			<service name="ROM" label="report"> <child name="report_rom"/> </service>
+			<service name="Event"> <child name="event_dump"/> </service>
+			<any-service> <parent/> <any-child/> </any-service>
+		</route>
+	</start>
+
+	<start name="event_dump">
+		<resource name="RAM" quantum="1M"/>
+		<provides> <service name="Event"/> </provides>
+		<config/>
+		<route>
+			<any-service> <parent/> <any-child/> </any-service>
+		</route>
+	</start>
+</config>}
+
+build_boot_image [build_artifacts]
+
+run_genode_until forever

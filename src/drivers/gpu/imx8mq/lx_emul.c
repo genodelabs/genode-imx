@@ -583,3 +583,16 @@ struct vfsmount * kern_mount(struct file_system_type * type)
 
 	return m;
 }
+
+
+#include <linux/dma-mapping.h>
+
+int dma_map_sgtable(struct device *dev, struct sg_table *sgt,
+                    enum dma_data_direction dir, unsigned long attrs)
+{
+	int nents = dma_map_sg_attrs(dev, sgt->sgl, sgt->orig_nents, dir, attrs);
+	if (nents < 0)
+		return nents;
+	sgt->nents = nents;
+	return 0;
+}

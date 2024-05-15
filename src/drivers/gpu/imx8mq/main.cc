@@ -34,6 +34,7 @@
 
 
 /* local includes */
+#include "lx_user.h"
 #include "lx_drm.h"
 
 extern Genode::Dataspace_capability genode_lookup_cap(void *, unsigned long long, unsigned long);
@@ -1127,7 +1128,6 @@ struct Driver::Main
 		log("--- i.MX 8MQ GPU driver started ---");
 
 		Lx_kit::initialize(_env, _signal_handler);
-		_env.exec_static_constructors();
 
 		_lx_user_task_args.create_task  = false;
 		_lx_user_task_args.args         = nullptr;
@@ -1135,6 +1135,12 @@ struct Driver::Main
 		lx_user_task_args = &_lx_user_task_args;
 
 		lx_emul_start_kernel(_dtb_rom.local_addr<void>());
+
+		/*
+		 * Defer service announcement until the user task has been created
+		 * because creating sessions relies on its existence.
+		 */
+		lx_emul_execute_kernel_until(lx_user_startup_complete, nullptr);
 
 		/* announce services */
 		_gpu_root.construct(Lx_kit::env().env, Lx_kit::env().heap);

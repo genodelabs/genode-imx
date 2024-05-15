@@ -48,6 +48,8 @@ LX_FILES += $(shell cat $(LX_FILE_LISTS))
 LX_USB_FILE_LISTS := $(shell find -H $(REP_DIR)/src/drivers/usb_host/imx -name dep.list -or -name source.list)
 LX_USB_FILE_LISTS += $(shell find -H $(REP_DIR)/src/drivers/usb_host/imx8mq -name dep.list -or -name source.list)
 LX_FILES += $(shell cat $(LX_USB_FILE_LISTS))
+LX_GPU_FILE_LISTS := $(shell find -H $(REP_DIR)/src/drivers/gpu/imx8mq -name dep.list -or -name source.list)
+LX_FILES += $(shell cat $(LX_GPU_FILE_LISTS))
 LX_FILES := $(sort $(LX_FILES))
 MIRRORED_FROM_PORT_DIR += $(addprefix $(LX_REL_DIR)/,$(LX_FILES))
 

@@ -1,12 +1,12 @@
-DRIVER := gpu/imx8mq
+MIRRORED_FROM_REP_DIR := src/include/spec/arm_v8a/lx_emul \
+                         src/drivers/gpu/imx8mq
 
-MIRROR_FROM_OS_DIR := include/gpu/info_etnaviv.h
+content: $(MIRRORED_FROM_REP_DIR)
+$(MIRRORED_FROM_REP_DIR):
+	$(mirror_from_rep_dir)
 
-content: $(MIRROR_FROM_OS_DIR)
+PORT_DIR := $(call port_dir,$(REP_DIR)/ports/linux-imx)
 
-$(MIRROR_FROM_OS_DIR):
-	mkdir -p $(dir $@)
-	cp $(GENODE_DIR)/repos/os/$@ $@
-
-
-include $(REP_DIR)/recipes/src/linux_mnt_reform2_drv_content.inc
+content: LICENSE
+LICENSE:
+	cp $(PORT_DIR)/linux-imx/COPYING $@

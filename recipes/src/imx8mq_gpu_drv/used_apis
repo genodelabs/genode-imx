@@ -1,6 +1,9 @@
 base
+genode_c_api
+gpu_session
+imx_linux
+jitterentropy
+nic_session
 os
 platform_session
-timer_session
-gpu_session
-genode_c_api
+uplink_session

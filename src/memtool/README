@@ -1,0 +1,26 @@
+Memtool port
+############
+
+For convenience reasons this target builds a memtool binary from Pengutronix
+that can be used within Linux userland to display/modify hardware memory including
+memory mapped I/O. It is especially useful to inspect successfully runnning devices
+under Linux while porting/debugging device drivers in Genode.
+
+As an example, when memtool is integrated within the initram-filesystem running
+on top of a minimal Linux kernel lets say on the Compulab IOT Gate i.MX8 PLUS,
+you can display the first 64 32-bit I/O registers of the IOMUX controller
+after booting Linux, like so:
+
+! memtool md -l 0x30330000+0x100
+
+Requirements
+~~~~~~~~~~~~
+
+To compile and link memtool appropriatedly, the Genode toolchain is not
+sufficient. Instead tools of the host system are used. When building busybox
+on a x86_64 host machine for either ARMv8 this target requires a
+cross-compilation toolchain to be installed first.
+
+On a x86_64 Debian-based machine, one needs to install for ARM 64-bit:
+
+! apt-get install crossbuild-essential-arm64

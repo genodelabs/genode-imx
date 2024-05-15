@@ -5,7 +5,7 @@ if {![image_uboot_use_fit]} {
 
 create_boot_directory
 
-build { imx_linux busybox }
+build { imx_linux busybox memtool }
 
 # Create expected boot directory, as we cannot use build_boot_image
 exec mkdir -p [run_dir]/boot
@@ -64,6 +64,7 @@ proc cpio_desc { } {
 	puts $fd "nod  /dev/console 0622 0 0 c 5 1"
 	puts $fd "nod  /dev/null    0666 0 0 c 1 3"
 	puts $fd "file /bin/busybox busybox/[architecture]/busybox 0755 0 0"
+	puts $fd "file /bin/memtool memtool/[architecture]/memtool 0755 0 0"
 	puts $fd "file /etc/init.d/rcS $init_rcs 0755 0 0"
 
 	foreach line [split [read $bblist] \n] {

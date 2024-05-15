@@ -1,0 +1,8 @@
+LICENSE := GPLv2
+VERSION := 1
+
+DOWNLOADS := memtool.git
+
+URL(memtool) := https://github.com/pengutronix/memtool.git
+REV(memtool) := 97a50b57930743aaa3e2ba3e1a41e9d93ce07f43
+DIR(memtool) := memtool

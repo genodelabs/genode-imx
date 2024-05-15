@@ -1,6 +1,6 @@
 LICENSE   := GPLv2
 VERSION   := 6.1.20
-DOWNLOADS := linux-imx.archive reform-debian-packages.git
+DOWNLOADS := linux-imx.archive reform-debian-packages.git compulab.git
 
 URL(linux-imx) := https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-$(VERSION).tar.xz
 SHA(linux-imx) := 76322de8c01a3c63b42c4d1e9b9e7d1897ddb91276e10d73d1f9df3562f031f0
@@ -10,7 +10,16 @@ URL(reform-debian-packages) := https://source.mnt.re/reform/reform-debian-packag
 REV(reform-debian-packages) := 13a7ab054c80f646e0c66f47b655e71fbd33d0cb
 DIR(reform-debian-packages) := reform
 
-default: reform-debian-packages.git linux-imx.archive
+URL(compulab) := https://github.com/skalk/compulab-linux-kernel-dts.git
+REV(compulab) := d885d5b38927255387202aa65d669b6b7df044c4
+DIR(compulab) := linux-imx/arch/arm64/boot/dts/compulab
+
+PATCHES += patches/linux-compulab.patch patches/linux-fsl-imx8mp.patch
+
+PATCH_OPT(patches/linux-compulab.patch)   := -p1 --directory=linux-imx
+PATCH_OPT(patches/linux-fsl-imx8mp.patch) := -p1 --directory=linux-imx
+
+default: reform-debian-packages.git linux-imx.archive compulab.git
 	cd linux-imx; for p in ../reform/linux/patches/*.patch; do patch -p1 < $$p; done; cd ..
 	cp reform/linux/*.dts linux-imx/arch/arm64/boot/dts/freescale/
 

@@ -77,15 +77,24 @@ proc cpio_desc { } {
 	return [pwd]/[run_dir]/cpio.desc
 }
 
+proc uart { } {
+	if {[have_board "imx8mp_iot_gate"]} { return "ttymxc1" }
+	if {[have_board "imx8q_evk"]}       { return "ttymxc0" }
+	if {[have_board "mnt_reform2"]}     { return "ttymxc0" }
+	puts "not supported board!"
+	exit 1
+}
+
 #
 # Create additional u-boot script that sets the kernel cmdline
 #
 proc boot_script { } {
+	set uart [uart]
 	set fd [open [run_dir]/boot.scr w]
-	puts $fd {setenv bootargs "console=ttymxc0,115200 root=/dev/ram ip=dhcp rdinit=/linuxrc"
-bootm  ${loadaddr}
-echo "Bad image or kernel."
-reset}
+	puts $fd "setenv bootargs 'console=$uart,115200 root=/dev/ram ip=dhcp rdinit=/linuxrc'
+bootm  \${loadaddr}
+echo 'Bad image or kernel.'
+reset"
 	close $fd
 	return [pwd]/[run_dir]/boot.scr
 }
@@ -100,13 +109,17 @@ proc linux_arch { } {
 }
 
 proc load_addr { } {
-	if {[have_board "imx8q_evk"]}   { return 0x40200000 }
-	if {[have_board "mnt_reform2"]} { return 0x40200000 }
+	if {[have_board "imx8mp_iot_gate"]} { return 0x40200000 }
+	if {[have_board "imx8q_evk"]}       { return 0x40200000 }
+	if {[have_board "mnt_reform2"]}     { return 0x40200000 }
 	puts "not supported board!"
 	exit 1
 }
 
 proc dtb { } {
+	if {[have_board "imx8mp_iot_gate"]} {
+		return [pwd]/imx_linux/arm_v8a/arch/arm64/boot/dts/compulab/iot-gate-imx8plus-m2tpm.dtb
+	}
 	if {[have_board "imx8q_evk"]} {
 		return [pwd]/imx_linux/arm_v8a/arch/arm64/boot/dts/freescale/imx8mq-evk.dtb
 	}
@@ -218,6 +231,9 @@ if {[have_include "load/tftp"]} {
 
 # Trick run tools that the kernel started
 proc run_boot_string { } { return "Booting Linux" }
+
+puts "FIT image can be found under [run_dir]/boot/image.itb"
+puts "load it via u-boot to a loadaddr, and start it via: source \${loadaddr}:bootscript"
 
 run_genode_until forever
 interact

@@ -27,38 +27,8 @@ int alloc_chrdev_region(dev_t * dev,unsigned baseminor,unsigned count,const char
 
 void * dmam_alloc_attrs(struct device * dev,size_t size,dma_addr_t * dma_handle,gfp_t gfp,unsigned long attrs)
 {
-//	struct dma_devres *dr;
-	void *vaddr;
-
-//	dr = devres_alloc(dmam_release, sizeof(*dr), gfp);
-//	if (!dr)
-//		return NULL;
-
-	vaddr = dma_alloc_attrs(dev, size, dma_handle, gfp, attrs);
-	if (!vaddr) {
-//		devres_free(dr);
-		return NULL;
-	}
-
-//	dr->vaddr = vaddr;
-//	dr->dma_handle = *dma_handle;
-//	dr->size = size;
-//	dr->attrs = attrs;
-//
-//	devres_add(dev, dr);
-
-	return vaddr;
+	return dma_alloc_attrs(dev, size, dma_handle, gfp, attrs);
 }
-
-
-#include <linux/slab.h>
-
-#ifdef CONFIG_TRACING
-void * kmalloc_order_trace(size_t size,gfp_t flags,unsigned int order)
-{
-	return kmalloc(size, flags);
-}
-#endif
 
 
 #include <linux/gfp.h>
@@ -66,11 +36,44 @@ void * kmalloc_order_trace(size_t size,gfp_t flags,unsigned int order)
 
 unsigned long get_zeroed_page(gfp_t gfp_mask)
 {
-	return (unsigned long)__alloc_pages(GFP_KERNEL, 0, 0)->virtual;
+	return (unsigned long)__alloc_pages(GFP_KERNEL, 0, 0, NULL)->virtual;
 }
 
 
-#include <linux/slab.h>
+void * page_frag_alloc_align(struct page_frag_cache *nc,
+                             unsigned int fragsz, gfp_t gfp_mask,
+                             unsigned int align_mask)
+{
+	struct page *page;
+
+	if (fragsz > PAGE_SIZE) {
+		printk("no support for fragments larger than PAGE_SIZE\n");
+		lx_emul_backtrace();
+		return NULL;
+	}
+
+	page = __alloc_pages(gfp_mask, 0, 0, NULL);
+
+	if (!page)
+		return NULL;
+
+	return page->virtual;
+}
+
+
+void page_frag_free(void * addr)
+{
+	struct page *page = virt_to_page(addr);
+	if (!page) {
+		printk("BUG %s: page for addr: %p not found\n", __func__, addr);
+		lx_emul_backtrace();
+	}
+
+	__free_pages(page, 0ul);
+}
+
+
+#include <../mm/slab.h>
 
 struct kmem_cache * kmem_cache_create_usercopy(const char * name,
                                                unsigned int size,
@@ -94,17 +97,19 @@ void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
 }
 
 
-#include <linux/gfp.h>
-
-void * page_frag_alloc(struct page_frag_cache * nc,unsigned int fragsz,gfp_t gfp_mask)
+int kmem_cache_alloc_bulk(struct kmem_cache * s,gfp_t flags, size_t nr,void ** p)
 {
-	return lx_emul_mem_alloc_aligned(fragsz, ARCH_KMALLOC_MINALIGN);
+	size_t i;
+	for (i = 0; i < nr; i++)
+		p[i] = kmem_cache_alloc(s, flags);
+
+	return nr;
 }
 
 
-void page_frag_free(void * addr)
+void * kmem_cache_alloc_lru(struct kmem_cache * cachep,struct list_lru * lru,gfp_t flags)
 {
-	lx_emul_mem_free(addr);
+	return kmem_cache_alloc(cachep, flags);
 }
 
 
@@ -141,4 +146,20 @@ int rtnl_lock_killable(void)
 void rtnl_unlock(void)
 {
 	mutex_unlock(&rtnl_mutex);
+}
+
+
+#include <lx_emul/random.h>
+
+u8 get_random_u8(void)
+{
+    return (u8)lx_emul_random_gen_u32();
+}
+
+
+#include <asm-generic/softirq_stack.h>
+
+void do_softirq_own_stack(void)
+{
+	__do_softirq();
 }

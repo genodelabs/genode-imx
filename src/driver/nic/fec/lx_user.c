@@ -13,9 +13,9 @@
 
 #include <linux/kthread.h>
 #include <linux/netdevice.h>
-#include <linux/rtnetlink.h>
 #include <lx_user/init.h>
 #include <genode_c_api/uplink.h>
+#include <genode_c_api/mac_address_reporter.h>
 
 
 static struct genode_uplink *dev_genode_uplink(struct net_device *dev)
@@ -63,9 +63,13 @@ static rx_handler_result_t handle_rx(struct sk_buff **pskb)
 	struct sk_buff *skb = *pskb;
 	struct net_device *dev = skb->dev;
 	struct genode_uplink_tx_packet_context ctx = { .skb = skb };
+	struct genode_uplink *uplink = dev_genode_uplink(dev);
+
+	if (!uplink)
+		return RX_HANDLER_PASS;
 
 	{
-		bool progress = genode_uplink_tx_packet(dev_genode_uplink(dev),
+		bool progress = genode_uplink_tx_packet(uplink,
 		                                        uplink_tx_packet_content,
 		                                        &ctx);
 		if (!progress)
@@ -159,10 +163,13 @@ static int user_task_function(void *arg)
 		struct net_device *dev;
 
 		for_each_netdev(&init_net, dev) {
-			rtnl_lock();
+			struct genode_mac_address dev_addr;
 
 			/* enable link sensing, repeated calls are handled by testing IFF_UP */
 			dev_open(dev, 0);
+
+			memcpy(dev_addr.addr, dev->dev_addr, sizeof(dev_addr));
+			genode_mac_address_register(dev->name, dev_addr);
 
 			/* install rx handler once */
 			if (!netdev_is_rx_handler_busy(dev))
@@ -181,7 +188,6 @@ static int user_task_function(void *arg)
 				                        uplink_rx_one_packet,
 				                        &ctx));
 			}
-			rtnl_unlock();
 		};
 
 		/* block until lx_emul_task_unblock */

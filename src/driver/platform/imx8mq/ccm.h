@@ -13,8 +13,7 @@
 
 #pragma once
 
-#include <os/attached_mmio.h>
-#include <clock.h>
+#include <common/ccm.h>
 
 namespace Driver {
 	using namespace Genode;
@@ -51,7 +50,8 @@ struct Driver::Ccm
 			struct Frac_div_ctl     : Bitfield<7, 24> {};
 		};
 
-		Clocks & _clocks;
+		Clocks    &_clocks;
+		bool const _never_disable;
 
 		template <typename FN>
 		void _parent(FN const & fn) const
@@ -70,9 +70,10 @@ struct Driver::Ccm
 
 		public:
 
-			Frac_pll(Clocks               & clocks,
-			         Name                   name,
-			         Byte_range_ptr const & range);
+			Frac_pll(Clocks               &clocks,
+			         Name                  name,
+			         Byte_range_ptr const &range,
+			         bool                  never_disable = false);
 
 			void parent(Name name) override;
 			void rate(Rate rate)   override;
@@ -111,7 +112,8 @@ struct Driver::Ccm
 			struct Ref_divr1      : Bitfield<25,3> {};
 		};
 
-		Clocks & _clocks;
+		Clocks    &_clocks;
+		bool const _never_disable;
 
 		template <typename FN>
 		void _parent(FN const & fn) const
@@ -130,10 +132,10 @@ struct Driver::Ccm
 
 		public:
 
-			Sccg_pll(Clocks               & clocks,
-			         Name                   name,
-			         Byte_range_ptr const & range)
-			: Clock(clocks, name), Mmio(range), _clocks(clocks) {}
+			Sccg_pll(Clocks               &clocks,
+			         Name                  name,
+			         Byte_range_ptr const &range,
+			         bool const            never_disable = false);
 
 			void parent(Name name) override;
 			void rate(Rate rate)   override;
@@ -167,103 +169,9 @@ struct Driver::Ccm
 		Pllout_monitor(Byte_range_ptr const & range) : Mmio(range) {};
 	};
 
-
-	class Root_clock : public Clock, Mmio<0x4>
-	{
-		struct Target_reg : Register<0x0, 32>
-		{
-			struct Post_div : Bitfield<0,6>  {};
-			struct Pre_div  : Bitfield<16,3> {};
-			struct Ref_sel  : Bitfield<24,3> {};
-			struct Enable   : Bitfield<28,1> {};
-		};
-
-		struct Clock_ref {
-			Clock & ref;
-			Clock_ref(Clock & c) : ref(c) {}
-		};
-
-		enum { REF_CLK_MAX = 8 };
-
-		Clocks  & _clocks;
-		Clock_ref _ref_clks[REF_CLK_MAX];
-
-		Clock & _parent() const;
-
-		public:
-
-			Root_clock(Clocks               & clocks,
-			           Name                   name,
-			           Byte_range_ptr const & range,
-			           Clock                & ref_clk0,
-			           Clock                & ref_clk1,
-			           Clock                & ref_clk2,
-			           Clock                & ref_clk3,
-			           Clock                & ref_clk4,
-			           Clock                & ref_clk5,
-			           Clock                & ref_clk6,
-			           Clock                & ref_clk7)
-			: Clock(clocks, name), Mmio(range), _clocks(clocks),
-			  _ref_clks { ref_clk0, ref_clk1, ref_clk2, ref_clk3,
-			              ref_clk4, ref_clk5, ref_clk6, ref_clk7 }{}
-
-			void parent(Name name) override;
-			void rate(Rate rate)   override;
-			Rate rate()      const override;
-			void _enable()         override;
-			void _disable()        override;
-	};
-
-
-	class Root_clock_divider : public Clock, Mmio<0x4>
-	{
-		struct Target_reg : Register<0x0, 32>
-		{
-			struct Post_div : Bitfield<0,6>  {};
-		};
-
-
-		Clock & _parent;
-
-		public:
-
-			Root_clock_divider(Clocks               & clocks,
-			                   Name                   name,
-			                   Byte_range_ptr const & range,
-			                   Clock                & parent)
-			: Clock(clocks, name), Mmio(range),
-			  _parent(parent) {}
-
-			void rate(Rate rate) override;
-			Rate rate()    const override;
-	};
-
-
-	class Gate : public Clock, Mmio<0x4>
-	{
-		struct Ccgr : Register<0x0, 32> { };
-
-		Clock & _parent;
-
-		public:
-
-			Gate(Clocks               & clocks,
-			     Name                   name,
-			     Byte_range_ptr const & range,
-			     Clock                & parent)
-			: Clock(clocks, name), Mmio(range),
-			  _parent(parent) {}
-
-			Rate rate() const override {
-				return _parent.rate(); }
-
-			void rate(Rate rate) override {
-				_parent.rate(rate); }
-
-			void _enable()       override;
-			void _disable()      override;
-	};
-
+	using Root_clock         = ::Ccm::Root_clock;
+	using Root_clock_divider = ::Ccm::Root_clock_divider;
+	using Gate               = ::Ccm::Gate;
 
 	enum {
 		CCM_MMIO_BASE        = 0x30380000,
@@ -306,13 +214,13 @@ struct Driver::Ccm
 	Frac_pll video_pll1_clk { clocks, "video_pll1_clk", frac_pll_range(2) };
 	Frac_pll gpu_pll_clk    { clocks, "gpu_pll_clk",    frac_pll_range(3) };
 	Frac_pll vpu_pll_clk    { clocks, "vpu_pll_clk",    frac_pll_range(4) };
-	Frac_pll arm_pll_clk    { clocks, "arm_pll_clk",    frac_pll_range(5) };
+	Frac_pll arm_pll_clk    { clocks, "arm_pll_clk",    frac_pll_range(5), true };
 
 	Sccg_pll system_pll1_clk { clocks, "system_pll1_clk", sccg_pll_range(0) };
 	Sccg_pll system_pll2_clk { clocks, "system_pll2_clk", sccg_pll_range(1) };
 	Sccg_pll system_pll3_clk { clocks, "system_pll3_clk", sccg_pll_range(2) };
 	Sccg_pll video_pll2_clk  { clocks, "video_pll2_clk",  sccg_pll_range(3) };
-	Sccg_pll dram_pll_clk    { clocks, "dram_pll_clk",    sccg_pll_range(4) };
+	Sccg_pll dram_pll_clk    { clocks, "dram_pll_clk",    sccg_pll_range(4), true };
 
 	Pllout_monitor pllout { ccm_analog_regs.range_at(0x74) };
 
@@ -337,62 +245,71 @@ struct Driver::Ccm
 	                                           root_range(0), m25_ref_clk,
 	                                           arm_pll_clk, system_pll2_div2,
 	                                           system_pll2_clk, system_pll1_clk,
-	                                           system_pll1_div2, audio_pll1_clk, system_pll3_clk };
+	                                           system_pll1_div2, audio_pll1_clk,
+	                                           system_pll3_clk, true };
 	Root_clock arm_m4_clk_root               { clocks, "arm_m4_clk_root",
 	                                           root_range(1), m25_ref_clk,
 	                                           system_pll2_div5, system_pll2_div4,
 	                                           system_pll1_div3, system_pll1_clk,
-	                                           audio_pll1_clk, video_pll1_clk, system_pll3_clk };
+	                                           audio_pll1_clk, video_pll1_clk,
+	                                           system_pll3_clk };
 	Root_clock vpu_a53_clk_root              { clocks, "vpu_a53_clk_root",
 	                                           root_range(2), m25_ref_clk,
 	                                           arm_pll_clk, system_pll2_div2,
 	                                           system_pll2_clk, system_pll1_clk,
-	                                           system_pll1_div2, audio_pll1_clk, vpu_pll_clk };
+	                                           system_pll1_div2, audio_pll1_clk,
+	                                           vpu_pll_clk };
 	Root_clock gpu_core_clk_root             { clocks, "gpu_core_clk_root",
 	                                           root_range(3), m25_ref_clk,
 	                                           gpu_pll_clk, system_pll1_clk,
 	                                           system_pll3_clk, system_pll2_clk,
-	                                           audio_pll1_clk, video_pll1_clk, audio_pll2_clk };
+	                                           audio_pll1_clk, video_pll1_clk,
+	                                           audio_pll2_clk };
 	Root_clock gpu_shader_clk_root           { clocks, "gpu_shader_clk",
 	                                           root_range(4), m25_ref_clk,
 	                                           gpu_pll_clk, system_pll1_clk,
 	                                           system_pll3_clk, system_pll2_clk,
-	                                           audio_pll1_clk, video_pll1_clk, audio_pll2_clk };
+	                                           audio_pll1_clk, video_pll1_clk,
+	                                           audio_pll2_clk };
 	Root_clock main_axi_clk_root             { clocks, "main_axi_clk_root",
 	                                           root_range(16), m25_ref_clk,
 	                                           system_pll2_div3, system_pll1_clk,
 	                                           system_pll2_div4, system_pll2_clk,
-	                                           audio_pll1_clk, video_pll1_clk, system_pll1_div8 };
+	                                           audio_pll1_clk, video_pll1_clk,
+	                                           system_pll1_div8, true };
 	Root_clock enet_axi_clk_root             { clocks, "enet_axi_clk_root",
 	                                           root_range(17), m25_ref_clk,
 	                                           system_pll1_div3, system_pll1_clk,
 	                                           system_pll2_div4, system_pll2_div5,
-	                                           audio_pll1_clk, video_pll1_clk, system_pll3_clk };
+	                                           audio_pll1_clk, video_pll1_clk,
+	                                           system_pll3_clk };
 	Root_clock nand_usdhc_bus_clk_root       { clocks, "nand_usdhc_bus_clk_root",
 	                                           root_range(18), m25_ref_clk,
 	                                           system_pll1_div3, system_pll1_clk,
 	                                           system_pll2_div5, system_pll1_div6,
-	                                           system_pll3_clk, system_pll2_div4, audio_pll1_clk };
+	                                           system_pll3_clk, system_pll2_div4,
+	                                           audio_pll1_clk };
 	Root_clock vpu_bus_clk_root              { clocks, "vpu_bus_clk_root",
 	                                           root_range(19), m25_ref_clk,
 	                                           system_pll1_clk, vpu_pll_clk,
 	                                           audio_pll2_clk, system_pll3_clk,
-	                                           system_pll2_clk, system_pll2_div5, system_pll1_div8 };
+	                                           system_pll2_clk, system_pll2_div5,
+	                                           system_pll1_div8 };
 	Root_clock display_axi_clk_root          { clocks, "display_axi_clk_root",
 	                                           root_range(20), m25_ref_clk,
 	                                           system_pll2_div8, system_pll1_clk,
 	                                           system_pll3_clk, system_pll1_div20,
-	                                           audio_pll2_clk, ext_clk_1, ext_clk_4 };
+	                                           audio_pll2_clk, ext_clk_1, ext_clk_4, true};
 	Root_clock display_apb_clk_root          { clocks, "display_apb_clk_root",
 	                                           root_range(21), m25_ref_clk,
 	                                           system_pll2_div8, system_pll1_clk,
 	                                           system_pll3_clk, system_pll1_div20,
-	                                           audio_pll2_clk, ext_clk_1, ext_clk_3 };
+	                                           audio_pll2_clk, ext_clk_1, ext_clk_3, true};
 	Root_clock display_rtrm_clk_root         { clocks, "display_rtrm_clk_root",
 	                                           root_range(22), m25_ref_clk,
 	                                           system_pll1_clk, system_pll2_div5,
 	                                           system_pll1_div2, audio_pll1_clk,
-	                                           video_pll1_clk, ext_clk_2, ext_clk_3 };
+	                                           video_pll1_clk, ext_clk_2, ext_clk_3, true};
 	Root_clock usb_bus_clk_root              { clocks, "usb_bus_clk_root",
 	                                           root_range(23), m25_ref_clk,
 	                                           system_pll2_div2, system_pll1_clk,
@@ -402,72 +319,86 @@ struct Driver::Ccm
 	                                           root_range(24), m25_ref_clk,
 	                                           system_pll1_clk, gpu_pll_clk,
 	                                           system_pll3_clk, system_pll2_clk,
-	                                           audio_pll1_clk, video_pll1_clk, audio_pll2_clk };
+	                                           audio_pll1_clk, video_pll1_clk,
+	                                           audio_pll2_clk };
 	Root_clock gpu_ahb_clk_root              { clocks, "gpu_ahb_clk_root",
 	                                           root_range(25), m25_ref_clk,
 	                                           system_pll1_clk, gpu_pll_clk,
 	                                           system_pll3_clk, system_pll2_clk,
-	                                           audio_pll1_clk, video_pll1_clk, audio_pll2_clk };
+	                                           audio_pll1_clk, video_pll1_clk,
+	                                           audio_pll2_clk };
 	Root_clock noc_clk_root                  { clocks, "noc_clk_root",
 	                                           root_range(26), m25_ref_clk,
 	                                           system_pll1_clk, system_pll3_clk,
 	                                           system_pll2_clk, system_pll2_div2,
-	                                           audio_pll1_clk, video_pll1_clk, audio_pll2_clk };
+	                                           audio_pll1_clk, video_pll1_clk,
+	                                           audio_pll2_clk, true };
 	Root_clock noc_apb_clk_root              { clocks, "noc_apb_clk_root",
 	                                           root_range(27), m25_ref_clk,
 	                                           system_pll1_div2, system_pll3_clk,
 	                                           system_pll2_div3, system_pll2_div5,
-	                                           system_pll1_clk, audio_pll1_clk, video_pll1_clk };
+	                                           system_pll1_clk, audio_pll1_clk,
+	                                           video_pll1_clk, true };
 	Root_clock ahb_clk_root                  { clocks, "ahb_clk_root",
 	                                           root_range(32), m25_ref_clk,
 	                                           system_pll1_div6, system_pll1_clk,
 	                                           system_pll1_div2, system_pll2_div8,
-	                                           system_pll3_clk, audio_pll1_clk, video_pll1_clk };
+	                                           system_pll3_clk, audio_pll1_clk,
+	                                           video_pll1_clk, true};
 	Root_clock audio_ahb_clk_root            { clocks, "audio_ahb_clk_root",
 	                                           root_range(34), m25_ref_clk,
 	                                           system_pll2_div2, system_pll1_clk,
 	                                           system_pll2_clk, system_pll2_div6,
-	                                           system_pll3_clk, audio_pll1_clk, video_pll1_clk };
+	                                           system_pll3_clk, audio_pll1_clk,
+	                                           video_pll1_clk };
 	Root_clock mipi_dsi_esc_rx_clk_root      { clocks, "mipi_dsi_esc_rx_clk_root",
 	                                           root_range(36), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div10,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           system_pll3_clk, ext_clk_3, audio_pll2_clk };
+	                                           system_pll3_clk, ext_clk_3,
+	                                           audio_pll2_clk };
 	Root_clock dram_alt_clk_root             { clocks, "dram_alt_clk_root",
 	                                           root_range(64), m25_ref_clk,
 	                                           system_pll1_clk, system_pll1_div8,
 	                                           system_pll2_div2, system_pll2_div4,
-	                                           system_pll1_div2, audio_pll1_clk, system_pll1_div3 };
+	                                           system_pll1_div2, audio_pll1_clk,
+	                                           system_pll1_div3, true};
 	Root_clock dram_apb_clk_root             { clocks, "dram_apb_clk_root",
 	                                           root_range(65), m25_ref_clk,
 	                                           system_pll2_div5, system_pll1_div20,
 	                                           system_pll1_div5, system_pll1_clk,
-	                                           system_pll3_clk, system_pll2_div4, audio_pll2_clk };
+	                                           system_pll3_clk, system_pll2_div4,
+	                                           audio_pll2_clk, true };
 	Root_clock vpu_g1_clk_root               { clocks, "vpu_g1_clk_root",
 	                                           root_range(66), m25_ref_clk,
 	                                           vpu_pll_clk, system_pll1_clk,
 	                                           system_pll2_clk, system_pll1_div8,
-	                                           system_pll2_div8, system_pll3_clk, audio_pll1_clk };
+	                                           system_pll2_div8, system_pll3_clk,
+	                                           audio_pll1_clk };
 	Root_clock vpu_g2_clk_root               { clocks, "vpu_g2_clk_root",
 	                                           root_range(67), m25_ref_clk,
 	                                           vpu_pll_clk, system_pll1_clk,
 	                                           system_pll2_clk, system_pll1_div8,
-	                                           system_pll2_div8, system_pll3_clk, audio_pll1_clk };
+	                                           system_pll2_div8, system_pll3_clk,
+	                                           audio_pll1_clk };
 	Root_clock display_dtrc_clk_root         { clocks, "display_dtrc_clk_root",
 	                                           root_range(68), m25_ref_clk,
 	                                           video_pll2_clk, system_pll1_clk,
 	                                           system_pll2_clk, system_pll1_div5,
-	                                           video_pll1_clk, system_pll3_clk, audio_pll2_clk };
+	                                           video_pll1_clk, system_pll3_clk,
+	                                           audio_pll2_clk };
 	Root_clock display_dc8000_clk_root       { clocks, "display_dc8000_clk_root",
 	                                           root_range(69), m25_ref_clk,
 	                                           video_pll2_clk, system_pll1_clk,
 	                                           system_pll2_clk, system_pll1_div5,
-	                                           video_pll1_clk, system_pll3_clk, audio_pll2_clk };
+	                                           video_pll1_clk, system_pll3_clk,
+	                                           audio_pll2_clk, true };
 	Root_clock pcie1_ctrl_clk_root           { clocks, "pcie1_ctrl_clk_root",
 	                                           root_range(70), m25_ref_clk,
 	                                           system_pll2_div4, system_pll2_div5,
 	                                           system_pll1_div3, system_pll1_clk,
-	                                           system_pll2_div2, system_pll2_div3, system_pll3_clk };
+	                                           system_pll2_div2, system_pll2_div3,
+	                                           system_pll3_clk };
 	Root_clock pcie1_phy_clk_root            { clocks, "pcie1_phy_clk_root",
 	                                           root_range(71), m25_ref_clk,
 	                                           system_pll2_div10, system_pll2_div2,
@@ -477,17 +408,20 @@ struct Driver::Ccm
 	                                           root_range(72), m25_ref_clk,
 	                                           system_pll2_div5, system_pll2_div20,
 	                                           system_pll3_clk, system_pll2_div10,
-	                                           system_pll1_div10, system_pll1_div5, system_pll1_div4 };
+	                                           system_pll1_div10, system_pll1_div5,
+	                                           system_pll1_div4 };
 	Root_clock dc_pixel_clk_root             { clocks, "dc_pixel_clk_root",
 	                                           root_range(73), m25_ref_clk,
 	                                           video_pll1_clk, audio_pll2_clk,
 	                                           audio_pll1_clk, system_pll1_clk,
-	                                           system_pll2_clk, system_pll3_clk, ext_clk_4 };
+	                                           system_pll2_clk, system_pll3_clk,
+	                                           ext_clk_4 };
 	Root_clock lcdif_pixel_clk_root          { clocks, "lcdif_pixel_clk_root",
 	                                           root_range(74), m25_ref_clk,
 	                                           video_pll1_clk, audio_pll2_clk,
 	                                           audio_pll1_clk, system_pll1_clk,
-	                                           system_pll2_clk, system_pll3_clk, ext_clk_4 };
+	                                           system_pll2_clk, system_pll3_clk,
+	                                           ext_clk_4 };
 	Root_clock sai1_clk_root                 { clocks, "sai1_clk_root",
 	                                           root_range(75), m25_ref_clk,
 	                                           audio_pll1_clk, audio_pll2_clk,
@@ -532,7 +466,8 @@ struct Driver::Ccm
 	                                           root_range(83), m25_ref_clk,
 	                                           system_pll2_div8, system_pll2_div20,
 	                                           system_pll2_div10, system_pll1_div5,
-	                                           audio_pll1_clk, video_pll1_clk, ext_clk_4 };
+	                                           audio_pll1_clk, video_pll1_clk,
+	                                           ext_clk_4 };
 	Root_clock enet_timer_clk_root           { clocks, "enet_timer_clk_root",
 	                                           root_range(84), m25_ref_clk,
 	                                           system_pll2_div10, audio_pll1_clk,
@@ -542,52 +477,62 @@ struct Driver::Ccm
 	                                           root_range(85), m25_ref_clk,
 	                                           system_pll2_div20, system_pll2_div8,
 	                                           system_pll2_div5, system_pll2_div2,
-	                                           audio_pll1_clk, video_pll1_clk, audio_pll2_clk };
+	                                           audio_pll1_clk, video_pll1_clk,
+	                                           audio_pll2_clk };
 	Root_clock nand_clk_root                 { clocks, "nand_clk_root",
 	                                           root_range(86), m25_ref_clk,
 	                                           system_pll2_div2, audio_pll1_clk,
 	                                           system_pll1_div2, audio_pll2_clk,
-	                                           system_pll3_clk, system_pll2_div4, video_pll1_clk };
+	                                           system_pll3_clk, system_pll2_div4,
+	                                           video_pll1_clk };
 	Root_clock qspi_clk_root                 { clocks, "qspi_clk_root",
 	                                           root_range(87), m25_ref_clk,
 	                                           system_pll1_div2, system_pll1_clk,
 	                                           system_pll2_div2, audio_pll2_clk,
-	                                           system_pll1_div3, system_pll3_clk, system_pll1_div8 };
+	                                           system_pll1_div3, system_pll3_clk,
+	                                           system_pll1_div8 };
 	Root_clock usdhc1_clk_root               { clocks, "usdhc1_clk_root",
 	                                           root_range(88), m25_ref_clk,
 	                                           system_pll1_div2, system_pll1_clk,
 	                                           system_pll2_div2, system_pll3_clk,
-	                                           system_pll1_div3, audio_pll2_clk, system_pll1_div8 };
+	                                           system_pll1_div3, audio_pll2_clk,
+	                                           system_pll1_div8 };
 	Root_clock usdhc2_clk_root               { clocks, "usdhc2_clk_root",
 	                                           root_range(89), m25_ref_clk,
 	                                           system_pll1_div2, system_pll1_clk,
 	                                           system_pll2_div2, system_pll3_clk,
-	                                           system_pll1_div3, audio_pll2_clk, system_pll1_div8 };
+	                                           system_pll1_div3, audio_pll2_clk,
+	                                           system_pll1_div8 };
 	Root_clock i2c1_clk_root                 { clocks, "i2c1_clk_root",
 	                                           root_range(90), m25_ref_clk,
 	                                           system_pll1_div5, system_pll2_div20,
 	                                           system_pll3_clk, audio_pll1_clk,
-	                                           video_pll1_clk, audio_pll2_clk, system_pll1_div6 };
+	                                           video_pll1_clk, audio_pll2_clk,
+	                                           system_pll1_div6 };
 	Root_clock i2c2_clk_root                 { clocks, "i2c2_clk_root",
 	                                           root_range(91), m25_ref_clk,
 	                                           system_pll1_div5, system_pll2_div20,
 	                                           system_pll3_clk, audio_pll1_clk,
-	                                           video_pll1_clk, audio_pll2_clk, system_pll1_div6 };
+	                                           video_pll1_clk, audio_pll2_clk,
+	                                           system_pll1_div6 };
 	Root_clock i2c3_clk_root                 { clocks, "i2c3_clk_root",
 	                                           root_range(92), m25_ref_clk,
 	                                           system_pll1_div5, system_pll2_div20,
 	                                           system_pll3_clk, audio_pll1_clk,
-	                                           video_pll1_clk, audio_pll2_clk, system_pll1_div6 };
+	                                           video_pll1_clk, audio_pll2_clk,
+	                                           system_pll1_div6 };
 	Root_clock i2c4_clk_root                 { clocks, "i2c4_clk_root",
 	                                           root_range(93), m25_ref_clk,
 	                                           system_pll1_div5, system_pll2_div20,
 	                                           system_pll3_clk, audio_pll1_clk,
-	                                           video_pll1_clk, audio_pll2_clk, system_pll1_div6 };
+	                                           video_pll1_clk, audio_pll2_clk,
+	                                           system_pll1_div6 };
 	Root_clock uart1_clk_root                { clocks, "uart1_clk_root",
 	                                           root_range(94), m25_ref_clk,
 	                                           system_pll1_div10, system_pll2_div5,
 	                                           system_pll2_div10, system_pll3_clk,
-	                                           ext_clk_2, ext_clk_4, audio_pll2_clk };
+	                                           ext_clk_2, ext_clk_4,
+	                                           audio_pll2_clk, true };
 	Root_clock uart2_clk_root                { clocks, "uart2_clk_root",
 	                                           root_range(95), m25_ref_clk,
 	                                           system_pll1_div10, system_pll2_div5,
@@ -617,67 +562,80 @@ struct Driver::Ccm
 	                                           root_range(100), m25_ref_clk,
 	                                           system_pll2_div5, system_pll1_div20,
 	                                           system_pll2_div10, system_pll1_clk,
-	                                           ext_clk_2, ext_clk_4, audio_pll2_clk };
+	                                           ext_clk_2, ext_clk_4,
+	                                           audio_pll2_clk, true };
 	Root_clock ecspi1_clk_root               { clocks, "ecspi1_clk_root",
 	                                           root_range(101), m25_ref_clk,
 	                                           system_pll2_div5, system_pll1_div20,
 	                                           system_pll1_div5, system_pll1_clk,
-	                                           system_pll3_clk, system_pll2_div4, audio_pll2_clk };
+	                                           system_pll3_clk, system_pll2_div4,
+	                                           audio_pll2_clk };
 	Root_clock ecspi2_clk_root               { clocks, "ecspi2_clk_root",
 	                                           root_range(102), m25_ref_clk,
 	                                           system_pll2_div5, system_pll1_div20,
 	                                           system_pll1_div5, system_pll1_clk,
-	                                           system_pll3_clk, system_pll2_div4, audio_pll2_clk };
+	                                           system_pll3_clk, system_pll2_div4,
+	                                           audio_pll2_clk };
 	Root_clock pwm1_clk_root                 { clocks, "pwm1_clk_root",
 	                                           root_range(103), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div5,
 	                                           system_pll1_div20, system_pll3_clk,
-	                                           ext_clk_1, system_pll1_div10, video_pll1_clk };
+	                                           ext_clk_1, system_pll1_div10,
+	                                           video_pll1_clk };
 	Root_clock pwm2_clk_root                 { clocks, "pwm2_clk_root",
 	                                           root_range(104), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div5,
 	                                           system_pll1_div20, system_pll3_clk,
-	                                           ext_clk_1, system_pll1_div10, video_pll1_clk };
+	                                           ext_clk_1, system_pll1_div10,
+	                                           video_pll1_clk };
 	Root_clock pwm3_clk_root                 { clocks, "pwm3_clk_root",
 	                                           root_range(105), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div5,
 	                                           system_pll1_div20, system_pll3_clk,
-	                                           ext_clk_2, system_pll1_div10, video_pll1_clk };
+	                                           ext_clk_2, system_pll1_div10,
+	                                           video_pll1_clk };
 	Root_clock pwm4_clk_root                 { clocks, "pwm4_clk_root",
 	                                           root_range(106), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div5,
 	                                           system_pll1_div20, system_pll3_clk,
-	                                           ext_clk_2, system_pll1_div10, video_pll1_clk };
+	                                           ext_clk_2, system_pll1_div10,
+	                                           video_pll1_clk };
 	Root_clock gpt1_clk_root                 { clocks, "gpt1_clk_root",
 	                                           root_range(107), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div2,
 	                                           system_pll1_div20, video_pll1_clk,
-	                                           system_pll1_div10, audio_pll1_clk, ext_clk_1 };
+	                                           system_pll1_div10, audio_pll1_clk,
+	                                           ext_clk_1 };
 	Root_clock gpt2_clk_root                 { clocks, "gpt2_clk_root",
 	                                           root_range(108), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div2,
 	                                           system_pll1_div20, video_pll1_clk,
-	                                           system_pll1_div10, audio_pll1_clk, ext_clk_2 };
+	                                           system_pll1_div10, audio_pll1_clk,
+	                                           ext_clk_2 };
 	Root_clock gpt3_clk_root                 { clocks, "gpt3_clk_root",
 	                                           root_range(109), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div2,
 	                                           system_pll1_div20, video_pll1_clk,
-	                                           system_pll1_div10, audio_pll1_clk, ext_clk_3 };
+	                                           system_pll1_div10, audio_pll1_clk,
+	                                           ext_clk_3 };
 	Root_clock gpt4_clk_root                 { clocks, "gpt4_clk_root",
 	                                           root_range(110), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div2,
 	                                           system_pll1_div20, video_pll1_clk,
-	                                           system_pll1_div10, audio_pll1_clk, ext_clk_1 };
+	                                           system_pll1_div10, audio_pll1_clk,
+	                                           ext_clk_1 };
 	Root_clock gpt5_clk_root                 { clocks, "gpt5_clk_root",
 	                                           root_range(111), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div2,
 	                                           system_pll1_div20, video_pll1_clk,
-	                                           system_pll1_div10, audio_pll1_clk, ext_clk_2 };
+	                                           system_pll1_div10, audio_pll1_clk,
+	                                           ext_clk_2 };
 	Root_clock gpt6_clk_root                 { clocks, "gpt6_clk_root",
 	                                           root_range(112), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div2,
 	                                           system_pll1_div20, video_pll1_clk,
-	                                           system_pll1_div10, audio_pll1_clk, ext_clk_3 };
+	                                           system_pll1_div10, audio_pll1_clk,
+	                                           ext_clk_3 };
 	Root_clock trace_clk_root                { clocks, "trace_clk_root",
 	                                           root_range(113), m25_ref_clk,
 	                                           system_pll1_div6, system_pll1_div5,
@@ -687,77 +645,92 @@ struct Driver::Ccm
 	                                           root_range(114), m25_ref_clk,
 	                                           system_pll1_div6, system_pll1_div5,
 	                                           vpu_pll_clk, system_pll2_div8,
-	                                           system_pll3_clk, system_pll1_div10, system_pll2_div6 };
+	                                           system_pll3_clk, system_pll1_div10,
+	                                           system_pll2_div6 };
 	Root_clock wrclk_clk_root                { clocks, "wrclk_clk_root",
 	                                           root_range(115), m25_ref_clk,
 	                                           system_pll1_div20, vpu_pll_clk,
 	                                           system_pll3_clk, system_pll2_div5,
-	                                           system_pll1_div3, system_pll2_div2, system_pll1_div8 };
+	                                           system_pll1_div3, system_pll2_div2,
+	                                           system_pll1_div8 };
 	Root_clock ipp_do_clko1clk_root          { clocks, "ipp_do_clko1_clk_root",
 	                                           root_range(116), m25_ref_clk,
 	                                           system_pll1_clk, m27_ref_clk,
 	                                           system_pll1_div4, audio_pll2_clk,
-	                                           system_pll2_div2, vpu_pll_clk, system_pll1_div10 };
+	                                           system_pll2_div2, vpu_pll_clk,
+	                                           system_pll1_div10 };
 	Root_clock ipp_do_clko2_clk_root         { clocks, "ipp_do_clko2_clk_root",
 	                                           root_range(117), m25_ref_clk,
 	                                           system_pll2_div5, system_pll1_div2,
 	                                           system_pll2_div6, system_pll3_clk,
-	                                           audio_pll1_clk, video_pll1_clk, k32_ref_clk };
+	                                           audio_pll1_clk, video_pll1_clk,
+	                                           k32_ref_clk };
 	Root_clock mipi_dsi_core_clk_root        { clocks, "mipi_dsi_core_clk_root",
 	                                           root_range(118), m25_ref_clk,
 	                                           system_pll1_div3, system_pll2_div4,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           system_pll3_clk, audio_pll2_clk, video_pll1_clk };
+	                                           system_pll3_clk, audio_pll2_clk,
+	                                           video_pll1_clk };
 	Root_clock mipi_dsi_phy_ref_clk_root     { clocks, "mipi_dsi_phy_ref_clk_root",
 	                                           root_range(119), m25_ref_clk,
 	                                           system_pll2_div8, system_pll2_div10,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           ext_clk_2, audio_pll2_clk, video_pll1_clk };
+	                                           ext_clk_2, audio_pll2_clk,
+	                                           video_pll1_clk };
 	Root_clock mipi_dsi_dbi_clk_root         { clocks, "mipi_dsi_dbi_clk_root",
 	                                           root_range(120), m25_ref_clk,
 	                                           system_pll1_div3, system_pll2_div10,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           system_pll3_clk, audio_pll2_clk, video_pll1_clk };
+	                                           system_pll3_clk, audio_pll2_clk,
+	                                           video_pll1_clk };
 	Root_clock old_mipi_dsi_esc_clk_root     { clocks, "old_mipi_dsi_esc_clk_root",
 	                                           root_range(121), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div10,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           system_pll3_clk, ext_clk_3, audio_pll2_clk };
+	                                           system_pll3_clk, ext_clk_3,
+	                                           audio_pll2_clk };
 	Root_clock mipi_csi1_core_clk_root       { clocks, "mipi_csi1_core_clk_root",
 	                                           root_range(122), m25_ref_clk,
 	                                           system_pll1_div3, system_pll2_div4,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           system_pll3_clk, audio_pll2_clk, video_pll1_clk };
+	                                           system_pll3_clk, audio_pll2_clk,
+	                                           video_pll1_clk };
 	Root_clock mipi_csi1_phy_ref_clk_root    { clocks, "mipi_csi1_phy_ref_clk_root",
 	                                           root_range(123), m25_ref_clk,
 	                                           system_pll2_div3, system_pll2_div10,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           ext_clk_2, audio_pll2_clk, video_pll1_clk };
+	                                           ext_clk_2, audio_pll2_clk,
+	                                           video_pll1_clk };
 	Root_clock mipi_csi1_esc_clk_root        { clocks, "mipi_csi1_esc_clk_root",
 	                                           root_range(124), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div10,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           system_pll3_clk, ext_clk_3, audio_pll2_clk };
+	                                           system_pll3_clk, ext_clk_3,
+	                                           audio_pll2_clk };
 	Root_clock mipi_csi2_core_clk_root       { clocks, "mipi_csi2_core_clk_root",
 	                                           root_range(125), m25_ref_clk,
 	                                           system_pll1_div3, system_pll2_div4,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           system_pll3_clk, audio_pll2_clk, video_pll1_clk };
+	                                           system_pll3_clk, audio_pll2_clk,
+	                                           video_pll1_clk };
 	Root_clock mipi_csi2_phy_ref_clk_root    { clocks, "mipi_csi2_phy_ref_clk_root",
 	                                           root_range(126), m25_ref_clk,
 	                                           system_pll2_div3, system_pll2_div10,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           ext_clk_2, audio_pll2_clk, video_pll1_clk };
+	                                           ext_clk_2, audio_pll2_clk,
+	                                           video_pll1_clk };
 	Root_clock mipi_csi2_esc_clk_root        { clocks, "mipi_csi2_esc_clk_root",
 	                                           root_range(127), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div10,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           system_pll3_clk, ext_clk_3, audio_pll2_clk };
+	                                           system_pll3_clk, ext_clk_3,
+	                                           audio_pll2_clk };
 	Root_clock pcie2_ctrl_clk_root           { clocks, "pcie2_ctrl_clk_root",
 	                                           root_range(128), m25_ref_clk,
 	                                           system_pll2_div4, system_pll2_div5,
 	                                           system_pll1_div3, system_pll1_clk,
-	                                           system_pll2_div2, system_pll2_div3, system_pll3_clk };
+	                                           system_pll2_div2, system_pll2_div3,
+	                                           system_pll3_clk };
 	Root_clock pcie2_phy_clk_root            { clocks, "pcie2_phy_clk_root",
 	                                           root_range(129), m25_ref_clk,
 	                                           system_pll2_div10, system_pll2_div2,
@@ -767,22 +740,26 @@ struct Driver::Ccm
 	                                           root_range(130), m25_ref_clk,
 	                                           system_pll2_div5, system_pll2_div20,
 	                                           system_pll3_clk, system_pll2_div10,
-	                                           system_pll1_div10, system_pll1_div5, system_pll1_div4 };
+	                                           system_pll1_div10, system_pll1_div5,
+	                                           system_pll1_div4 };
 	Root_clock ecspi3_clk_root               { clocks, "ecspi3_clk_root",
 	                                           root_range(131), m25_ref_clk,
 	                                           system_pll2_div5, system_pll1_div20,
 	                                           system_pll1_div5, system_pll1_clk,
-	                                           system_pll3_clk, system_pll2_div4, audio_pll2_clk };
+	                                           system_pll3_clk, system_pll2_div4,
+	                                           audio_pll2_clk };
 	Root_clock old_mipi_dsi_esc_rx_clk_root  { clocks, "old_mipi_dsi_esc_rx_clk_root",
 	                                           root_range(132), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div10,
 	                                           system_pll1_clk, system_pll2_clk,
-	                                           system_pll3_clk, ext_clk_3, audio_pll2_clk };
+	                                           system_pll3_clk, ext_clk_3,
+	                                           audio_pll2_clk };
 	Root_clock display_hdmi_clk_root         { clocks, "display_hdmi_clk_root",
 	                                           root_range(133), m25_ref_clk,
 	                                           system_pll1_div4, system_pll2_div5,
 	                                           vpu_pll_clk, system_pll1_clk,
-	                                           system_pll2_clk, system_pll3_clk, ext_clk_4 };
+	                                           system_pll2_clk, system_pll3_clk,
+	                                           ext_clk_4 };
 
 	Root_clock_divider ipg_clk_root          { clocks, "ipg_clk_root",
 	                                           root_range(33), ahb_clk_root };
@@ -817,7 +794,7 @@ struct Driver::Ccm
 	Gate sai6_gate       { clocks, "sai6_gate",       gate_range(56),  sai6_clk_root           };
 	Gate sdma1_gate      { clocks, "sdma1_gate",      gate_range(58),  ipg_clk_root            };
 	Gate sdma2_gate      { clocks, "sdma2_gate",      gate_range(59),  ipg_audio_clk_root      };
-	Gate uart1_gate      { clocks, "uart1_gate",      gate_range(73),  uart1_clk_root          };
+	Gate uart1_gate      { clocks, "uart1_gate",      gate_range(73),  uart1_clk_root, true    };
 	Gate uart2_gate      { clocks, "uart2_gate",      gate_range(74),  uart2_clk_root          };
 	Gate uart3_gate      { clocks, "uart3_gate",      gate_range(75),  uart3_clk_root          };
 	Gate uart4_gate      { clocks, "uart4_gate",      gate_range(76),  uart4_clk_root          };
@@ -833,7 +810,7 @@ struct Driver::Ccm
 	Gate va53_gate       { clocks, "va53_gate",       gate_range(86),  vpu_g1_clk_root         };
 	Gate gpu_gate        { clocks, "gpu_gate",        gate_range(87),  gpu_core_clk_root       };
 	Gate vp9_gate        { clocks, "vp9_gate",        gate_range(90),  vpu_g2_clk_root         };
-	Gate display_gate    { clocks, "display_gate",    gate_range(93),  display_dc8000_clk_root };
+	Gate display_gate    { clocks, "display_gate",    gate_range(93),  display_dc8000_clk_root, true };
 	Gate tempsensor_gate { clocks, "tempsensor_gate", gate_range(98),  ipg_clk_root            };
 	Gate vpu_dec_gate    { clocks, "vpu_dec_gate",    gate_range(99),  vpu_bus_clk_root        };
 	Gate pcie2_gate      { clocks, "pcie2_gate",      gate_range(100), pcie2_ctrl_clk_root     };

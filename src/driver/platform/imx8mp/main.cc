@@ -16,8 +16,8 @@
 #include <base/component.h>
 
 #include <ccm.h>
-#include <gpc.h>
-#include <src.h>
+#include <common/gpc.h>
+#include <common/src.h>
 #include <common.h>
 
 namespace Driver { struct Main; };

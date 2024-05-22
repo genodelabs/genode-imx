@@ -155,8 +155,9 @@
 		              driver_name="ref"/>
 		<clock        name="usb_bus_clk_root"
 		              parent="system_pll2_div2"
-		              rate="500000000"
-		              driver_name="ref"/>
+		              rate="500000000"/>
+		<clock        name="32k_ref_clk"
+		              driver_name="suspend"/>
 	</device>
 
 	<device name="usb_phy_1" type="fsl,imx8mq-usb-phy">
@@ -180,8 +181,9 @@
 		              driver_name="ref"/>
 		<clock        name="usb_bus_clk_root"
 		              parent="system_pll2_div2"
-		              rate="500000000"
-		              driver_name="ref"/>
+		              rate="500000000"/>
+		<clock        name="32k_ref_clk"
+		              driver_name="suspend"/>
 	</device>
 
 	<device name="usb_phy_2" type="fsl,imx8mq-usb-phy">

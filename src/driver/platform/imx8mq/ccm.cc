@@ -19,6 +19,9 @@
 
 void Driver::Ccm::Frac_pll::_disable()
 {
+	if (_never_disable)
+		return;
+
 	write<Config_reg_0::Power_down>(1);
 }
 
@@ -111,11 +114,25 @@ Driver::Clock::Rate Driver::Ccm::Frac_pll::rate() const
 }
 
 
-Driver::Ccm::Frac_pll::Frac_pll(Clocks & clocks, Name name, Byte_range_ptr const &range)
-: Clock(clocks, name), Mmio(range), _clocks(clocks)
+Driver::Ccm::Frac_pll::Frac_pll(Clocks               &clocks,
+                                Name                  name,
+                                Byte_range_ptr const &range,
+                                bool const            never_disable)
+:
+	Clock(clocks, name),
+	Mmio(range),
+	_clocks(clocks),
+	_never_disable(never_disable)
 {
 	write<Config_reg_0::Bypass>(0);
 	write<Config_reg_0::Out_enable>(1);
+
+	/*
+	 * Enable within the clock tree if clock is on,
+	 * because there are potentially root-clocks enabled and configured to use
+	 * this PLL, disable it in the end when all clocks are initialized
+	 */
+	if (!read<Config_reg_0::Power_down>()) enable();
 }
 
 
@@ -220,128 +237,30 @@ void Driver::Ccm::Sccg_pll::_enable()
 
 void Driver::Ccm::Sccg_pll::_disable()
 {
+	if (_never_disable)
+		return;
+
 	write<Config_reg_0::Power_down>(1);
 }
 
 
-/********************************
- ** Root_clock immplementation **
- ********************************/
-
-void Driver::Ccm::Root_clock::rate(Rate rate)
-{
-	uint8_t       pre_div   = 0;
-	uint8_t       post_div  = 0;
-	unsigned long deviation = ~0UL;
-
-	unsigned long parent_rate =
-		_ref_clks[read<Target_reg::Ref_sel>()].ref.rate().value;
-
-	for (uint8_t pre = 0; deviation && (pre < (1U<<3)); pre++) {
-		for (uint8_t post = 0; deviation && (post < (1U<<6)); post++) {
-			unsigned long diff = (parent_rate / (pre+1)) / (post+1);
-			diff = (diff > rate.value) ? diff - rate.value
-			                           : rate.value - diff;
-			if (diff < deviation) {
-				pre_div   = pre;
-				post_div  = post;
-				deviation = diff;
-			}
-		}
-	}
-
-	write<Target_reg::Pre_div>(pre_div);
-	write<Target_reg::Post_div>(post_div);
-};
-
-
-void Driver::Ccm::Root_clock::parent(Name name)
-{
-	for (unsigned i = 0; i < REF_CLK_MAX; i++) {
-		if (_ref_clks[i].ref.name == name) {
-			/**
-			 * enable parent before setting it,
-			 * otherwise the system stalls
-			 */
-			_ref_clks[i].ref.enable();
-			write<Target_reg::Ref_sel>(i);
-			return;
-		}
-	}
-
-	warning("Reference clock ", name, " cannot be set");
-}
-
-
-Driver::Clock::Rate Driver::Ccm::Root_clock::rate() const
-{
-	unsigned long parent_rate =
-		_ref_clks[read<Target_reg::Ref_sel>()].ref.rate().value;
-	unsigned pre  = read<Target_reg::Pre_div>()+1;
-	unsigned post = read<Target_reg::Post_div>()+1;
-	return {parent_rate / pre / post};
-}
-
-
-void Driver::Ccm::Root_clock::_enable()
-{
-	/* enable the parent clock */
-	_ref_clks[read<Target_reg::Ref_sel>()].ref.enable();
-	write<Target_reg::Enable>(1);
-}
-
-
-void Driver::Ccm::Root_clock::_disable()
+Driver::Ccm::Sccg_pll::Sccg_pll(Clocks               &clocks,
+                                Name                  name,
+                                Byte_range_ptr const &range,
+                                bool const            never_disable)
+:
+	Clock(clocks, name),
+	Mmio(range),
+	_clocks(clocks),
+	_never_disable(never_disable)
 {
 	/*
-	 * the parent clock cannot be disabled implictly,
-	 * because it can be used by several root clocks,
-	 * we need reference-counting first to implement this.
+	 * Enable within the clock tree if clock is on,
+	 * because there are potentially root-clocks enabled and configured to use
+	 * this PLL, disable it in the end when all clocks are initialized
 	 */
-	write<Target_reg::Enable>(0);
+	if (!read<Config_reg_0::Power_down>()) enable();
 }
-
-
-/***************************************
- ** Root_clock_divider implementation **
- ***************************************/
-
-void Driver::Ccm::Root_clock_divider::rate(Rate rate)
-{
-	uint32_t div = (uint32_t) ((_parent.rate().value / rate.value) - 1);
-	if (div > 64) {
-		Genode::error("Cannot set divider ", name, " to ", div);
-		return;
-	}
-	write<Target_reg::Post_div>(div);
-}
-
-
-Driver::Clock::Rate Driver::Ccm::Root_clock_divider::rate() const
-{
-	return {_parent.rate().value / (read<Target_reg::Post_div>()+1)};
-};
-
-
-/**************************
- ** Gate immplementation **
- **************************/
-
-void Driver::Ccm::Gate::_enable()
-{
-	/* enable the parent clock implictly */
-	_parent.enable();
-	write<Ccgr>(0x3);
-}
-
-
-void Driver::Ccm::Gate::_disable()
-{
-	/* disable the parent clock implictly */
-	_parent.disable();
-	write<Ccgr>(0x0);
-}
-
 
 /*******************
  ** CCM interface **
@@ -350,96 +269,6 @@ void Driver::Ccm::Gate::_disable()
 Driver::Ccm::Ccm(Genode::Env & env, Clocks & clocks)
 	: env(env), clocks(clocks)
 {
-	audio_pll1_clk.disable();
-	audio_pll2_clk.disable();
-	gpu_pll_clk.disable();
-	vpu_pll_clk.disable();
-	system_pll3_clk.disable();
-	video_pll2_clk.disable();
-
-	/* turn off all unnecessary root clocks */
-	arm_m4_clk_root.disable();
-	vpu_a53_clk_root.disable();
-	gpu_core_clk_root.disable();
-	gpu_shader_clk_root.disable();
-	enet_axi_clk_root.disable();
-	nand_usdhc_bus_clk_root.disable();
-	vpu_bus_clk_root.disable();
-	display_axi_clk_root.disable();
-	display_apb_clk_root.disable();
-	display_rtrm_clk_root.disable();
-	usb_bus_clk_root.disable();
-	gpu_axi_clk_root.disable();
-	gpu_ahb_clk_root.disable();
-	audio_ahb_clk_root.disable();
-	mipi_dsi_esc_rx_clk_root.disable();
-	vpu_g1_clk_root.disable();
-	vpu_g2_clk_root.disable();
-	display_dtrc_clk_root.disable();
-	display_dc8000_clk_root.disable();
-	pcie1_ctrl_clk_root.disable();
-	pcie1_phy_clk_root.disable();
-	pcie1_aux_clk_root.disable();
-	dc_pixel_clk_root.disable();
-	lcdif_pixel_clk_root.disable();
-	sai1_clk_root.disable();
-	sai2_clk_root.disable();
-	sai3_clk_root.disable();
-	sai4_clk_root.disable();
-	sai5_clk_root.disable();
-	sai6_clk_root.disable();
-	spdif1_clk_root.disable();
-	spdif2_clk_root.disable();
-	enet_ref_clk_root.disable();
-	enet_timer_clk_root.disable();
-	enet_phy_ref_clk_root.disable();
-	nand_clk_root.disable();
-	qspi_clk_root.disable();
-	usdhc1_clk_root.disable();
-	usdhc2_clk_root.disable();
-	i2c1_clk_root.disable();
-	i2c2_clk_root.disable();
-	i2c3_clk_root.disable();
-	i2c4_clk_root.disable();
-	uart2_clk_root.disable();
-	uart3_clk_root.disable();
-	uart4_clk_root.disable();
-	usb_core_ref_clk_root.disable();
-	usb_phy_ref_clk_root.disable();
-	ecspi1_clk_root.disable();
-	ecspi2_clk_root.disable();
-	pwm1_clk_root.disable();
-	pwm2_clk_root.disable();
-	pwm3_clk_root.disable();
-	pwm4_clk_root.disable();
-	gpt1_clk_root.disable();
-	gpt2_clk_root.disable();
-	gpt3_clk_root.disable();
-	gpt4_clk_root.disable();
-	gpt5_clk_root.disable();
-	gpt6_clk_root.disable();
-	trace_clk_root.disable();
-	wdog_clk_root.disable();
-	wrclk_clk_root.disable();
-	ipp_do_clko1clk_root.disable();
-	ipp_do_clko2_clk_root.disable();
-	mipi_dsi_core_clk_root.disable();
-	mipi_dsi_phy_ref_clk_root.disable();
-	mipi_dsi_dbi_clk_root.disable();
-	old_mipi_dsi_esc_clk_root.disable();
-	mipi_csi1_core_clk_root.disable();
-	mipi_csi1_phy_ref_clk_root.disable();
-	mipi_csi1_esc_clk_root.disable();
-	mipi_csi2_core_clk_root.disable();
-	mipi_csi2_phy_ref_clk_root.disable();
-	mipi_csi2_esc_clk_root.disable();
-	pcie2_ctrl_clk_root.disable();
-	pcie2_phy_clk_root.disable();
-	pcie2_aux_clk_root.disable();
-	ecspi3_clk_root.disable();
-	old_mipi_dsi_esc_rx_clk_root.disable();
-	display_hdmi_clk_root.disable();
-
 	/* increase NOC clock for better DDR performance */
 	noc_clk_root.parent("system_pll1_clk");
 	noc_clk_root.rate({800000000});
@@ -447,4 +276,13 @@ Driver::Ccm::Ccm(Genode::Env & env, Clocks & clocks)
 	pllout.write<Pllout_monitor::Config::Ref_sel>(Pllout_monitor::Config::Ref_sel::SYS_PLL1);
 	pllout.write<Pllout_monitor::Sccg_divider::System_pll_1>(0b111);
 	pllout.write<Pllout_monitor::Config::Enable>(1);
+
+	/* Now, disable all PLLs not root-clock depends for the moment */
+	audio_pll1_clk.disable();
+	audio_pll2_clk.disable();
+	video_pll1_clk.disable();
+	gpu_pll_clk.disable();
+	vpu_pll_clk.disable();
+	system_pll3_clk.disable();
+	video_pll2_clk.disable();
 }

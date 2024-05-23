@@ -89,6 +89,7 @@ $(DRIVER)-%.dts:
 	          sed -s 's/intc\:/gic\:/' | \
 	          sed -s 's/interrupt-parent = <\&intc>;/interrupt-parent = <\&gic>;/' | \
 	          sed -s 's/interrupt-parent = <\&gpc>;/interrupt-parent = <\&gic>;/' | \
+	          sed -s '/phy-reset-gpios =.*extended_io.*$$/d;' | \
 	    $(BASE_DIR)/../../tool/dts/extract ${DTS_EXTRACT($*)} - |\
 	    grep -v "/omit-if-no-ref/" > $@
 

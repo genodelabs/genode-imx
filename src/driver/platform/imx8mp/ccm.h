@@ -49,7 +49,8 @@ struct Driver::Ccm
 			struct Reset: Bitfield<9, 1> {
 				enum State { RESET = 0, NO_RESET = 1 };
 			};
-			struct Gating_enable: Bitfield<13, 1> {};
+			struct Enable_1416: Bitfield<11, 1> {};
+			struct Enable_1443: Bitfield<13, 1> {};
 			struct Lock_signal: Bitfield<31, 1> {};
 		};
 
@@ -108,8 +109,41 @@ struct Driver::Ccm
 			return { fin };
 		}
 
-		void disable() { write<Pll14xx::Gen_ctrl::Gating_enable>(0); }
-		void enable() { write<Pll14xx::Gen_ctrl::Gating_enable>(1); }
+		void wait_for_lock()
+		{
+			unsigned count = 0;
+			while(!read<Gen_ctrl::Lock_signal>())
+			{
+				/* not using Timer::one_shot_timout is on purpose */
+				if (count == 1024) {
+					warning(" PLL did not achieved lock.");
+					break;
+				}
+				++count;
+			}
+		}
+
+		template <typename T>
+		void enable()
+		{
+			if (read<T>() && read<Gen_ctrl::Reset>())
+				return;
+
+			write<Gen_ctrl::Bypass>(1);
+			write<Gen_ctrl::Reset>(Gen_ctrl::Reset::NO_RESET);
+
+			wait_for_lock();
+
+			write<Gen_ctrl::Bypass>(0);
+			write<T>(1);
+		}
+
+		template <typename T>
+		void disable()
+		{
+			write<T>(0);
+			write<Gen_ctrl::Reset>(Gen_ctrl::Reset::RESET);
+		}
 	};
 
 	class Frac_pll1443: public Clock
@@ -146,13 +180,15 @@ struct Driver::Ccm
 					log("PLL=", name, " Ref_clk_select=", new_parent);
 			}
 
-			void _enable()  override { _mmio.enable();  }
+			void _enable() override {
+				_mmio.enable<Pll14xx::Gen_ctrl::Enable_1443>(); }
+
 			void _disable() override
 			{
 				if (_never_disable)
 					return;
 
-				_mmio.disable();
+				_mmio.disable<Pll14xx::Gen_ctrl::Enable_1443>();
 			}
 	};
 
@@ -182,13 +218,15 @@ struct Driver::Ccm
 					log("PLL=", name, " Ref_clk_select=", new_parent);
 			}
 
-			void _enable()  override { _mmio.enable();  }
+			void _enable() override {
+				_mmio.enable<Pll14xx::Gen_ctrl::Enable_1416>(); }
+
 			void _disable() override
 			{
 				if (_never_disable)
 					return;
 
-				_mmio.disable();
+				_mmio.disable<Pll14xx::Gen_ctrl::Enable_1416>();
 			}
 	};
 

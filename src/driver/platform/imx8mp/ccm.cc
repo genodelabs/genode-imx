@@ -211,13 +211,24 @@ Driver::Ccm::Frac_pll1443::Frac_pll1443(Clocks               &clocks,
 	_verbose(verbose),
 	_never_disable(never_disable)
 {
+	_mmio.write<Pll14xx::Gen_ctrl::Bypass>(0);
+
+	/*
+	 * Enable within the clock tree if clock is on,
+	 * because there are potentially root-clocks enabled and configured to use
+	 * this PLL, disable it in the end when all clocks are initialized
+	 */
+	if (_mmio.read<Pll14xx::Gen_ctrl::Reset>()) enable();
+	else _disable();
+
 	if (_verbose)
 		log("New PLL1443=", name,
 		    " Ref_clk=", _mmio.read<Pll14xx::Gen_ctrl::Ref_clk_select>(),
 		    " bypass=", _mmio.read<Pll14xx::Gen_ctrl::Bypass>(),
 		    " reset=", _mmio.read<Pll14xx::Gen_ctrl::Reset>(),
-		    " Gating_enable=", _mmio.read<Pll14xx::Gen_ctrl::Gating_enable>(),
+		    " Gating_enable=", _mmio.read<Pll14xx::Gen_ctrl::Enable_1443>(),
 		    " Lock_signal=", _mmio.read<Pll14xx::Gen_ctrl::Lock_signal>());
+
 }
 
 
@@ -282,16 +293,7 @@ void Driver::Ccm::Frac_pll1416::rate(Driver::Clock::Rate rate)
 	 * Wait the PLL to achieved lock, ts output frequency and phase are
 	 * synchronized with its input reference within acceptable tolerances.
 	 */
-	unsigned count = 0;
-	while(!_mmio.read<Pll14xx::Gen_ctrl::Lock_signal>())
-	{
-		/* not using Timer::one_shot_timout is on purpose */
-		if (count == 1024) {
-			warning(" PLL=", name, " did not achieved lock.");
-			break;
-		}
-		++count;
-	}
+	_mmio.wait_for_lock();
 
 	/* disable by-pass */
 	_mmio.write<Pll14xx::Gen_ctrl::Bypass>(0);
@@ -335,12 +337,22 @@ Driver::Ccm::Frac_pll1416::Frac_pll1416(Clocks               &clocks,
 	_verbose(verbose),
 	_never_disable(never_disable)
 {
+	_mmio.write<Pll14xx::Gen_ctrl::Bypass>(0);
+
+	/*
+	 * Enable within the clock tree if clock is on,
+	 * because there are potentially root-clocks enabled and configured to use
+	 * this PLL, disable it in the end when all clocks are initialized
+	 */
+	if (_mmio.read<Pll14xx::Gen_ctrl::Reset>()) enable();
+	else _disable();
+
 	if (_verbose)
 		log("New PLL1416=", name,
 		    " Ref_clk=", _mmio.read<Pll14xx::Gen_ctrl::Ref_clk_select>(),
 		    " bypass=", _mmio.read<Pll14xx::Gen_ctrl::Bypass>(),
 		    " reset=", _mmio.read<Pll14xx::Gen_ctrl::Reset>(),
-		    " Gating_enable=", _mmio.read<Pll14xx::Gen_ctrl::Gating_enable>(),
+		    " Gating_enable=", _mmio.read<Pll14xx::Gen_ctrl::Enable_1416>(),
 		    " Lock_signal=", _mmio.read<Pll14xx::Gen_ctrl::Lock_signal>());
 }
 

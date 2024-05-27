@@ -1,7 +1,11 @@
 base
-os
 blit
-platform_session
-timer_session
-i2c_session
 capture_session
+genode_c_api
+i2c_session
+imx_linux
+jitterentropy
+os
+platform_session
+report_session
+timer_session

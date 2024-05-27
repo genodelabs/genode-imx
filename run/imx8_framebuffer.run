@@ -1,20 +1,26 @@
 assert_spec arm_v8a
 
 create_boot_directory
+
 import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/src/init \
-                  [depot_user]/raw/mnt_reform2-devices
+                  [depot_user]/raw/[board]-devices
 
-build {
-	driver/platform/imx8mq
+set build_components {
 	driver/framebuffer/imx8mq
-	driver/pwm/imx8mq
-	driver/gpio/imx/spec/arm_v8
-	driver/i2c/imx8q_evk
+	driver/platform/imx8mq
 	test/framebuffer
 }
 
-install_config {
+append_if [have_board mnt_reform2] build_components {
+	driver/gpio/imx/spec/arm_v8
+	driver/i2c/imx8q_evk
+	driver/pwm/imx8mq
+}
+
+build $build_components
+
+set config {
 <config>
 	<parent-provides>
 		<service name="ROM"/>
@@ -38,16 +44,17 @@ install_config {
 
 	<start name="platform" caps="150" managing_system="yes">
 		<binary name="imx8mq_platform"/>
-		<resource name="RAM" quantum="2M"/>
+		<resource name="RAM" quantum="1M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config>
 			<policy label="fb -> " info="yes">
 				<device name="dcss"/>
 				<device name="hdmi"/>
+				<device name="irqsteer"/>}
+append_if [have_board mnt_reform2] config {
 				<device name="mipi_dsi"/>
 				<device name="mipi_dsi_phy"/>
 				<device name="lcd"/>
-				<device name="irqsteer"/>
 				<device name="pclk"/>
 				<device name="esc"/>
 				<device name="dpi"/>
@@ -66,12 +73,14 @@ install_config {
 			</policy>
 
 			<policy label="i2c -> ">
-				<device name="i2c"/>
+				<device name="i2c"/>}
+append config {
 			</policy>
 		</config>
 		<route> <any-service> <parent/> </any-service> </route>
-	</start>
+	</start>}
 
+append_if [have_board mnt_reform2] config {
 	<start name="gpio" caps="150">
 		<binary name="imx_gpio"/>
 		<resource name="RAM" quantum="2M"/>
@@ -119,13 +128,14 @@ install_config {
 			<service name="Platform"> <child name="platform"/> </service>
 		</route>
 		<config period="248" sample="250" clock_source="ipg_highfreq"/>
-	</start>
+	</start>}
 
+append config {
 	<start name="fb" caps="250">
 		<binary name="imx8mq_fb"/>
-		<resource name="RAM" quantum="40M"/>
+		<resource name="RAM" quantum="128M"/>
 		<route>
-			<service name="ROM" label="dtb"> <parent label="imx8mq_fb-mnt_reform2.dtb"/> </service>
+			<service name="ROM" label="dtb"> <parent label="} imx8mq_fb-[board].dtb {"/> </service>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>
 			<service name="PD">       <parent/> </service>
@@ -133,8 +143,10 @@ install_config {
 			<service name="LOG">      <parent/> </service>
 			<service name="Timer">    <child name="timer"/>            </service>
 			<service name="Platform"> <child name="platform"/>         </service>
-			<service name="Capture">  <child name="test-framebuffer"/> </service>
-			<service name="I2c">      <child name="i2c"/>              </service>
+			<service name="Capture">  <child name="test-framebuffer"/> </service>}
+append_if [have_board mnt_reform2] config {
+			<service name="I2c">      <child name="i2c"/>              </service>}
+append config {
 		</route>
 	</start>
 
@@ -145,6 +157,8 @@ install_config {
 	</start>
 
 </config>}
+
+install_config $config
 
 build_boot_image [build_artifacts]
 

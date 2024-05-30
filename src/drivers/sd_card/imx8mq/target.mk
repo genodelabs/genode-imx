@@ -1,4 +1,4 @@
-TARGET  := imx8mq_sd_card_drv
+TARGET  := imx8mq_sd_card
 REQUIRES = arm_v8a
 LIBS     = base
 INC_DIR  = $(PRG_DIR)

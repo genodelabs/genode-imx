@@ -35,12 +35,12 @@ install_config {
 		<provides><service name="Timer"/></provides>
 	</start>
 
-	<start name="platform_drv" caps="150" managing_system="yes">
-		<binary name="imx8mq_platform_drv"/>
+	<start name="platform" caps="150" managing_system="yes">
+		<binary name="imx8mq_platform"/>
 		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config>
-			<policy label="usb_host_drv -> " info="yes">
+			<policy label="usb_host -> " info="yes">
 				<device name="usb_host_1"/>
 				<device name="usb_phy_1"/>
 				<device name="usb_host_2"/>
@@ -54,32 +54,32 @@ install_config {
 		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Report"/> <service name="ROM"/> </provides>
 		<config verbose="yes">
-			<default-policy report="usb_host_drv -> devices"/>
+			<default-policy report="usb_host -> devices"/>
 		</config>
 		<route> <any-service> <parent/> </any-service> </route>
 	</start>
 
-	<start name="usb_host_drv" caps="250">
-		<binary name="imx8mq_usb_host_drv"/>
+	<start name="usb_host" caps="250">
+		<binary name="imx8mq_usb_host"/>
 		<resource name="RAM" quantum="40M"/>
 		<provides> <service name="Usb"/> </provides>
 		<route>
-			<service name="ROM" label="dtb"> <parent label="imx8mq_usb_host_drv-imx8q_evk.dtb"/> </service>
+			<service name="ROM" label="dtb"> <parent label="imx8mq_usb_host-imx8q_evk.dtb"/> </service>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>
 			<service name="PD">       <parent/> </service>
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
-			<service name="Timer">    <child name="timer"/>        </service>
-			<service name="Report">   <child name="report_rom"/>   </service>
-			<service name="Platform"> <child name="platform_drv"/> </service>
+			<service name="Timer">    <child name="timer"/>      </service>
+			<service name="Report">   <child name="report_rom"/> </service>
+			<service name="Platform"> <child name="platform"/>   </service>
 		</route>
 		<config>
-			<policy label_prefix="usb_hid_drv"><device class="0x3"/></policy>
+			<policy label_prefix="usb_hid"><device class="0x3"/></policy>
 		</config>
 	</start>
 
-	<start name="usb_hid_drv" caps="140">
+	<start name="usb_hid" caps="140">
 		<resource name="RAM" quantum="11M"/>
 		<route>
 			<service name="ROM" label="report"> <child name="report_rom"/> </service>

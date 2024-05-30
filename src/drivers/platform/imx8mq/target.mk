@@ -1,4 +1,4 @@
-TARGET   = imx8mq_platform_drv
+TARGET   = imx8mq_platform
 REQUIRES = arm_v8
 SRC_CC   = ccm.cc
 

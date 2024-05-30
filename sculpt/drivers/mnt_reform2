@@ -23,17 +23,17 @@
 	<default caps="100"/>
 
 	<service name="I2c">
-		<default-policy> <child name="i2c_drv"/> </default-policy> </service>
+		<default-policy> <child name="i2c"/> </default-policy> </service>
 
 	<service name="Platform">
-		<default-policy> <child name="platform_drv"/> </default-policy> </service>
+		<default-policy> <child name="platform"/> </default-policy> </service>
 
 	<start name="report_rom">
 		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Report"/> <service name="ROM"/> </provides>
 		<config verbose="no">
-			<policy label="rom_reporter -> pci_devices"   report="imx8mq_pci_host_drv -> devices"/>
-			<policy label="rom_filter -> pci_devices"     report="imx8mq_pci_host_drv -> devices"/>
+			<policy label="rom_reporter -> pci_devices"   report="imx8mq_pci_host -> devices"/>
+			<policy label="rom_filter -> pci_devices"     report="imx8mq_pci_host -> devices"/>
 		</config>
 	</start>
 
@@ -70,8 +70,8 @@
 		</route>
 	</start>
 
-	<start name="platform_drv" caps="300" managing_system="yes">
-		<binary name="imx8mq_platform_drv"/>
+	<start name="platform" caps="300" managing_system="yes">
+		<binary name="imx8mq_platform"/>
 		<resource name="RAM" quantum="3M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config ld_verbose="yes">
@@ -88,11 +88,11 @@
 				<device name="dpi"/>
 			</policy>
 
-			<policy label="imx8mq_pwm_drv -> ">
+			<policy label="imx8mq_pwm -> ">
 				<device name="pwm"/>
 			</policy>
 
-			<policy label="gpio_drv -> " info="yes">
+			<policy label="gpio -> " info="yes">
 				<device name="gpio1"/>
 				<device name="gpio2"/>
 				<device name="gpio3"/>
@@ -100,7 +100,7 @@
 				<device name="gpio5"/>
 			</policy>
 
-			<policy label="i2c_drv -> ">
+			<policy label="i2c -> ">
 				<device name="i2c"/>
 			</policy>
 
@@ -124,7 +124,7 @@
 				<device name="gpu"/>
 			</policy>
 
-			<policy label="imx8mq_pci_host_drv -> " info="yes">
+			<policy label="imx8mq_pci_host -> " info="yes">
 				<device name="pcie_1"/>
 				<device name="pcie_2"/>
 			</policy>
@@ -144,8 +144,8 @@
 		</route>
 	</start>
 
-	<start name="gpio_drv" caps="150">
-		<binary name="imx_gpio_drv"/>
+	<start name="gpio" caps="150">
+		<binary name="imx_gpio"/>
 		<resource name="RAM" quantum="2M"/>
 		<provides><service name="Gpio"/></provides>
 		<route>
@@ -154,7 +154,7 @@
 			<service name="PD">       <parent/> </service>
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
-			<service name="Platform"> <child name="platform_drv"/> </service>
+			<service name="Platform"> <child name="platform"/> </service>
 		</route>
 		<config>
 			<gpio num="10" mode="O" value="1"/>
@@ -165,7 +165,7 @@
 		</config>
 	</start>
 
-	<start name="imx8mq_pci_host_drv">
+	<start name="imx8mq_pci_host">
 		<resource name="RAM" quantum="1M"/>
 		<route>
 			<service name="RM">       <parent/> </service>
@@ -174,14 +174,14 @@
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
 			<service name="Timer">    <parent/> </service>
-			<service name="Report">   <child name="report_rom"/>   </service>
-			<service name="Platform"> <child name="platform_drv"/> </service>
-			<service name="Gpio">     <child name="gpio_drv"/>     </service>
+			<service name="Report">   <child name="report_rom"/> </service>
+			<service name="Platform"> <child name="platform"/>   </service>
+			<service name="Gpio">     <child name="gpio"/>   </service>
 		</route>
 	</start>
 
-	<start name="i2c_drv" caps="150">
-		<binary name="imx8q_evk_i2c_drv"/>
+	<start name="i2c" caps="150">
+		<binary name="imx8q_evk_i2c"/>
 		<resource name="RAM" quantum="2M"/>
 		<provides><service name="I2c"/></provides>
 		<route>
@@ -191,14 +191,14 @@
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
 			<service name="Timer">    <parent/> </service>
-			<service name="Platform"> <child name="platform_drv"/> </service>
+			<service name="Platform"> <child name="platform"/> </service>
 		</route>
 		<config verbose="yes">
 			<policy label_prefix="runtime -> fb" bus_address="0x2c"/>
 		</config>
 	</start>
 
-	<start name="imx8mq_pwm_drv" caps="100">
+	<start name="imx8mq_pwm" caps="100">
 		<resource name="RAM" quantum="2M"/>
 		<route>
 			<service name="RM">       <parent/> </service>
@@ -206,7 +206,7 @@
 			<service name="PD">       <parent/> </service>
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
-			<service name="Platform"> <child name="platform_drv"/> </service>
+			<service name="Platform"> <child name="platform"/> </service>
 		</route>
 		<config period="248" sample="250" clock_source="ipg_highfreq"/>
 	</start>

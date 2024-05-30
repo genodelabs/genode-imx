@@ -62,10 +62,10 @@ import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/src/rom_filter \
                   [depot_user]/src/dynamic_rom \
                   [depot_user]/src/nic_router \
-                  [depot_user]/src/dummy_rtc_drv \
-                  [depot_user]/src/imx8mq_platform_drv \
-                  [depot_user]/src/imx_gpio_drv \
-                  [depot_user]/src/imx8mq_pci_host_drv \
+                  [depot_user]/src/dummy_rtc \
+                  [depot_user]/src/imx8mq_platform \
+                  [depot_user]/src/imx_gpio \
+                  [depot_user]/src/imx8mq_pci_host \
                   [depot_user]/pkg/imx8mq_wifi \
                   [depot_user]/raw/mnt_reform2-devices
 
@@ -112,7 +112,7 @@ append config {
 		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Report"/> <service name="ROM"/> </provides>
 		<config verbose="no">
-			<policy label="rom_filter -> pci_devices" report="imx8mq_pci_host_drv -> devices"/>
+			<policy label="rom_filter -> pci_devices" report="imx8mq_pci_host -> devices"/>
 		</config>
 	</start>
 
@@ -136,12 +136,12 @@ append config {
 		</route>
 	</start>
 
-	<start name="platform_drv" caps="300" managing_system="yes">
-		<binary name="imx8mq_platform_drv"/>
+	<start name="platform" caps="300" managing_system="yes">
+		<binary name="imx8mq_platform"/>
 		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config>
-			<policy label="gpio_drv -> " info="yes">
+			<policy label="gpio -> " info="yes">
 				<device name="gpio1"/>
 				<device name="gpio2"/>
 				<device name="gpio3"/>
@@ -149,12 +149,12 @@ append config {
 				<device name="gpio5"/>
 			</policy>
 
-			<policy label="imx8mq_pci_host_drv -> " info="yes">
+			<policy label="imx8mq_pci_host -> " info="yes">
 				<device name="pcie_1"/>
 				<!-- <device name="pcie_2"/> -->
 			</policy>
 
-			<policy label="wifi_drv -> " info="yes">
+			<policy label="wifi -> " info="yes">
 				<pci class="WIFI"/>
 			</policy>
 		</config>
@@ -166,8 +166,8 @@ append config {
 		</route>
 	</start>
 
-	<start name="gpio_drv" caps="150">
-		<binary name="imx_gpio_drv"/>
+	<start name="gpio" caps="150">
+		<binary name="imx_gpio"/>
 		<resource name="RAM" quantum="2M"/>
 		<provides><service name="Gpio"/></provides>
 		<route>
@@ -176,7 +176,7 @@ append config {
 			<service name="PD">       <parent/> </service>
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
-			<service name="Platform"> <child name="platform_drv"/> </service>
+			<service name="Platform"> <child name="platform"/> </service>
 		</route>
 		<config>
 			<gpio num="87"  mode="O" value="1"/>
@@ -184,7 +184,7 @@ append config {
 		</config>
 	</start>
 
-	<start name="imx8mq_pci_host_drv">
+	<start name="imx8mq_pci_host">
 		<resource name="RAM" quantum="1M"/>
 		<route>
 			<service name="RM">       <parent/> </service>
@@ -192,14 +192,14 @@ append config {
 			<service name="PD">       <parent/> </service>
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
-			<service name="Timer">    <child name="timer"/>        </service>
-			<service name="Report">   <child name="report_rom"/>   </service>
-			<service name="Platform"> <child name="platform_drv"/> </service>
-			<service name="Gpio">     <child name="gpio_drv"/>     </service>
+			<service name="Timer">    <child name="timer"/>      </service>
+			<service name="Report">   <child name="report_rom"/> </service>
+			<service name="Platform"> <child name="platform"/>   </service>
+			<service name="Gpio">     <child name="gpio"/>       </service>
 		</route>
 	</start>
 
-	<start name="dummy_rtc_drv">
+	<start name="dummy_rtc">
 		<resource name="RAM" quantum="1M"/>
 		<provides> <service name="Rtc"/> </provides>
 		<config year="2023" month="01" day="19" hour="16" minute="0" second="0"/>
@@ -272,7 +272,7 @@ append config {
 		<config verbose="no" verbose_domain_state="yes" dhcp_discover_timeout_sec="10" dhcp_request_timeout_sec="6">
 
 			<policy label_prefix="test-lwip_httpsrv" domain="downlink"/>
-			<policy label_prefix="wifi_drv"          domain="uplink"/>
+			<policy label_prefix="wifi"              domain="uplink"/>
 
 			<domain name="uplink" verbose_packets="no" verbose_packet_drop="no" icmp_echo_server="yes">
 
@@ -298,7 +298,7 @@ append config {
 		<config verbose="yes"/>
 	</start>
 
-	<start name="wifi_drv" caps="250" priority="-1">
+	<start name="wifi" caps="250" priority="-1">
 		<resource name="RAM" quantum="32M"/>
 		<config ld_verbose="yes">
 			<report mac_address="true"/>

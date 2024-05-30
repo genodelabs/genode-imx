@@ -1,4 +1,4 @@
-TARGET  := imx8mq_fb_drv
+TARGET  := imx8mq_fb
 REQUIRES = arm_v8a
 LIBS     = base blit
 INC_DIR  = $(PRG_DIR)

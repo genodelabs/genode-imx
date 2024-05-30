@@ -36,12 +36,12 @@ install_config {
 		<provides><service name="Timer"/></provides>
 	</start>
 
-	<start name="platform_drv" caps="150" managing_system="yes">
-		<binary name="imx8mq_platform_drv"/>
+	<start name="platform" caps="150" managing_system="yes">
+		<binary name="imx8mq_platform"/>
 		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config>
-			<policy label="fb_drv -> " info="yes">
+			<policy label="fb -> " info="yes">
 				<device name="dcss"/>
 				<device name="hdmi"/>
 				<device name="mipi_dsi"/>
@@ -53,11 +53,11 @@ install_config {
 				<device name="dpi"/>
 			</policy>
 
-			<policy label="imx8mq_pwm_drv -> ">
+			<policy label="imx8mq_pwm -> ">
 				<device name="pwm"/>
 			</policy>
 
-			<policy label="gpio_drv -> " info="yes">
+			<policy label="gpio -> " info="yes">
 				<device name="gpio1"/>
 				<device name="gpio2"/>
 				<device name="gpio3"/>
@@ -65,15 +65,15 @@ install_config {
 				<device name="gpio5"/>
 			</policy>
 
-			<policy label="i2c_drv -> ">
+			<policy label="i2c -> ">
 				<device name="i2c"/>
 			</policy>
 		</config>
 		<route> <any-service> <parent/> </any-service> </route>
 	</start>
 
-	<start name="gpio_drv" caps="150">
-		<binary name="imx_gpio_drv"/>
+	<start name="gpio" caps="150">
+		<binary name="imx_gpio"/>
 		<resource name="RAM" quantum="2M"/>
 		<provides><service name="Gpio"/></provides>
 		<route>
@@ -82,7 +82,7 @@ install_config {
 			<service name="PD">       <parent/> </service>
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
-			<service name="Platform"> <child name="platform_drv"/> </service>
+			<service name="Platform"> <child name="platform"/> </service>
 		</route>
 		<config>
 			<gpio num="10" mode="O" value="1"/>
@@ -90,8 +90,8 @@ install_config {
 		</config>
 	</start>
 
-	<start name="i2c_drv" caps="150">
-		<binary name="imx8q_evk_i2c_drv"/>
+	<start name="i2c" caps="150">
+		<binary name="imx8q_evk_i2c"/>
 		<resource name="RAM" quantum="2M"/>
 		<provides><service name="I2c"/></provides>
 		<route>
@@ -100,15 +100,15 @@ install_config {
 			<service name="PD">       <parent/> </service>
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
-			<service name="Platform"> <child name="platform_drv"/> </service>
-			<service name="Timer">    <child name="timer"/>        </service>
+			<service name="Platform"> <child name="platform"/> </service>
+			<service name="Timer">    <child name="timer"/>    </service>
 		</route>
 		<config verbose="yes">
-			 <policy label_prefix="fb_drv" bus_address="0x2c"/>
+			 <policy label_prefix="fb" bus_address="0x2c"/>
 		</config>
 	</start>
 
-	<start name="imx8mq_pwm_drv" caps="100">
+	<start name="imx8mq_pwm" caps="100">
 		<resource name="RAM" quantum="2M"/>
 		<route>
 			<service name="RM">       <parent/> </service>
@@ -116,25 +116,25 @@ install_config {
 			<service name="PD">       <parent/> </service>
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
-			<service name="Platform"> <child name="platform_drv"/> </service>
+			<service name="Platform"> <child name="platform"/> </service>
 		</route>
 		<config period="248" sample="250" clock_source="ipg_highfreq"/>
 	</start>
 
-	<start name="fb_drv" caps="250">
-		<binary name="imx8mq_fb_drv"/>
+	<start name="fb" caps="250">
+		<binary name="imx8mq_fb"/>
 		<resource name="RAM" quantum="40M"/>
 		<route>
-			<service name="ROM" label="dtb"> <parent label="imx8mq_fb_drv-mnt_reform2.dtb"/> </service>
+			<service name="ROM" label="dtb"> <parent label="imx8mq_fb-mnt_reform2.dtb"/> </service>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>
 			<service name="PD">       <parent/> </service>
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
 			<service name="Timer">    <child name="timer"/>            </service>
-			<service name="Platform"> <child name="platform_drv"/>     </service>
+			<service name="Platform"> <child name="platform"/>         </service>
 			<service name="Capture">  <child name="test-framebuffer"/> </service>
-			<service name="I2c">      <child name="i2c_drv"/>          </service>
+			<service name="I2c">      <child name="i2c"/>              </service>
 		</route>
 	</start>
 

@@ -126,7 +126,7 @@ struct Driver_manager::Sd_card_driver : Device_driver
 	void generate_start_node(Xml_generator &xml) const override
 	{
 		xml.node("start", [&] () {
-			_gen_common_start_node_content(xml, "sd_card_drv", "imx8mq_sd_card_drv",
+			_gen_common_start_node_content(xml, "sd_card", "imx8mq_sd_card",
 			                               Ram_quota{16*1024*1024}, Cap_quota{300},
 			                               Priority{0}, Version{0});
 			_gen_provides_node<Block::Session>(xml);
@@ -160,7 +160,7 @@ struct Driver_manager::Sd_card_driver : Device_driver
 			Label const label = sd_card.attribute_value("label", Label());
 			xml.node("policy", [&] () {
 				xml.attribute("label_suffix", label);
-				xml.node("child", [&] () { xml.attribute("name", "sd_card_drv"); });
+				xml.node("child", [&] () { xml.attribute("name", "sd_card"); });
 			});
 		});
 	}
@@ -172,7 +172,7 @@ struct Driver_manager::Nvme_driver : Device_driver
 	void generate_start_node(Xml_generator &xml) const override
 	{
 		xml.node("start", [&] () {
-			_gen_common_start_node_content(xml, "nvme_drv", "nvme_drv",
+			_gen_common_start_node_content(xml, "nvme", "nvme",
 			                               Ram_quota{8*1024*1024}, Cap_quota{100},
 			                               Priority{-1}, Version{0});
 			_gen_provides_node<Block::Session>(xml);
@@ -201,7 +201,7 @@ struct Driver_manager::Nvme_driver : Device_driver
 		xml.node("policy", [&] () {
 			xml.attribute("label_suffix", String<64>("nvme-0"));
 			xml.node("child", [&] () {
-				xml.attribute("name", "nvme_drv"); });
+				xml.attribute("name", "nvme"); });
 		});
 	}
 };
@@ -217,9 +217,9 @@ struct Driver_manager::Main : private Block_devices_generator
 	Attached_rom_dataspace _nvme_ns       { _env, "nvme_ns"       };
 	Attached_rom_dataspace _sd_cards      { _env, "sd_cards"      };
 
-	Reporter _init_config    { _env, "config", "init.config" };
-	Reporter _usb_drv_config { _env, "config", "usb_drv.config" };
-	Reporter _block_devices  { _env, "block_devices" };
+	Reporter _init_config   { _env, "config", "init.config" };
+	Reporter _usb_config    { _env, "config", "usb.config" };
+	Reporter _block_devices { _env, "block_devices" };
 
 	Sd_card_driver             _sd_card_driver { _sd_cards };
 	Constructible<Nvme_driver> _nvme_driver { };
@@ -244,7 +244,7 @@ struct Driver_manager::Main : private Block_devices_generator
 	};
 
 	void _generate_init_config    (Reporter &) const;
-	void _generate_usb_drv_config (Reporter &, Xml_node, Xml_node) const;
+	void _generate_usb_config (Reporter &, Xml_node, Xml_node) const;
 	void _generate_block_devices  (Reporter &) const;
 
 	/**
@@ -256,7 +256,7 @@ struct Driver_manager::Main : private Block_devices_generator
 	Main(Env &env) : _env(env)
 	{
 		_init_config.enabled(true);
-		_usb_drv_config.enabled(true);
+		_usb_config.enabled(true);
 		_block_devices.enabled(true);
 
 		_usb_devices.sigh(_usb_update_handler);
@@ -302,15 +302,15 @@ void Driver_manager::Main::_handle_usb_devices_update()
 	_usb_devices.update();
 	_usb_policy.update();
 
-	_generate_usb_drv_config(_usb_drv_config, _usb_devices.xml(), _usb_policy.xml());
+	_generate_usb_config(_usb_config, _usb_devices.xml(), _usb_policy.xml());
 }
 
 
-void Driver_manager::Main::_generate_usb_drv_config(Reporter &usb_drv_config,
-                                                    Xml_node devices,
-                                                    Xml_node policy) const
+void Driver_manager::Main::_generate_usb_config(Reporter &usb_config,
+                                                Xml_node devices,
+                                                Xml_node policy) const
 {
-	Reporter::Xml_generator xml(usb_drv_config, [&] () {
+	Reporter::Xml_generator xml(usb_config, [&] () {
 
 		xml.node("report", [&] () { xml.attribute("devices", true); });
 
@@ -320,7 +320,7 @@ void Driver_manager::Main::_generate_usb_drv_config(Reporter &usb_drv_config,
 
 		/* usb hid drv gets all hid devices */
 		xml.node("policy", [&] () {
-			xml.attribute("label_prefix", "usb_hid_drv");
+			xml.attribute("label_prefix", "usb_hid");
 			xml.attribute("class", "0x3");
 		});
 

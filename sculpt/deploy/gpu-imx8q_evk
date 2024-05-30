@@ -9,7 +9,7 @@
 		<service name="Timer"> <parent/> </service>
 	</common_routes>
 
-	<start name="gpu_drv_test" pkg="glmark2-imx8q_evk">
+	<start name="gpu_test" pkg="glmark2-imx8q_evk">
 		<route>
 			<service name="Platform"> <parent label="gpu"/> </service>
 			<service name="Gui">      <parent/>             </service>

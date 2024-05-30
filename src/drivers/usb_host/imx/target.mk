@@ -1,4 +1,4 @@
-DRIVER   := imx_usb_host_drv
+DRIVER   := imx_usb_host
 TARGET   := $(DRIVER)
 REQUIRES := arm_v7a
 LIBS      = base imx_linux_generated imx_lx_emul jitterentropy

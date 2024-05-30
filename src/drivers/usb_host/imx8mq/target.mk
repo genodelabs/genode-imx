@@ -1,4 +1,4 @@
-DRIVER   := imx8mq_usb_host_drv
+DRIVER   := imx8mq_usb_host
 TARGET   := $(DRIVER)
 REQUIRES := arm_v8a
 LIBS     := base imx_linux_generated imx_lx_emul jitterentropy

@@ -1,4 +1,4 @@
-TARGET     := fec_nic_drv
+TARGET     := fec_nic
 LIBS        = base
 INC_DIR    += $(PRG_DIR)/../..
 SRC_CC     += main.cc

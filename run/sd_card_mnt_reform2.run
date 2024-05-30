@@ -2,8 +2,8 @@ assert_spec arm_v8a
 
 create_boot_directory
 import_from_depot [depot_user]/src/[base_src] \
-                  [depot_user]/src/imx8mq_platform_drv \
-                  [depot_user]/src/imx8mq_sd_card_drv \
+                  [depot_user]/src/imx8mq_platform \
+                  [depot_user]/src/imx8mq_sd_card \
                   [depot_user]/src/init \
                   [depot_user]/src/report_rom \
                   [depot_user]/raw/mnt_reform2-devices
@@ -23,11 +23,11 @@ install_config {
 	</parent-provides>
 	<default caps="100"/>
 
-	<start name="imx8mq_platform_drv" managing_system="yes">
+	<start name="imx8mq_platform" managing_system="yes">
 		<resource name="RAM" quantum="2M"/>
 		<provides><service name="Platform"/></provides>
 		<config>
-			<policy label="sd_card_drv -> " info="yes">
+			<policy label="sd_card -> " info="yes">
 				<device name="usdhc1"/>
 				<device name="usdhc2"/>
 			</policy>
@@ -51,8 +51,8 @@ install_config {
 		<route> <any-service> <parent/> </any-service> </route>
 	</start>
 
-	<start name="sd_card_drv" caps="300">
-		<binary name="imx8mq_sd_card_drv"/>
+	<start name="sd_card" caps="300">
+		<binary name="imx8mq_sd_card"/>
 		<resource name="RAM" quantum="16M"/>
 		<provides><service name="Block"/></provides>
 		<config report="yes">
@@ -60,7 +60,7 @@ install_config {
 		</config>
 		<route>
 			<service name="ROM" label="dtb">
-				<parent label="imx8mq_sd_card_drv-mnt_reform2.dtb"/>
+				<parent label="imx8mq_sd_card-mnt_reform2.dtb"/>
 			</service>
 			<service name="ROM"> <parent/> </service>
 			<service name="PD">  <parent/> </service>

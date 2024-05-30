@@ -1,4 +1,4 @@
-TARGET   = imx_gpio_drv
+TARGET   = imx_gpio
 REQUIRES = arm_v7
 SRC_CC   = main.cc
 LIBS     = base

@@ -18,7 +18,7 @@ the GPU.
 
 To start the driver the following configuration snippet can be used:
 
-!<start name="imx8mq_gpu_drv" caps="500">
+!<start name="imx8mq_gpu" caps="500">
 !  <resource name="RAM" quantum="128M">
 !  <provides> <service name="Gpu"/> </provides>
 !  </config/>
@@ -27,4 +27,4 @@ To start the driver the following configuration snippet can be used:
 Additionally there exists the 'dtb' attribute in the '<config> node
 that may be used to specify the name of the DTB ROM module, e.g.:
 
-! <config dtb="imx8mq_gpu_drv-imx8q_evk.dtb"/>
+! <config dtb="imx8mq_gpu-imx8q_evk.dtb"/>

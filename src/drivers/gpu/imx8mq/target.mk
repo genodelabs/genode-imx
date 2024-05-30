@@ -1,4 +1,4 @@
-DRIVER   := imx8mq_gpu_drv
+DRIVER   := imx8mq_gpu
 TARGET   := $(DRIVER)
 REQUIRES := arm_v8a
 LIBS     := base imx_linux_generated imx_lx_emul jitterentropy

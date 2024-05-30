@@ -11,8 +11,8 @@
 		<rom label="glapi.lib.so"/>
 		<rom label="glmark2"/>
 		<rom label="glmark2_assets.tar"/>
-		<rom label="imx8mq_gpu_drv"/>
-		<rom label="imx8mq_gpu_drv-imx8q_evk.dtb"/>
+		<rom label="imx8mq_gpu"/>
+		<rom label="imx8mq_gpu-imx8q_evk.dtb"/>
 		<rom label="jpeg.lib.so"/>
 		<rom label="ld.lib.so"/>
 		<rom label="libc.lib.so"/>
@@ -42,14 +42,14 @@
 			<service name="Gui"/>
 		</parent-provides>
 
-		<start name="imx8mq_gpu_drv" caps="300">
+		<start name="imx8mq_gpu" caps="300">
 			<resource name="RAM" quantum="76M"/>
 			<provides>
 				<service name="Gpu"/>
 			</provides>
 			<route>
 				<service name="ROM" label="dtb">
-					<parent label="imx8mq_gpu_drv-imx8q_evk.dtb"/>
+					<parent label="imx8mq_gpu-imx8q_evk.dtb"/>
 				</service>
 				<service name="Platform">
 					<parent label="gpu"/>
@@ -77,9 +77,9 @@
 			</config>
 			<route>
 				<service name="Gpu">
-					<child name="imx8mq_gpu_drv"/>
+					<child name="imx8mq_gpu"/>
 				</service>
-				<service name="ROM" label="mesa_gpu_drv.lib.so">
+				<service name="ROM" label="mesa_gpu.lib.so">
 					<parent label="mesa_gpu-etnaviv.lib.so"/>
 				</service>
 				<service name="ROM" label="libEGL.so">

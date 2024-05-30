@@ -1,4 +1,4 @@
 _/raw/drivers_nic-imx7d_sabre
 _/raw/imx7d_sabre-devices
-_/src/fec_nic_drv
-_/src/imx7d_platform_drv
+_/src/fec_nic
+_/src/imx7d_platform

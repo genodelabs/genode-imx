@@ -28,7 +28,7 @@ extern task_struct *user_task_struct_ptr;
 struct Main
 {
 	Env                  & _env;
-	Attached_rom_dataspace _dtb_rom { _env, "nic_drv.dtb" };
+	Attached_rom_dataspace _dtb_rom { _env, "nic.dtb" };
 
 	/**
 	 * Signal handler triggered by activity of the uplink connection

@@ -36,12 +36,12 @@ install_config {
 		<provides><service name="Timer"/></provides>
 	</start>
 
-	<start name="platform_drv" caps="150" managing_system="yes">
-		<binary name="imx8mq_platform_drv"/>
+	<start name="platform" caps="150" managing_system="yes">
+		<binary name="imx8mq_platform"/>
 		<resource name="RAM" quantum="1M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config>
-			<policy label="fb_drv -> " info="yes">
+			<policy label="fb -> " info="yes">
 				<device name="dcss"/>
 				<device name="hdmi"/>
 				<device name="irqsteer"/>
@@ -50,18 +50,18 @@ install_config {
 		<route> <any-service> <parent/> </any-service> </route>
 	</start>
 
-	<start name="fb_drv" caps="250">
-		<binary name="imx8mq_fb_drv"/>
+	<start name="fb" caps="250">
+		<binary name="imx8mq_fb"/>
 		<resource name="RAM" quantum="40M"/>
 		<route>
-			<service name="ROM" label="dtb"> <parent label="imx8mq_fb_drv-imx8q_evk.dtb"/> </service>
+			<service name="ROM" label="dtb"> <parent label="imx8mq_fb-imx8q_evk.dtb"/> </service>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>
 			<service name="PD">       <parent/> </service>
 			<service name="CPU">      <parent/> </service>
 			<service name="LOG">      <parent/> </service>
 			<service name="Timer">    <child name="timer"/>            </service>
-			<service name="Platform"> <child name="platform_drv"/>     </service>
+			<service name="Platform"> <child name="platform"/>         </service>
 			<service name="Capture">  <child name="test-framebuffer"/> </service>
 		</route>
 	</start>

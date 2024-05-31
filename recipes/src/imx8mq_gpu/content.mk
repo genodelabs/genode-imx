@@ -1,5 +1,5 @@
 MIRRORED_FROM_REP_DIR := src/include/spec/arm_v8a/lx_emul \
-                         src/drivers/gpu/imx8mq
+                         src/driver/gpu/imx8mq
 
 content: $(MIRRORED_FROM_REP_DIR)
 $(MIRRORED_FROM_REP_DIR):

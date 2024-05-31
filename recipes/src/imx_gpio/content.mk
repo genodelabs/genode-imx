@@ -1,6 +1,6 @@
-content: src/drivers/gpio/imx include/gpio LICENSE
+content: src/driver/gpio/imx include/gpio LICENSE
 
-src/drivers/gpio/imx:
+src/driver/gpio/imx:
 	$(mirror_from_rep_dir)
 
 include/gpio:

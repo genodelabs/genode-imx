@@ -1,6 +1,6 @@
-content: src/drivers/i2c LICENSE
+content: src/driver/i2c LICENSE
 
-src/drivers/i2c:
+src/driver/i2c:
 	mkdir -p $@
 	cp -r $(GENODE_DIR)/repos/os/$@/* $@/
 

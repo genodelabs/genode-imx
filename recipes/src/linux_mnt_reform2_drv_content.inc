@@ -1,6 +1,6 @@
 PORT_DIR := $(call port_dir,$(REP_DIR)/ports/mnt_reform2_linux)
 
-LX_FILE_LISTS := $(shell find -H $(REP_DIR)/src/drivers/$(DRIVER) -name deps.list -or -name source.list)
+LX_FILE_LISTS := $(shell find -H $(REP_DIR)/src/driver/$(DRIVER) -name deps.list -or -name source.list)
 MIRROR_FROM_PORT_DIR := $(sort $(addprefix linux/,$(shell cat $(LX_FILE_LISTS))))
 
 MIRROR_FROM_DDE_DIR  := src/include/lx_emul \
@@ -11,10 +11,10 @@ MIRROR_FROM_DDE_DIR  := src/include/lx_emul \
                         src/lib/lx_emul \
                         src/lib/lx_kit
 
-MIRROR_FROM_REP_DIR  := src/drivers/$(DRIVER) \
-                        src/drivers/linux_mnt_reform2_drv_target.inc \
-                        src/drivers/linux_mnt_reform2_drv_target_arm_v7.inc \
-                        src/drivers/linux_mnt_reform2_drv_target_arm_v8.inc \
+MIRROR_FROM_REP_DIR  := src/driver/$(DRIVER) \
+                        src/driver/linux_mnt_reform2_drv_target.inc \
+                        src/driver/linux_mnt_reform2_drv_target_arm_v7.inc \
+                        src/driver/linux_mnt_reform2_drv_target_arm_v8.inc \
                         src/include/mnt_reform2_linux \
                         src/lib/mnt_reform2_linux
 

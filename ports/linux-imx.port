@@ -14,7 +14,7 @@ URL(compulab) := https://github.com/skalk/compulab-linux-kernel-dts.git
 REV(compulab) := d885d5b38927255387202aa65d669b6b7df044c4
 DIR(compulab) := linux-imx/arch/arm64/boot/dts/compulab
 
-PATCHES := src/drivers/usb_host/imx8mq/imx8mq-evk-enable-usb-c-dts.patch
+PATCHES := src/driver/usb_host/imx8mq/imx8mq-evk-enable-usb-c-dts.patch
 PATCHES += patches/linux-compulab.patch patches/linux-fsl-imx8mp.patch
 
 PATCH_OPT(patches/linux-compulab.patch)   := -p1 --directory=linux-imx

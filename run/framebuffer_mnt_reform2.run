@@ -6,11 +6,11 @@ import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/raw/mnt_reform2-devices
 
 build {
-	drivers/platform/imx8mq
-	drivers/framebuffer/imx8mq
-	drivers/pwm/imx8mq
-	drivers/gpio/imx/spec/arm_v8
-	drivers/i2c/imx8q_evk
+	driver/platform/imx8mq
+	driver/framebuffer/imx8mq
+	driver/pwm/imx8mq
+	driver/gpio/imx/spec/arm_v8
+	driver/i2c/imx8q_evk
 	test/framebuffer
 }
 

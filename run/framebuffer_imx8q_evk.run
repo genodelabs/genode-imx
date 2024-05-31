@@ -7,10 +7,10 @@ import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/raw/imx8q_evk-devices
 
 build {
-	drivers/framebuffer/imx8mq
-	drivers/gpio/imx/spec/arm_v8
-	drivers/i2c/imx8q_evk
-	drivers/platform/imx8mq
+	driver/framebuffer/imx8mq
+	driver/gpio/imx/spec/arm_v8
+	driver/i2c/imx8q_evk
+	driver/platform/imx8mq
 	test/framebuffer
 }
 

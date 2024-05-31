@@ -6,11 +6,11 @@ import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/raw/imx8q_evk-devices
 
 build {
-	drivers/usb_hid
+	driver/usb_hid
 	server/event_dump
 	server/report_rom
-	drivers/platform/imx8mq
-	drivers/usb_host/imx8mq
+	driver/platform/imx8mq
+	driver/usb_host/imx8mq
 }
 
 install_config {

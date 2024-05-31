@@ -16,9 +16,11 @@ DIR(compulab) := linux-imx/arch/arm64/boot/dts/compulab
 
 PATCHES := src/driver/usb_host/imx8mq/imx8mq-evk-enable-usb-c-dts.patch
 PATCHES += patches/linux-compulab.patch patches/linux-fsl-imx8mp.patch
+PATCHES += patches/prevent_pldw_bitops.patch
 
 PATCH_OPT(patches/linux-compulab.patch)   := -p1 --directory=linux-imx
 PATCH_OPT(patches/linux-fsl-imx8mp.patch) := -p1 --directory=linux-imx
+PATCH_OPT(patches/prevent_pldw_bitops.patch) := -p1 --directory=linux-imx
 
 default: reform-debian-packages.git linux-imx.archive compulab.git
 	cd linux-imx; for p in ../reform/linux/patches/*.patch; do patch -p1 < $$p; done; cd ..

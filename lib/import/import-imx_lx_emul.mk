@@ -18,6 +18,9 @@ endif
 ifeq ($(filter-out $(SPECS),arm),)
 # lx_emul/initcall_order.h
 INC_DIR += $(REP_DIR)/src/include/spec/arm_v7a
+
+# prevent unsupported instruction on Cortex-A8 in .S files
+CC_OPT += -DGENODE_PREVENT_PLDW=1
 endif
 
 LX_SRC_DIR := $(call select_from_ports,linux-imx)/linux-imx

@@ -15,6 +15,7 @@
 
 #include <base/component.h>
 
+#include <iomuxc.h>
 #include <ccm.h>
 #include <common/gpc.h>
 #include <common/src.h>
@@ -31,6 +32,7 @@ struct Driver::Main
 	Signal_handler<Main>   _config_handler { _env.ep(), *this,
 	                                         &Main::_handle_config };
 
+	Iomuxc iomuxc { _env };
 	Ccm ccm { _env, _common.devices().clocks(), _verbose };
 	Gpc gpc { _env, _common.devices().powers() };
 	Src src { _env, _common.devices().resets() };

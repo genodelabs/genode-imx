@@ -1,7 +1,7 @@
 /*
  * \brief  Array defining order of Linux Kernel initcalls
  * \author Automatically generated file - do no edit
- * \date   2024-05-14
+ * \date   2024-05-29
  */
 
 #pragma once
@@ -79,6 +79,7 @@ static const char * lx_emul_initcall_order[] = {
 	"__initcall_asids_update_limit3",
 	"__initcall_kcmp_cookies_init3",
 	"__initcall_cryptomgr_init3",
+	"__initcall_imx8mp_pinctrl_init3",
 	"__initcall_imx8mq_pinctrl_init3",
 	"__initcall_dma_channel_table_init3",
 	"__initcall_dma_bus_init3",
@@ -240,6 +241,7 @@ static const char * lx_emul_initcall_order[] = {
 	"__initcall_of_fixed_factor_clk_driver_init6",
 	"__initcall_of_fixed_clk_driver_init6",
 	"__initcall_gpio_clk_driver_init6",
+	"__initcall_imx8mp_clk_driver_init6",
 	"__initcall_imx8mq_clk_driver_init6",
 	"__initcall_sdma_driver_init6",
 	"__initcall_imx_pgc_domain_driver_init6",
@@ -277,10 +279,15 @@ static const char * lx_emul_initcall_order[] = {
 	"__initcall_nvme_core_init6",
 	"__initcall_nvme_init6",
 	"__initcall_blackhole_netdev_init6",
+	"__initcall_phylink_init6",
 	"__initcall_phy_module_init6",
 	"__initcall_fixed_mdio_bus_init6",
+	"__initcall_phy_module_init6",
 	"__initcall_mdio_mux_multiplexer_driver_init6",
 	"__initcall_fec_driver_init6",
+	"__initcall_stmmac_init6",
+	"__initcall_dwmac_generic_driver_init6",
+	"__initcall_imx_dwmac_driver_init6",
 	"__initcall_ath9k_init6",
 	"__initcall_ath9k_cmn_init6",
 	"__initcall_iwl_drv_init6",

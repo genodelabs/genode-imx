@@ -1,2 +1,34 @@
 <devices>
+	<device name="eqos" type="nxp,imx8mp-dwmac-eqos">
+		<io_mem address="0x30bf0000" size="0x10000"/>
+		<irq    number="167"/>
+		<irq    number="166"/>
+		<clock  name="enet_axi_clk_root"
+		        parent="system_pll1_div3"/>
+		<clock  name="enet_qos_timer_clk_root"
+		        parent="system_pll2_div10"
+		        rate="100000000"
+		        driver_name="ptp_ref"/>
+		<clock  name="enet_qos_clk_root"
+		        parent="system_pll2_div8"
+		        rate="125000000"
+		        driver_name="tx"/>
+		<clock  name="enet_qos_gate" driver_name="stmmaceth"/>
+		<clock  name="qos_enet_gate" driver_name="pclk"/>
+		<clock  name="sim_enet_gate"/>
+	</device>
+
+	<device name="i2c2">
+		<io_mem address="0x30a30000" size="0x10000"/>
+		<irq number="68"/>
+		<clock name="i2c2_clk_root"/>
+		<clock name="i2c2_gate"/>
+	</device>
+
+	<device name="gpio1">
+		<io_mem address="0x30200000" size="0x10000"/>
+		<irq number="96"/>
+		<irq number="97"/>
+		<clock name="gpio1_gate"/>
+	</device>
 </devices>

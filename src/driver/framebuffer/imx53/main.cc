@@ -74,7 +74,7 @@ struct Framebuffer::Main
 	{
 		log("--- i.MX53 framebuffer driver ---");
 
-		_ipu.init(_size.w(), _size.h(), _size.w() * BYTES_PER_PIXEL,
+		_ipu.init(_size.w, _size.h, _size.w * BYTES_PER_PIXEL,
 		          _fb_buf.dma_addr(), _disp == 0);
 
 		_timer.sigh(_timer_handler);

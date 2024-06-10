@@ -11,6 +11,7 @@
  * version 2.
  */
 
+#include <linux/part_stat.h>
 #include <../block/blk.h>
 #include <linux/module.h>
 #include <linux/blkdev.h>
@@ -38,12 +39,12 @@ struct block_device *bdev_alloc(struct gendisk *disk, u8 partno)
 	inode->i_mode = S_IFBLK;
 	inode->i_rdev = 0;
 
-	mutex_init(&bdev->bd_mutex);
 	mutex_init(&bdev->bd_fsfreeze_mutex);
 	spin_lock_init(&bdev->bd_size_lock);
 	bdev->bd_disk = disk;
 	bdev->bd_partno = partno;
 	bdev->bd_inode = inode;
+	bdev->bd_queue = disk->queue;
 
 	bdev->bd_stats = alloc_percpu(struct disk_stats);
 	return bdev;
@@ -117,7 +118,7 @@ static void bio_end_io(struct bio *bio)
 	struct genode_block_request * const req =
 		(struct genode_block_request*) bio->bi_private;
 	struct genode_block_session * const session =
-		genode_block_session_by_name(bio->bi_disk->disk_name);
+		genode_block_session_by_name(bio->bi_bdev->bd_disk->disk_name);
 
 	if (session) {
 		genode_block_ack_request(session, req, true);
@@ -131,7 +132,7 @@ static void bio_end_io(struct bio *bio)
 
 static inline int block_sync(struct block_device * const bdev)
 {
-	if (blkdev_issue_flush(bdev, GFP_KERNEL)) {
+	if (blkdev_issue_flush(bdev)) {
 		printk("blkdev_issue_flush failed!\n");
 		return 0;
 	}
@@ -143,7 +144,8 @@ static inline void block_request(struct block_device         * const bdev,
                                  struct genode_block_request * const request,
                                  bool                          write)
 {
-	struct bio  * bio  = bio_alloc(GFP_KERNEL, 1);
+	struct bio  * bio  = bio_alloc(bdev, 1, write ? REQ_OP_WRITE
+	                                              : REQ_OP_READ, GFP_KERNEL);
 	struct page * page = virt_to_page(request->addr);
 
 	bio_set_dev(bio, bdev);
@@ -153,7 +155,6 @@ static inline void block_request(struct block_device         * const bdev,
 	bio->bi_opf            = write ? REQ_OP_WRITE : REQ_OP_READ;
 	bio->bi_private        = request;
 
-	bio_set_flag(bio, BIO_WORKINGSET);
 	bio_add_page(bio, page, request->blk_cnt * 512,
 	             (unsigned long)request->addr & (PAGE_SIZE-1));
 	submit_bio(bio);
@@ -184,6 +185,7 @@ block_handle_session(struct genode_block_session * const session,
 			break;
 		case GENODE_BLOCK_SYNC:
 			genode_block_ack_request(session, req, block_sync(bdev));
+			genode_block_notify_peers();
 		default: ;
 		};
 	}

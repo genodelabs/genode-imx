@@ -28,6 +28,41 @@ unsigned long __must_check __arch_copy_to_user(void __user *to, const void *from
 }
 
 
+#include <asm-generic/sections.h>
+
+char __start_rodata[] = {};
+char __end_rodata[]   = {};
+
+
+#include <linux/of_reserved_mem.h>
+#include <linux/mod_devicetable.h>
+
+const struct of_device_id __reservedmem_of_table[] = {};
+
+
+#include <linux/kernel_stat.h>
+
+void account_process_tick(struct task_struct * p,int user_tick)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/tracepoint-defs.h>
+
+const struct trace_print_flags vmaflag_names[]  = { {0,NULL}};
+
+
+#include <linux/tracepoint-defs.h>
+
+const struct trace_print_flags pageflag_names[]  = { {0,NULL}};
+
+
+#include <linux/tracepoint-defs.h>
+
+const struct trace_print_flags gfpflag_names[]  = { {0,NULL}};
+
+
 #include <linux/ratelimit_types.h>
 
 int ___ratelimit(struct ratelimit_state * rs,const char * func)
@@ -45,49 +80,6 @@ void __bio_crypt_advance(struct bio *bio, unsigned int bytes)
 }
 
 
-#include <linux/blk-crypto.h>
-
-int __bio_crypt_clone(struct bio *dst, struct bio *src, gfp_t gfp_mask)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void __bio_crypt_free_ctx(struct bio *bio);
-void __bio_crypt_free_ctx(struct bio *bio)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern bool __blk_crypto_bio_prep(struct bio **bio_ptr);
-bool __blk_crypto_bio_prep(struct bio **bio_ptr)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void __blk_crypto_free_request(struct request *rq);
-void __blk_crypto_free_request(struct request *rq)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern blk_status_t __blk_crypto_init_request(struct request *rq);
-blk_status_t __blk_crypto_init_request(struct request *rq)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern int __blk_crypto_rq_bio_prep(struct request *rq, struct bio *bio, gfp_t gfp_mask);
-int __blk_crypto_rq_bio_prep(struct request *rq, struct bio *bio, gfp_t gfp_mask)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/cpuhotplug.h>
 
 int __cpuhp_state_add_instance(enum cpuhp_state state,struct hlist_node * node,bool invoke)
@@ -100,15 +92,6 @@ int __cpuhp_state_add_instance(enum cpuhp_state state,struct hlist_node * node,b
 #include <linux/cpuhotplug.h>
 
 int __cpuhp_state_remove_instance(enum cpuhp_state state,struct hlist_node * node,bool invoke)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
-#include <linux/genhd.h>
-
-int __invalidate_device(struct block_device * bdev,bool kill_dirty)
 {
 	lx_emul_trace(__func__);
 	return 0;
@@ -156,7 +139,7 @@ void __pm_runtime_use_autosuspend(struct device * dev,bool use)
 
 #include <linux/random.h>
 
-void add_interrupt_randomness(int irq,int irq_flags)
+void add_interrupt_randomness(int irq)
 {
 	lx_emul_trace(__func__);
 }
@@ -165,14 +148,6 @@ void add_interrupt_randomness(int irq,int irq_flags)
 #include <linux/dma-map-ops.h>
 
 void arch_setup_dma_ops(struct device * dev,u64 dma_base,u64 size,const struct iommu_ops * iommu,bool coherent)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/dma-map-ops.h>
-
-void arch_teardown_dma_ops(struct device * dev)
 {
 	lx_emul_trace(__func__);
 }
@@ -216,30 +191,6 @@ void bdi_unregister(struct backing_dev_info * bdi)
 }
 
 
-#include <linux/blkdev.h>
-
-void bdput(struct block_device * bdev)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/bio.h>
-
-void bio_associate_blkg(struct bio * bio)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/bio.h>
-
-void bio_clone_blkg_association(struct bio * dst,struct bio * src)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <../block/blk-stat.h>
 struct blk_queue_stats { int dummy; };
 
@@ -259,27 +210,7 @@ void blk_cgroup_bio_start(struct bio * bio)
 }
 
 
-extern void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx * hctx);
-void blk_mq_debugfs_unregister_hctx(struct blk_mq_hw_ctx * hctx)
-{
-	lx_emul_trace(__func__);
-}
-
-
-extern void blk_mq_debugfs_unregister_queue_rqos(struct request_queue * q);
-void blk_mq_debugfs_unregister_queue_rqos(struct request_queue * q)
-{
-	lx_emul_trace(__func__);
-}
-
-
-extern void blk_mq_hctx_kobj_init(struct blk_mq_hw_ctx * hctx);
-void blk_mq_hctx_kobj_init(struct blk_mq_hw_ctx * hctx)
-{
-	lx_emul_trace(__func__);
-}
-
-
+struct request_queue;
 extern void blk_mq_sysfs_init(struct request_queue * q);
 void blk_mq_sysfs_init(struct request_queue * q)
 {
@@ -297,28 +228,6 @@ struct blk_stat_callback * blk_stat_alloc_callback(void (* timer_fn)(struct blk_
 	static struct blk_stat_callback ret;
 	lx_emul_trace(__func__);
 	return &ret;
-}
-
-
-extern bool blk_throtl_bio(struct bio *bio);
-bool blk_throtl_bio(struct bio *bio)
-{
-	return false;
-}
-
-
-int blkcg_init_queue(struct request_queue * q)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
-#include <linux/blkdev.h>
-
-void blkdev_put(struct block_device * bdev,fmode_t mode)
-{
-	lx_emul_trace(__func__);
 }
 
 
@@ -380,15 +289,6 @@ void dpm_sysfs_remove(struct device * dev)
 }
 
 
-#include <linux/blkdev.h>
-
-int fsync_bdev(struct block_device * bdev)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
 #include <linux/gpio/consumer.h>
 
 struct gpio_desc * __must_check gpiod_get_optional(struct device * dev,const char * con_id,enum gpiod_flags flags)
@@ -404,13 +304,6 @@ int gpiod_set_debounce(struct gpio_desc * desc,unsigned int debounce)
 {
 	lx_emul_trace(__func__);
 	return 0;
-}
-
-
-extern void irq_pm_install_action(struct irq_desc * desc,struct irqaction * action);
-void irq_pm_install_action(struct irq_desc * desc,struct irqaction * action)
-{
-	lx_emul_trace(__func__);
 }
 
 
@@ -456,47 +349,12 @@ void led_trigger_register_simple(const char * name,struct led_trigger ** tp)
 }
 
 
-#include <../drivers/mmc/core/card.h>
-
-void mmc_add_card_debugfs(struct mmc_card * card)
-{
-	lx_emul_trace(__func__);
-}
-
-
-void mmc_add_host_debugfs(struct mmc_host * host)
-{
-	lx_emul_trace(__func__);
-}
-
-
-void mmc_remove_card_debugfs(struct mmc_card * card)
-{
-	lx_emul_trace(__func__);
-}
-
-
-void mmc_remove_host_debugfs(struct mmc_host * host)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/clk/clk-conf.h>
 
 int of_clk_set_defaults(struct device_node * node,bool clk_supplier)
 {
 	lx_emul_trace(__func__);
 	return 0;
-}
-
-
-#include <linux/of_iommu.h>
-
-const struct iommu_ops * of_iommu_configure(struct device * dev,struct device_node * master_np,const u32 * id)
-{
-	lx_emul_trace(__func__);
-	return NULL;
 }
 
 
@@ -569,14 +427,6 @@ u32 prandom_u32(void)
 }
 
 
-#include <linux/genhd.h>
-
-void rand_initialize_disk(struct gendisk * disk)
-{
-	lx_emul_trace(__func__);
-}
-
-
 extern void register_handler_proc(unsigned int irq,struct irqaction * action);
 void register_handler_proc(unsigned int irq,struct irqaction * action)
 {
@@ -591,15 +441,6 @@ void register_irq_proc(unsigned int irq,struct irq_desc * desc)
 }
 
 
-#include <linux/suspend.h>
-
-int register_pm_notifier(struct notifier_block * nb)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
 extern void synchronize_rcu_expedited(void);
 void synchronize_rcu_expedited(void)
 {
@@ -609,7 +450,7 @@ void synchronize_rcu_expedited(void)
 
 void synchronize_srcu(struct srcu_struct * ssp)
 {
-	lx_emul_trace_and_stop(__func__);
+	lx_emul_trace(__func__);
 }
 
 
@@ -679,45 +520,6 @@ void sysfs_remove_link(struct kobject * kobj,const char * name)
 }
 
 
-#include <linux/vmstat.h>
-
-DEFINE_PER_CPU(struct vm_event_state, vm_event_states) = {{0}};
-EXPORT_PER_CPU_SYMBOL(vm_event_states);
-
-
-#include <linux/pm_wakeup.h>
-
-struct wakeup_source * wakeup_source_register(struct device * dev,const char * name)
-{
-	lx_emul_trace(__func__);
-	return NULL;
-}
-
-
-#include <linux/pm_wakeup.h>
-
-void wakeup_source_unregister(struct wakeup_source * ws)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/nmi.h>
-
-notrace void touch_softlockup_watchdog_sched(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/wait_bit.h>
-
-void __init wait_bit_init(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
 
 #include <linux/skbuff.h>
 
@@ -725,3 +527,375 @@ void skb_init()
 {
 	lx_emul_trace(__func__);
 }
+
+
+struct blk_mq_hw_ctx;
+extern void blk_mq_hctx_kobj_init(struct blk_mq_hw_ctx * hctx);
+void blk_mq_hctx_kobj_init(struct blk_mq_hw_ctx * hctx)
+{
+	lx_emul_trace(__func__);
+}
+
+
+u64 vabits_actual;
+EXPORT_SYMBOL(vabits_actual);
+
+
+#include <linux/pci.h>
+
+unsigned long pci_address_to_pio(phys_addr_t addr)
+{
+    lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/blkdev.h>
+
+void blkdev_put(struct block_device * bdev,fmode_t mode)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/cpuhotplug.h>
+
+int __cpuhp_setup_state(enum cpuhp_state state,const char * name,bool invoke,int (* startup)(unsigned int cpu),int (* teardown)(unsigned int cpu),bool multi_instance)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/posix-timers.h>
+
+void __init posix_cputimers_init_work(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/timekeeper_internal.h>
+
+void update_vsyscall(struct timekeeper * tk)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <net/net_namespace.h>
+
+void __init net_ns_init(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sched/signal.h>
+
+void ignore_signals(struct task_struct * t)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_create_dir_ns(struct kobject * kobj,const void * ns)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_create_groups(struct kobject * kobj,const struct attribute_group ** groups)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/kernfs.h>
+
+void kernfs_get(struct kernfs_node * kn)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/kobject.h>
+
+int kobject_uevent(struct kobject * kobj,enum kobject_action action)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/kernfs.h>
+
+struct kernfs_node * kernfs_find_and_get_ns(struct kernfs_node * parent,const char * name,const void * ns)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_create_bin_file(struct kobject * kobj,const struct bin_attribute * attr)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/proc_fs.h>
+
+struct proc_dir_entry * proc_symlink(const char * name,struct proc_dir_entry * parent,const char * dest)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
+
+extern void pm_runtime_init(struct device * dev);
+void pm_runtime_init(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+extern void software_node_notify(struct device * dev);
+void software_node_notify(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_create_file_ns(struct kobject * kobj,const struct attribute * attr,const void * ns)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+extern int dpm_sysfs_add(struct device * dev);
+int dpm_sysfs_add(struct device * dev)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_create_link(struct kobject * kobj,struct kobject * target,const char * name)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_runtime.h>
+
+int __pm_runtime_resume(struct device * dev,int rpmflags)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_runtime.h>
+
+int __pm_runtime_idle(struct device * dev,int rpmflags)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/kernel.h>
+
+bool parse_option_str(const char * str,const char * option)
+{
+	lx_emul_trace(__func__);
+	return false;
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_get_suppliers(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+int pm_runtime_barrier(struct device * dev)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_domain.h>
+
+int dev_pm_domain_attach(struct device * dev,bool power_on)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_put_suppliers(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/logic_pio.h>
+
+struct logic_pio_hwaddr * find_io_range_by_fwnode(struct fwnode_handle * fwnode)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
+
+#include <linux/sysctl.h>
+
+struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
+
+#include <linux/syscore_ops.h>
+
+void register_syscore_ops(struct syscore_ops * ops)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/proc_fs.h>
+
+struct proc_dir_entry * proc_create_seq_private(const char * name,umode_t mode,struct proc_dir_entry * parent,const struct seq_operations * ops,unsigned int state_size,void * data)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
+
+#include <linux/sysctl.h>
+
+void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_add_file_to_group(struct kobject * kobj,const struct attribute * attr,const char * group)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_drop_link(struct device_link * link)
+{
+	lx_emul_trace(__func__);
+}
+
+
+extern void pm_runtime_remove(struct device * dev);
+void pm_runtime_remove(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+extern void software_node_notify_remove(struct device * dev);
+void software_node_notify_remove(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_release_supplier(struct device_link * link)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/rcupdate.h>
+
+void rcu_sched_clock_irq(int user)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/posix-timers.h>
+
+void run_posix_cpu_timers(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_enter(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_exit(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/random.h>
+
+void add_device_randomness(const void * buf,size_t len)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/blkdev.h>
+
+void __cold rand_initialize_disk(struct gendisk * disk)
+{
+	lx_emul_trace(__func__);
+}
+
+
+extern void pm_runtime_reinit(struct device * dev);
+void pm_runtime_reinit(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+

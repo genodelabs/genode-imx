@@ -39,7 +39,7 @@ long __sched io_schedule_timeout(long timeout)
 	int  old_iowait = current->in_iowait;
 
 	current->in_iowait = 1;
-	blk_schedule_flush_plug(current);
+	blk_flush_plug(current->plug, true);
 	ret = schedule_timeout(timeout);
 	current->in_iowait = old_iowait;
 
@@ -47,22 +47,42 @@ long __sched io_schedule_timeout(long timeout)
 }
 
 
-#include <linux/nodemask.h>
+#include <../mm/slab.h>
 
-nodemask_t node_states[NR_NODE_STATES] __read_mostly = {
-	[N_POSSIBLE] = NODE_MASK_ALL,
-	[N_ONLINE] = { { [0] = 1UL } },
-#ifndef CONFIG_NUMA
-	[N_NORMAL_MEMORY] = { { [0] = 1UL } },
-#ifdef CONFIG_HIGHMEM
-	[N_HIGH_MEMORY] = { { [0] = 1UL } },
-#endif
-	[N_MEMORY] = { { [0] = 1UL } },
-	[N_CPU] = { { [0] = 1UL } },
-#endif /* NUMA */
-};
+void * kmem_cache_alloc_lru(struct kmem_cache * cachep,struct list_lru * lru,gfp_t flags)
+{
+	return kmem_cache_alloc(cachep, flags);
+}
 
 
-#include <linux/nodemask.h>
+#include <linux/blkdev.h>
 
-unsigned int nr_node_ids = MAX_NUMNODES;
+int bd_prepare_to_claim(struct block_device * bdev,void * holder)
+{
+	struct block_device *whole = bdev_whole(bdev);
+	whole->bd_claiming = holder;
+	return 0;
+}
+
+
+void bd_abort_claiming(struct block_device * bdev,void * holder)
+{
+	struct block_device *whole = bdev_whole(bdev);
+	whole->bd_claiming = NULL;
+}
+
+
+#include <linux/ioprio.h>
+
+int __get_task_ioprio(struct task_struct * p)
+{
+	return IOPRIO_DEFAULT;
+}
+
+
+#include <linux/mm.h>
+
+bool is_vmalloc_addr(const void * x)
+{
+	return false;
+}

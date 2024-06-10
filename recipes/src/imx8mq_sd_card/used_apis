@@ -5,3 +5,5 @@ timer_session
 block_session
 report_session
 genode_c_api
+imx_linux
+jitterentropy

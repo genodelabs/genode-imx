@@ -54,6 +54,8 @@ LX_NIC_FILE_LISTS := $(shell find -H $(REP_DIR)/src/driver/nic/fec -name dep.lis
 LX_FILES += $(shell cat $(LX_NIC_FILE_LISTS))
 LX_FB_FILE_LISTS := $(shell find -H $(REP_DIR)/src/driver/framebuffer/imx8mq -name dep.list -or -name source.list)
 LX_FILES += $(shell cat $(LX_FB_FILE_LISTS))
+LX_SD_CARD_FILE_LISTS := $(shell find -H $(REP_DIR)/src/driver/sd_card/imx8mq -name dep.list -or -name source.list)
+LX_FILES += $(shell cat $(LX_SD_CARD_FILE_LISTS))
 LX_FILES := $(sort $(LX_FILES))
 MIRRORED_FROM_PORT_DIR += $(addprefix $(LX_REL_DIR)/,$(LX_FILES))
 

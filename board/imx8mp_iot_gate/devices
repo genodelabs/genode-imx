@@ -54,4 +54,13 @@
 		<irq number="97"/>
 		<clock name="gpio1_gate"/>
 	</device>
+
+	<device name="usdhc" type="fsl,imx8mp-usdhc">
+		<io_mem address="0x30b60000" size="0x10000"/>
+		<irq    number="56"/>
+		<clock  name="usdhc3_clk_root" rate="400000000"/>
+		<clock  name="no_clk" driver_name="ipg"/>
+		<clock  name="nand_usdhc_bus_clk_root" driver_name="ahb"/>
+		<clock  name="usdhc3_gate" driver_name="per"/>
+	</device>
 </devices>

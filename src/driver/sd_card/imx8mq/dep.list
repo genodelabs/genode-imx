@@ -1,3 +1,12 @@
+arch/arm64/boot/dts/compulab/iot-gate-imx8plus.dts
+arch/arm64/boot/dts/compulab/sb-iotgimx8plus.dtsi
+arch/arm64/boot/dts/compulab/ucm-imx8m-plus-can.dtsi
+arch/arm64/boot/dts/compulab/ucm-imx8m-plus.dtsi
+arch/arm64/boot/dts/compulab/ucm-imx8m-plus-hdmi.dtsi
+arch/arm64/boot/dts/compulab/ucm-imx8m-plus-pcie.dtsi
+arch/arm64/boot/dts/compulab/ucm-imx8m-plus-pinctrl.dtsi
+arch/arm64/boot/dts/freescale/imx8mp.dtsi
+arch/arm64/boot/dts/freescale/imx8mp-pinfunc.h
 arch/arm64/boot/dts/freescale/imx8mq.dtsi
 arch/arm64/boot/dts/freescale/imx8mq-pinfunc.h
 arch/arm64/include/asm/alternative.h
@@ -259,6 +268,7 @@ include/asm-generic/trace_clock.h
 include/asm-generic/unaligned.h
 include/asm-generic/user.h
 include/clocksource/arm_arch_timer.h
+include/dt-bindings/clock/imx8mp-clock.h
 include/dt-bindings/clock/imx8mq-clock.h
 include/dt-bindings/gpio/gpio.h
 include/dt-bindings/input/input.h
@@ -267,8 +277,11 @@ include/dt-bindings/interconnect/imx8mq.h
 include/dt-bindings/interrupt-controller/arm-gic.h
 include/dt-bindings/interrupt-controller/irq.h
 include/dt-bindings/leds/common.h
+include/dt-bindings/phy/phy-imx8-pcie.h
+include/dt-bindings/power/imx8mp-power.h
 include/dt-bindings/power/imx8mq-power.h
 include/dt-bindings/pwm/pwm.h
+include/dt-bindings/reset/imx8mp-reset.h
 include/dt-bindings/reset/imx8mq-reset.h
 include/dt-bindings/thermal/thermal.h
 include/dt-bindings/usb/pd.h

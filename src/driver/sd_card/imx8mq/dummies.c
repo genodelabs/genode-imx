@@ -899,3 +899,11 @@ void pm_runtime_reinit(struct device * dev)
 }
 
 
+#include <linux/pinctrl/consumer.h>
+
+int pinctrl_select_state(struct pinctrl * p,struct pinctrl_state * state)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+

@@ -941,14 +941,6 @@ unsigned long phys_initrd_size;
 phys_addr_t phys_initrd_start;
 
 
-#include <linux/pinctrl/consumer.h>
-
-int pinctrl_select_state(struct pinctrl * p,struct pinctrl_state * state)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/pm_runtime.h>
 
 int pm_generic_runtime_resume(struct device * dev)

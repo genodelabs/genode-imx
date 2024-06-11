@@ -1,4 +1,27 @@
 <devices>
+	<device name="fec" type="fsl,imx8mp-fec">
+		<io_mem address="0x30be0000" size="0x10000"/>
+		<irq    number="150"/>
+		<irq    number="151"/>
+		<irq    number="152"/>
+		<irq    number="153"/>
+		<clock  name="enet_axi_clk_root"
+		        parent="system_pll1_div3"/>
+		<clock  name="enet_timer_clk_root"
+		        parent="system_pll2_div10"
+		        rate="100000000"
+		        driver_name="ptp"/>
+		<clock  name="enet_ref_clk_root"
+		        parent="system_pll2_div8"
+		        rate="125000000"
+		        driver_name="enet_clk_ref"/>
+		<clock  name="enet_phy_ref_clk_root"
+		        parent="system_pll2_div20"
+		        driver_name="enet_out"/>
+		<clock  name="enet1_gate" driver_name="ipg"/>
+		<clock  name="sim_enet_gate" driver_name="ahb"/>
+	</device>
+
 	<device name="eqos" type="nxp,imx8mp-dwmac-eqos">
 		<io_mem address="0x30bf0000" size="0x10000"/>
 		<irq    number="167"/>

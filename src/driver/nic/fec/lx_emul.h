@@ -22,3 +22,13 @@
 
 /* fix for missing include in linux/irqdesc.h */
 #include <linux/irq.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void lx_emul_get_mac_address(void *buf);
+
+#ifdef __cplusplus
+}
+#endif

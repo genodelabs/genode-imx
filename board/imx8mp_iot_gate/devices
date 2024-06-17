@@ -55,6 +55,34 @@
 		<clock name="gpio1_gate"/>
 	</device>
 
+	<device name="gpio2">
+		<io_mem address="0x30210000" size="0x10000"/>
+		<irq number="98"/>
+		<irq number="99"/>
+		<clock name="gpio2_gate"/>
+	</device>
+
+	<device name="gpio3">
+		<io_mem address="0x30220000" size="0x10000"/>
+		<irq number="100"/>
+		<irq number="101"/>
+		<clock name="gpio3_gate"/>
+	</device>
+
+	<device name="gpio4">
+		<io_mem address="0x30230000" size="0x10000"/>
+		<irq number="102"/>
+		<irq number="103"/>
+		<clock name="gpio4_gate"/>
+	</device>
+
+	<device name="gpio5">
+		<io_mem address="0x30230000" size="0x10000"/>
+		<irq number="104"/>
+		<irq number="105"/>
+		<clock name="gpio5_gate"/>
+	</device>
+
 	<device name="usdhc" type="fsl,imx8mp-usdhc">
 		<io_mem address="0x30b60000" size="0x10000"/>
 		<irq    number="56"/>

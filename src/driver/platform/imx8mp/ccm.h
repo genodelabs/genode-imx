@@ -745,7 +745,7 @@ struct Driver::Ccm
 	                                           system_pll1_div6, system_pll1_div5,
 	                                           vpu_pll_clk, system_pll2_div8,
 	                                           system_pll3_clk, system_pll1_div10,
-	                                           system_pll2_div6 };
+	                                           system_pll2_div6, true };
 	Root_clock wrclk_clk_root                { clocks, "wrclk_clk_root",
 	                                           root_range(115), m24_ref_clk,
 	                                           system_pll1_div20, vpu_pll_clk,
@@ -966,9 +966,9 @@ struct Driver::Ccm
 	Gate usdhc2_gate      { clocks, "usdhc2_gate",
 	                        gate_range(82),  usdhc2_clk_root };
 	Gate wdog1_gate       { clocks, "wdog1_gate",
-	                        gate_range(83),  wdog_clk_root };
+	                        gate_range(83),  wdog_clk_root, true };
 	Gate wdog2_gate       { clocks, "wdog2_gate",
-	                        gate_range(84),  wdog_clk_root };
+	                        gate_range(84),  wdog_clk_root, true };
 	Gate wdog3_gate       { clocks, "wdog3_gate",
 	                        gate_range(85),  wdog_clk_root };
 	Gate vpu_g1_gate      { clocks, "vpu_g1_gate",

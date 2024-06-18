@@ -91,4 +91,13 @@
 		<clock  name="nand_usdhc_bus_clk_root" driver_name="ahb"/>
 		<clock  name="usdhc3_gate" driver_name="per"/>
 	</device>
+
+	<device name="ecspi2">
+		<io_mem address="0x30830000" size="0x10000"/>
+		<irq    number="64"/>
+		<clock  name="ecspi2_clk_root"
+		        parent="system_pll1_clk"
+		        rate="80000000"/>
+		<clock  name="ecspi2_gate"/>
+	</device>
 </devices>

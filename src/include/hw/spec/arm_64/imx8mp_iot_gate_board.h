@@ -15,11 +15,11 @@
 #ifndef _SRC__INCLUDE__HW__SPEC__ARM_64__IMX8MP_IOT_GATE__BOARD_H_
 #define _SRC__INCLUDE__HW__SPEC__ARM_64__IMX8MP_IOT_GATE__BOARD_H_
 
-#include <drivers/uart/imx.h>
 #include <hw/spec/arm/boot_info.h>
+#include <hw/spec/arm/imx_uart.h>
 
 namespace Hw::Imx8mp_iot_gate_board {
-	using Serial = Genode::Imx_uart;
+	using Serial = Hw::Imx_uart;
 
 	enum {
 		RAM_BASE   = 0x40000000,

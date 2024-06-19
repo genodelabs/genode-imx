@@ -14,9 +14,9 @@
 #ifndef _SRC__INCLUDE__HW__SPEC__ARM__IMX7_SABRELITE_BOARD_H_
 #define _SRC__INCLUDE__HW__SPEC__ARM__IMX7_SABRELITE_BOARD_H_
 
-#include <drivers/uart/imx.h>
 #include <hw/spec/arm/boot_info.h>
 #include <hw/spec/arm/cortex_a15.h>
+#include <hw/spec/arm/imx_uart.h>
 
 namespace Hw::Imx7d_sabre_board {
 
@@ -48,7 +48,7 @@ namespace Hw::Imx7d_sabre_board {
 	};
 
 	using Cpu_mmio = Hw::Cortex_a15_mmio<IRQ_CONTROLLER_BASE>;
-	using Serial = Genode::Imx_uart;
+	using Serial = Hw::Imx_uart;
 
 	enum {
 		UART_BASE  = UART_1_MMIO_BASE,

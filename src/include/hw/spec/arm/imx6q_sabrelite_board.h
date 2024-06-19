@@ -14,10 +14,10 @@
 #ifndef _SRC__INCLUDE__HW__SPEC__ARM__IMX6Q_SABRELITE_BOARD_H_
 #define _SRC__INCLUDE__HW__SPEC__ARM__IMX6Q_SABRELITE_BOARD_H_
 
-#include <drivers/uart/imx.h>
 #include <hw/spec/arm/boot_info.h>
 #include <hw/spec/arm/cortex_a9.h>
 #include <hw/spec/arm/imx6.h>
+#include <hw/spec/arm/imx_uart.h>
 #include <hw/spec/arm/pl310.h>
 
 namespace Hw::Imx6q_sabrelite_board {
@@ -30,7 +30,7 @@ namespace Hw::Imx6q_sabrelite_board {
 	};
 
 	using Cpu_mmio = Hw::Cortex_a9_mmio<CORTEX_A9_PRIVATE_MEM_BASE>;
-	using Serial   = Genode::Imx_uart;
+	using Serial   = Hw::Imx_uart;
 
 	enum {
 		UART_BASE  = UART_2_MMIO_BASE,

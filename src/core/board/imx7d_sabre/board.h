@@ -22,7 +22,7 @@
 #include <spec/arm/generic_timer.h>
 #include <spec/arm/cpu/vcpu_state_virtualization.h>
 #include <spec/arm/virtualization/board.h>
-#include <spec/cortex_a15/cpu.h>
+#include <spec/arm/cortex_a15_cpu.h>
 
 namespace Board {
 

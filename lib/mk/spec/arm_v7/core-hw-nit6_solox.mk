@@ -15,4 +15,4 @@ REP_INC_DIR += src/core/board/nit6_solox
 SRC_CC += platform_services.cc
 
 # include less specific configuration
-include $(call select_from_repositories,lib/mk/spec/cortex_a9/core-hw.inc)
+include $(call select_from_repositories,lib/mk/spec/arm_v7/core-hw-cortex_a9.inc)

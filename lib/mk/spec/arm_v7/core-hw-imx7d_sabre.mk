@@ -29,4 +29,4 @@ SRC_S += spec/arm_v7/virtualization/exception_vector.s
 CC_MARCH = -mcpu=cortex-a7 -mfpu=vfpv3 -mfloat-abi=softfp
 
 # include less specific configuration
-include $(call select_from_repositories,lib/mk/spec/cortex_a15/core-hw.inc)
+include $(call select_from_repositories,lib/mk/spec/arm_v7/core-hw-cortex_a15.inc)

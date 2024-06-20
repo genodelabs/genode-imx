@@ -22,7 +22,10 @@
 /* base-hw core includes */
 #include <spec/arm/imx_epit.h>
 #include <spec/arm/trustzone_board.h>
-#include <spec/cortex_a8/cpu.h>
+#include <spec/arm_v7/cpu_support.h>
+#include <spec/arm/cortex_a8_page_table.h>
+
+namespace Core { using Cpu = Arm_v7_cpu; }
 
 namespace Board { using namespace Hw::Imx53_qsb_board; }
 

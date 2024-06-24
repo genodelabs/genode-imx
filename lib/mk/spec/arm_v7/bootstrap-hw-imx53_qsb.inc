@@ -1,3 +1,5 @@
+REQUIRES = hw
+
 REP_INC_DIR += src/bootstrap/board/imx53_qsb
 
 SRC_CC  += bootstrap/spec/arm/cortex_a8_mmu.cc

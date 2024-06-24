@@ -1,3 +1,5 @@
+REQUIRES = hw
+
 REP_INC_DIR += src/bootstrap/board/imx7d_sabre
 
 SRC_CC  += bootstrap/spec/arm/cortex_a15_cpu.cc

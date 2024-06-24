@@ -1,8 +1,2 @@
-content: src/driver/i2c LICENSE
-
-src/driver/i2c:
-	mkdir -p $@
-	cp -r $(REP_DIR)/$@/* $@/
-
-LICENSE:
-	cp $(GENODE_DIR)/LICENSE $@
+SRC_DIR = src/driver/i2c
+include $(GENODE_DIR)/repos/base/recipes/src/content.inc

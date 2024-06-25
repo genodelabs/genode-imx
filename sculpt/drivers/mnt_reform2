@@ -145,9 +145,13 @@
 	</start>
 
 	<start name="gpio" caps="150">
-		<binary name="imx_gpio"/>
+		<binary name="imx_pio"/>
 		<resource name="RAM" quantum="2M"/>
-		<provides><service name="Gpio"/></provides>
+		<provides>
+			<service name="Pin_state"/>
+			<service name="Pin_control"/>
+			<service name="IRQ"/>
+		</provides>
 		<route>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>
@@ -157,26 +161,26 @@
 			<service name="Platform"> <child name="platform"/> </service>
 		</route>
 		<config>
-			<gpio num="10" mode="O" value="1"/>
-			<gpio num="84" mode="O" value="1"/>
-
-			/* enable PCI Express */
-			<gpio num="87" mode="O" value="1"/>
+			<out name="backlight"  index="10" bank="0" default="on"/>
+			<out name="edp_bridge" index="20" bank="2" default="on"/>
+			<out name="pcie0_reset_deassert" bank="4" index="7"  default="on"/>
+			<out name="pcie1_reset_deassert" bank="2" index="23" default="on"/>
+			<policy label="imx8mq_pci_host -> " pin="pcie0_reset_deassert"/>
 		</config>
 	</start>
 
 	<start name="imx8mq_pci_host">
 		<resource name="RAM" quantum="1M"/>
 		<route>
-			<service name="RM">       <parent/> </service>
-			<service name="ROM">      <parent/> </service>
-			<service name="PD">       <parent/> </service>
-			<service name="CPU">      <parent/> </service>
-			<service name="LOG">      <parent/> </service>
-			<service name="Timer">    <parent/> </service>
-			<service name="Report">   <child name="report_rom"/> </service>
-			<service name="Platform"> <child name="platform"/>   </service>
-			<service name="Gpio">     <child name="gpio"/>   </service>
+			<service name="RM">        <parent/> </service>
+			<service name="ROM">       <parent/> </service>
+			<service name="PD">        <parent/> </service>
+			<service name="CPU">       <parent/> </service>
+			<service name="LOG">       <parent/> </service>
+			<service name="Timer">     <parent/> </service>
+			<service name="Report">    <child name="report_rom"/> </service>
+			<service name="Platform">  <child name="platform"/>   </service>
+			<service name="Pin_state"> <child name="gpio"/>       </service>
 		</route>
 	</start>
 

@@ -13,7 +13,7 @@ set build_components {
 }
 
 append_if [have_board mnt_reform2] build_components {
-	driver/gpio/imx/spec/arm_v8
+	driver/pin/imx
 	driver/i2c/imx8q_evk
 	driver/pwm/imx8mq
 }
@@ -82,9 +82,13 @@ append config {
 
 append_if [have_board mnt_reform2] config {
 	<start name="gpio" caps="150">
-		<binary name="imx_gpio"/>
+		<binary name="imx_pio"/>
 		<resource name="RAM" quantum="2M"/>
-		<provides><service name="Gpio"/></provides>
+		<provides>
+			<service name="Pin_state"/>
+			<service name="Pin_control"/>
+			<service name="IRQ"/>
+		</provides>
 		<route>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>
@@ -94,8 +98,8 @@ append_if [have_board mnt_reform2] config {
 			<service name="Platform"> <child name="platform"/> </service>
 		</route>
 		<config>
-			<gpio num="10" mode="O" value="1"/>
-			<gpio num="84" mode="O" value="1"/>
+			<out name="backlight"  index="10" bank="0" default="on"/>
+			<out name="edp_bridge" index="20" bank="2" default="on"/>
 		</config>
 	</start>
 

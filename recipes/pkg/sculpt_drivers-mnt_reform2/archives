@@ -2,7 +2,7 @@ _/raw/mnt_reform2-devices
 _/pkg/imx8mq_wifi
 _/src/fec_nic
 _/src/imx8mq_fb
-_/src/imx_gpio
+_/src/imx_pin
 _/src/imx8mq_i2c
 _/src/imx8mq_pci_host
 _/src/imx8mq_platform

@@ -13,7 +13,7 @@
 
 #include <base/component.h>
 #include <base/log.h>
-#include <gpio_session/connection.h>
+#include <pin_state_session/connection.h>
 #include <os/reporter.h>
 #include <platform_session/device.h>
 #include <timer_session/connection.h>
@@ -423,19 +423,16 @@ struct Main
 	Env & env;
 
 	/* Dummy wait for GPIO settings being settled */
-	Reconstructible<Gpio::Connection> gpio { env, 255 };
-
-	Platform::Connection   platform { env };
-	Timer::Connection      timer    { env };
-	Expanding_reporter     reporter { env,
-	                                  "devices",
-	                                  "devices" };
+	Pin_state::Connection pio      { env };
+	Platform::Connection  platform { env };
+	Timer::Connection     timer    { env };
+	Expanding_reporter    reporter { env,
+	                                 "devices",
+	                                 "devices" };
 	Constructible<Scanner> scanner {};
 
 	Main(Env & env) : env(env)
 	{
-		gpio.destruct();
-
 		Pci::bus_t bus = 0;
 
 		reporter.generate([&] (Xml_generator & generator)

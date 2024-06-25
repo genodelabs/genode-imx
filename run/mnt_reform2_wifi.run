@@ -64,7 +64,7 @@ import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/src/nic_router \
                   [depot_user]/src/dummy_rtc \
                   [depot_user]/src/imx8mq_platform \
-                  [depot_user]/src/imx_gpio \
+                  [depot_user]/src/imx_pin \
                   [depot_user]/src/imx8mq_pci_host \
                   [depot_user]/pkg/imx8mq_wifi \
                   [depot_user]/raw/mnt_reform2-devices
@@ -167,9 +167,13 @@ append config {
 	</start>
 
 	<start name="gpio" caps="150">
-		<binary name="imx_gpio"/>
+		<binary name="imx_pio"/>
 		<resource name="RAM" quantum="2M"/>
-		<provides><service name="Gpio"/></provides>
+		<provides>
+			<service name="Pin_control"/>
+			<service name="Pin_state"/>
+			<service name="IRQ"/>
+		</provides>
 		<route>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>
@@ -179,23 +183,24 @@ append config {
 			<service name="Platform"> <child name="platform"/> </service>
 		</route>
 		<config>
-			<gpio num="87"  mode="O" value="1"/>
-			<gpio num="135" mode="O" value="1"/>
+			<out name="pcie0_reset_deassert" bank="4" index="7"  default="on"/>
+			<out name="pcie1_reset_deassert" bank="2" index="23" default="on"/>
+			<policy label="imx8mq_pci_host -> " pin="pcie0_reset_deassert"/>
 		</config>
 	</start>
 
 	<start name="imx8mq_pci_host">
 		<resource name="RAM" quantum="1M"/>
 		<route>
-			<service name="RM">       <parent/> </service>
-			<service name="ROM">      <parent/> </service>
-			<service name="PD">       <parent/> </service>
-			<service name="CPU">      <parent/> </service>
-			<service name="LOG">      <parent/> </service>
-			<service name="Timer">    <child name="timer"/>      </service>
-			<service name="Report">   <child name="report_rom"/> </service>
-			<service name="Platform"> <child name="platform"/>   </service>
-			<service name="Gpio">     <child name="gpio"/>       </service>
+			<service name="RM">        <parent/> </service>
+			<service name="ROM">       <parent/> </service>
+			<service name="PD">        <parent/> </service>
+			<service name="CPU">       <parent/> </service>
+			<service name="LOG">       <parent/> </service>
+			<service name="Timer">     <child name="timer"/>      </service>
+			<service name="Report">    <child name="report_rom"/> </service>
+			<service name="Platform">  <child name="platform"/>   </service>
+			<service name="Pin_state"> <child name="gpio"/>       </service>
 		</route>
 	</start>
 

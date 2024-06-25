@@ -1,5 +1,5 @@
 base
 report_session
-gpio_session
+pin_state_session
 platform_session
 os

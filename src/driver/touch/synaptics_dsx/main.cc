@@ -17,7 +17,7 @@
 #include <base/env.h>
 
 #include <event_session/connection.h>
-#include <gpio_session/connection.h>
+#include <irq_session/connection.h>
 #include <platform_session/device.h>
 #include <i2c.h>
 
@@ -58,12 +58,10 @@ struct Finger_data
 struct Synaptics
 {
 	enum { FINGERS = 5, I2C_ADDR = 0x20,  };
-	enum Gpio_irq { IRQ = 135 };
 
 	Genode::Env &env;
 	I2c::I2c                     _i2c;
-	Gpio::Connection             _gpio { env, IRQ };
-	Irq_session_client           _irq { _gpio.irq_session(Gpio::Session::LOW_LEVEL) };
+	Irq_connection               _irq { env, Irq_connection::Label() };
 	Io_signal_handler<Synaptics> _irq_dispatcher { env.ep(), *this, &Synaptics::_handle_irq };
 	Event::Connection            _event { env };
 	uint8_t                      _buf[10];
@@ -118,7 +116,6 @@ struct Synaptics
 	Synaptics(Env &env, Platform::Device & i2c_dev)
 	: env(env), _i2c(env, i2c_dev)
 	{
-
 		/* set page 0 */
 		_buf[0] = 0xff;
 		_buf[1] = 0;
@@ -133,9 +130,6 @@ struct Synaptics
 		_buf[0] = 0xe;
 		_buf[1] = 0x84;
 		_i2c.send(I2C_ADDR, _buf, 2);
-
-		/* GPIO touchscreen handling */
-		_gpio.direction(Gpio::Session::IN);
 
 		_irq.sigh(_irq_dispatcher);
 		_irq.ack_irq();

@@ -107,7 +107,7 @@ class Genode::Block_driver
 				Request_cache       &cache()             { return _cache;     }
 				Block::Connection<> &session()           { return _session;   }
 				size_t               block_size()  const { return _info.block_size;  }
-				size_t               block_count() const { return _info.block_count; }
+				uint64_t             block_count() const { return _info.block_count; }
 				bool                 writeable()   const { return _info.writeable; }
 				Name const          &name()        const { return _name;      }
 				unsigned             irq()         const { return _irq;       }
@@ -115,7 +115,7 @@ class Genode::Block_driver
 
 		void             *_buf       = nullptr;
 		size_t            _buf_size  = 0;
-		Id_space<Device>  _devs;
+		Id_space<Device>  _devs { };
 		unsigned          _dev_count = 0;
 		Allocator_avl     _dev_alloc;
 

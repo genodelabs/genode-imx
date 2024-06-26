@@ -62,7 +62,7 @@ class Mmu
 		Genode::addr_t _section(Genode::addr_t fe, Genode::addr_t va) {
 			return ((fe & 0xfff00000) | (va & 0xfffff)); }
 
-		Genode::addr_t _supersection(Genode::addr_t fe, Genode::addr_t va)
+		Genode::addr_t _supersection(Genode::addr_t, Genode::addr_t)
 		{
 			Genode::warning(__func__, " not implemented yet!");
 			return 0;

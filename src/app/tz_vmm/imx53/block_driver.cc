@@ -100,7 +100,7 @@ Block_driver::Block_driver(Env       &env,
 }
 
 
-void Block_driver::_name(Vm &vm, Vcpu_state &state)
+void Block_driver::_name(Vm &, Vcpu_state &state)
 {
 	_dev_apply(Device::Id { state.r2 },
 		[&] (Device &dev) { copy_cstring((char *)_buf, dev.name().string(), _buf_size); },
@@ -108,15 +108,16 @@ void Block_driver::_name(Vm &vm, Vcpu_state &state)
 }
 
 
-void Block_driver::_block_count(Vm &vm, Vcpu_state &state)
+void Block_driver::_block_count(Vm &, Vcpu_state &state)
 {
 	_dev_apply(Device::Id { state.r2 },
-		[&] (Device &dev) { state.r0 = dev.block_count(); },
+		[&] (Device &dev) { state.r0 = dev.block_count() & ~0UL;
+		                    state.r1 = (dev.block_count() >> 32) & ~0UL; },
 		[&] ()            { state.r0 = 0; });
 }
 
 
-void Block_driver::_block_size(Vm &vm, Vcpu_state &state)
+void Block_driver::_block_size(Vm &, Vcpu_state &state)
 {
 	_dev_apply(Device::Id { state.r2 },
 		[&] (Device &dev) { state.r0 = dev.block_size(); },
@@ -124,7 +125,7 @@ void Block_driver::_block_size(Vm &vm, Vcpu_state &state)
 }
 
 
-void Block_driver::_queue_size(Vm &vm, Vcpu_state &state)
+void Block_driver::_queue_size(Vm &, Vcpu_state &state)
 {
 	_dev_apply(Device::Id { state.r2 },
 		[&] (Device &dev) { state.r0 = dev.session().tx()->bulk_buffer_size(); },
@@ -132,7 +133,7 @@ void Block_driver::_queue_size(Vm &vm, Vcpu_state &state)
 }
 
 
-void Block_driver::_writeable(Vm &vm, Vcpu_state &state)
+void Block_driver::_writeable(Vm &, Vcpu_state &state)
 {
 	_dev_apply(Device::Id { state.r2 },
 		[&] (Device &dev) { state.r0 = dev.writeable(); },
@@ -140,7 +141,7 @@ void Block_driver::_writeable(Vm &vm, Vcpu_state &state)
 }
 
 
-void Block_driver::_irq(Vm &vm, Vcpu_state &state)
+void Block_driver::_irq(Vm &, Vcpu_state &state)
 {
 	_dev_apply(Device::Id { state.r2 },
 		[&] (Device &dev) { state.r0 = dev.irq(); },
@@ -169,7 +170,7 @@ void Block_driver::_buffer(Vm &vm, Vcpu_state &state)
 }
 
 
-void Block_driver::_new_request(Vm &vm, Vcpu_state &state)
+void Block_driver::_new_request(Vm &, Vcpu_state &state)
 {
 	auto dev_func = [&] (Device &dev) {
 		try {
@@ -198,7 +199,7 @@ void Block_driver::_new_request(Vm &vm, Vcpu_state &state)
 }
 
 
-void Block_driver::_submit_request(Vm &vm, Vcpu_state &state)
+void Block_driver::_submit_request(Vm &, Vcpu_state &state)
 {
 	auto dev_func = [&] (Device &dev) {
 
@@ -216,7 +217,7 @@ void Block_driver::_submit_request(Vm &vm, Vcpu_state &state)
 			}
 			memcpy(dst, _buf, size);
 		}
-		size_t const sector     = disc_offset / dev.block_size();
+		Block::block_number_t const sector = disc_offset / dev.block_size();
 		size_t const sector_cnt = size / dev.block_size();
 		Packet_descriptor pkt(Packet_descriptor(queue_offset, size),
 		                      write ? Packet_descriptor::WRITE :
@@ -229,7 +230,7 @@ void Block_driver::_submit_request(Vm &vm, Vcpu_state &state)
 }
 
 
-void Block_driver::_collect_reply(Vm &vm, Vcpu_state &state)
+void Block_driver::_collect_reply(Vm &, Vcpu_state &state)
 {
 	auto dev_func = [&] (Device &dev) {
 

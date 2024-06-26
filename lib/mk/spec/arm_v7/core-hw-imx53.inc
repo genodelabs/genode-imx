@@ -4,6 +4,8 @@
 # \date   2014-09-02
 #
 
+REQUIRES = hw
+
 # add C++ sources
 SRC_CC += kernel/cpu_up.cc
 SRC_CC += kernel/lock.cc

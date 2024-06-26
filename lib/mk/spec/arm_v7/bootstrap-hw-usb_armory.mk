@@ -1,3 +1,5 @@
+REQUIRES = hw
+
 REP_INC_DIR += src/bootstrap/board/usb_armory
 
 SRC_CC  += bootstrap/board/usb_armory/platform.cc

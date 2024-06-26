@@ -215,11 +215,14 @@ struct Framebuffer::Ipu : Platform::Device::Mmio<0x1080000 + 15 * 4 + 4>
 		void *dst =(void*)(base() + Cp_mem::OFFSET + channel*sizeof(Cp_mem));
 		Cp_mem cpmem;
 
-		cpmem.fw   = width  - 1;
-		cpmem.fh   = height - 1;
-		cpmem.sly  = stride - 1;
-		cpmem.eba0 = phys_base >> 3;
-		cpmem.eba1 = phys_base >> 3;
+		Genode::addr_t addr = phys_base >> 3;
+
+		cpmem.fw   = (width  - 1) & ((1<<13)-1);
+		cpmem.fh   = (height - 1) & ((1<<12)-1);
+		cpmem.sly  = (stride - 1) & ((1<<14)-1);
+		cpmem.eba0 = addr         & ((1<<29)-1);
+		cpmem.eba1 = addr         & ((1<<29)-1);
+
 		cpmem.bpp  = 0;  /* corresponds to 32BPP      */
 		cpmem.pfs  = 7;  /* corresponds to RGB        */
 		cpmem.npb  = 15;

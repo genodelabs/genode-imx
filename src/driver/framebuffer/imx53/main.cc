@@ -36,25 +36,20 @@ struct Framebuffer::Main
 {
 	using Pixel = Capture::Pixel;
 
-	static unsigned _display(Xml_node node) {
-		return node.attribute_value<unsigned>("display", 0U); }
+	Env & _env;
 
-	static size_t _width(Xml_node node) {
-		return node.attribute_value<size_t>("width", 800UL); }
+	Attached_rom_dataspace _config { _env, "config" };
 
-	static size_t _height(Xml_node node) {
-		return node.attribute_value<size_t>("height", 480UL); }
+	unsigned _disp   { _config.xml().attribute_value<unsigned>("display",  0U) };
+	uint16_t _width  { _config.xml().attribute_value<uint16_t>("width",  800U) };
+	uint16_t _height { _config.xml().attribute_value<uint16_t>("height", 480U) };
 
-	Env &                       _env;
-	Attached_rom_dataspace      _config   { _env, "config" };
-	unsigned                    _disp     { _display(_config.xml()) };
-	Capture::Area const         _size     { _width(_config.xml()),
-	                                        _height(_config.xml()) };
-	Platform::Connection        _platform { _env      };
-	Platform::Device            _device   { _platform };
-	Platform::Dma_buffer        _fb_buf   { _platform,
-	                                        _size.count()*sizeof(Pixel),
-	                                        CACHED };
+	Capture::Area const  _size     { _width, _height };
+	Platform::Connection _platform { _env      };
+	Platform::Device     _device   { _platform };
+	Platform::Dma_buffer _fb_buf   { _platform,
+	                                 _size.count()*sizeof(Pixel),
+	                                 CACHED };
 	Ipu                         _ipu      { _device   };
 	Capture::Connection         _capture  { _env };
 	Capture::Connection::Screen _captured_screen { _capture, _env.rm(), _size };
@@ -74,7 +69,7 @@ struct Framebuffer::Main
 	{
 		log("--- i.MX53 framebuffer driver ---");
 
-		_ipu.init(_size.w, _size.h, _size.w * BYTES_PER_PIXEL,
+		_ipu.init(_width, _height, _width * BYTES_PER_PIXEL,
 		          _fb_buf.dma_addr(), _disp == 0);
 
 		_timer.sigh(_timer_handler);

@@ -26,9 +26,9 @@ void Serial_driver::_flush()
 }
 
 
-void Serial_driver::_send(Vm &vm, Vcpu_state &state)
+void Serial_driver::_send(Vm &, Vcpu_state &state)
 {
-	char const c = state.r2;
+	char const c = state.r2 & 0xff;
 	if (c == '\n') {
 		_flush();
 	} else {

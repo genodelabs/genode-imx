@@ -4,6 +4,8 @@
 # \date   2015-02-09
 #
 
+REQUIRES = hw
+
 # add include paths
 REP_INC_DIR += src/core/board/imx7d_sabre
 REP_INC_DIR += src/core/spec/arm/virtualization

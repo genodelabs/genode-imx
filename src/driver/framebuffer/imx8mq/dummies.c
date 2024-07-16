@@ -153,10 +153,6 @@ void arch_teardown_dma_ops(struct device * dev)
 }
 
 
-bool arm64_use_ng_mappings = false;
-EXPORT_SYMBOL(arm64_use_ng_mappings);
-
-
 #include <linux/init.h>
 
 char __initdata boot_command_line[] = { 0 };

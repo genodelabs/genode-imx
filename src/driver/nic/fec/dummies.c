@@ -355,8 +355,6 @@ void synchronize_srcu(struct srcu_struct * ssp)
 	lx_emul_trace(__func__);
 }
 
-bool arm64_use_ng_mappings = false;
-EXPORT_SYMBOL(arm64_use_ng_mappings);
 
 #include <linux/filter.h>
 

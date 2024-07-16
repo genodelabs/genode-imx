@@ -23,13 +23,6 @@ int alloc_chrdev_region(dev_t * dev,unsigned baseminor,unsigned count,const char
 }
 
 
-extern int cache_line_size(void);
-int cache_line_size(void)
-{
-	return 128;
-}
-
-
 #include <linux/blkdev.h>
 #include <linux/sched.h>
 

@@ -33,10 +33,6 @@ unsigned long __must_check __arch_clear_user(void __user *to, unsigned long n)
 	lx_emul_trace_and_stop(__func__);
 }
 
-bool arm64_use_ng_mappings = false;
-EXPORT_SYMBOL(arm64_use_ng_mappings);
-
-
 #include <linux/gfp.h>
 
 struct page * alloc_pages_current(gfp_t gfp,unsigned order)

@@ -105,9 +105,6 @@ const u8 shipped_regdb_certs[] = { };
 unsigned int shipped_regdb_certs_len = sizeof (shipped_regdb_certs);
 
 
-bool arm64_use_ng_mappings = false;
-
-
 #include <linux/mm.h>
 
 DEFINE_STATIC_KEY_FALSE(init_on_alloc);

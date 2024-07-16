@@ -55,9 +55,6 @@ void lx_emul_register_pci_fixup(void (*fn)(struct pci_dev*),
 }
 
 
-bool arm64_use_ng_mappings;
-
-
 unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n);
 unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n)
 {

@@ -153,10 +153,6 @@ void arch_setup_dma_ops(struct device * dev,u64 dma_base,u64 size,const struct i
 }
 
 
-bool arm64_use_ng_mappings = false;
-EXPORT_SYMBOL(arm64_use_ng_mappings);
-
-
 #include <linux/backing-dev.h>
 
 struct backing_dev_info * bdi_alloc(int node_id)

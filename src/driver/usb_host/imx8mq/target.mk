@@ -22,7 +22,6 @@ CC_OPT_drivers/usb/host/xhci-trace += -I$(LX_CONTRIB_DIR)/drivers/usb/host
 
 CC_OPT_drivers/base/regmap/regmap   += -I$(LX_SRC_DIR)/drivers/base/regmap
 
-
 #
 # Genode C-API backends
 #
@@ -33,10 +32,13 @@ vpath genode_c_api/usb.cc      $(subst /genode_c_api,,$(call select_from_reposit
 vpath lx_emul/common_dummies.c $(REP_DIR)/src/lib/imx
 
 # Driver-specific device-tree binary data
-BOARDS                   := imx8q_evk mnt_pocket mnt_reform2
-DTS_PATH(imx8q_evk)      := arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-DTS_EXTRACT(imx8q_evk)   := --select usb_dwc3_0 --select usb_dwc3_1
-DTS_PATH(mnt_pocket)     := arch/arm64/boot/dts/freescale/imx8mp-mnt-pocket-reform.dts
-DTS_EXTRACT(mnt_pocket)  := --select usb_dwc3_0 --select usb_dwc3_1
-DTS_PATH(mnt_reform2)    := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
-DTS_EXTRACT(mnt_reform2) := --select usb_dwc3_0 --select usb_dwc3_1
+
+BOARDS                       := imx8q_evk imx8mp_iot_gate mnt_pocket mnt_reform2
+DTS_PATH(imx8q_evk)          := arch/arm64/boot/dts/freescale/imx8mq-evk.dts
+DTS_EXTRACT(imx8q_evk)       := --select usb_dwc3_0 --select usb_dwc3_1
+DTS_PATH(imx8mp_iot_gate)    := arch/arm64/boot/dts/compulab/iot-gate-imx8plus.dts
+DTS_EXTRACT(imx8mp_iot_gate) := --select usb_dwc3_0 --select usb_dwc3_1
+DTS_PATH(mnt_pocket)         := arch/arm64/boot/dts/freescale/imx8mp-mnt-pocket-reform.dts
+DTS_EXTRACT(mnt_pocket)      := --select usb_dwc3_0 --select usb_dwc3_1
+DTS_PATH(mnt_reform2)        := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
+DTS_EXTRACT(mnt_reform2)     := --select usb_dwc3_0 --select usb_dwc3_1

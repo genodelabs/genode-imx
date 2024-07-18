@@ -841,6 +841,16 @@ struct Driver::Ccm
 	                                           audio_pll1_clk, audio_pll2_clk,
 	                                           video_pll_clk, system_pll1_div6,
 	                                           no_clk, ext_clk_3, ext_clk_4 };
+	Root_clock usb_core_clk_root             { clocks, "usb_core_clk_root",
+	                                           ccm_regs.range_at(0xb100), m24_ref_clk,
+	                                           system_pll1_div8, system_pll1_div20,
+	                                           system_pll2_div10, system_pll2_div5,
+	                                           ext_clk_2, ext_clk_3, audio_pll2_clk };
+	Root_clock usb_phy_clk_root              { clocks, "usb_phy_clk_root",
+	                                           ccm_regs.range_at(0xb180), m24_ref_clk,
+	                                           system_pll1_div8, system_pll1_div20,
+	                                           system_pll2_div10, system_pll2_div5,
+	                                           ext_clk_2, ext_clk_3, audio_pll2_clk };
 
 	Root_clock_divider ipg_clk_root          { clocks, "ipg_clk_root",
 	                                           root_range(33), ahb_clk_root };
@@ -961,6 +971,8 @@ struct Driver::Ccm
 	                        gate_range(76),  uart4_clk_root };
 	Gate usb_gate         { clocks, "usb_gate",
 	                        gate_range(77),  hsio_axi_clk_root };
+	Gate usb_phy_gate     { clocks, "usb_phy_gate",
+	                        gate_range(79),  usb_phy_clk_root };
 	Gate usdhc1_gate      { clocks, "usdhc1_gate",
 	                        gate_range(81),  usdhc1_clk_root };
 	Gate usdhc2_gate      { clocks, "usdhc2_gate",

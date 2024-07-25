@@ -215,12 +215,6 @@ void dwc3_debugfs_init(struct dwc3 * dwc)
 }
 
 
-#include <linux/mm.h>
-
-DEFINE_STATIC_KEY_FALSE(init_on_alloc);
-DEFINE_STATIC_KEY_FALSE(init_on_free);
-
-
 #include <linux/ioport.h>
 
 int insert_resource(struct resource * parent,struct resource * new)

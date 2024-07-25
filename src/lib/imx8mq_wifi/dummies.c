@@ -105,11 +105,6 @@ const u8 shipped_regdb_certs[] = { };
 unsigned int shipped_regdb_certs_len = sizeof (shipped_regdb_certs);
 
 
-#include <linux/mm.h>
-
-DEFINE_STATIC_KEY_FALSE(init_on_alloc);
-
-
 #include <linux/rcutree.h>
 
 void synchronize_rcu_expedited(void)

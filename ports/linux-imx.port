@@ -1,32 +1,44 @@
 LICENSE   := GPLv2
-VERSION   := 6.1.20
-DOWNLOADS := linux-imx.archive reform-debian-packages.git compulab.git
+VERSION   := 6.6.47
+DOWNLOADS := linux-imx.archive reform-debian-packages.git
 
 URL(linux-imx) := https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-$(VERSION).tar.xz
-SHA(linux-imx) := 76322de8c01a3c63b42c4d1e9b9e7d1897ddb91276e10d73d1f9df3562f031f0
+SHA(linux-imx) := d43376c9e9eaa92bb1b926054bd160d329c58a62d64bd65fe1222c11c6564f50
 DIR(linux-imx) := linux-imx
 
 URL(reform-debian-packages) := https://source.mnt.re/reform/reform-debian-packages.git
-REV(reform-debian-packages) := 5110500a6b6df1fdeb3d1dc0caf1b30bb4b0ead5
+REV(reform-debian-packages) := c4e993a72d077086c96f4e5ca5854841d53bfae0
 DIR(reform-debian-packages) := reform
 
-URL(compulab) := https://github.com/skalk/compulab-linux-kernel-dts.git
-REV(compulab) := d885d5b38927255387202aa65d669b6b7df044c4
-DIR(compulab) := linux-imx/arch/arm64/boot/dts/compulab
-
 PATCHES := src/driver/usb_host/imx8mq/imx8mq-evk-enable-usb-c-dts.patch
-PATCHES += patches/linux-compulab.patch patches/linux-fsl-imx8mp.patch
-PATCHES += patches/prevent_pldw_bitops.patch
-PATCHES += patches/imx8mq-evk-enable-hdmi-dts.patch
+PATCHES += patches/linux-compulab-dts.patch
+PATCHES += patches/linux-imx8mq-evk-enable-hdmi-dts.patch
+PATCHES += patches/linux-mnt-dts.patch
+PATCHES += patches/linux-prevent_pldw_bitops.patch
 
-PATCH_OPT(patches/linux-compulab.patch)   := -p1 --directory=linux-imx
-PATCH_OPT(patches/linux-fsl-imx8mp.patch) := -p1 --directory=linux-imx
-PATCH_OPT(patches/prevent_pldw_bitops.patch) := -p1 --directory=linux-imx
-PATCH_OPT(patches/imx8mq-evk-enable-hdmi-dts.patch) := -p1 --directory=linux-imx
+PATCH_OPT(patches/linux-compulab-dts.patch)               := -p1 --directory=linux-imx
+PATCH_OPT(patches/linux-imx8mq-evk-enable-hdmi-dts.patch) := -p1 --directory=linux-imx
+PATCH_OPT(patches/linux-mnt-dts.patch)                    := -p1 --directory=linux-imx
+PATCH_OPT(patches/linux-prevent_pldw_bitops.patch)        := -p1 --directory=linux-imx
 
-default: reform-debian-packages.git linux-imx.archive compulab.git
-	cd linux-imx; for p in ../reform/linux/patches6.1/*.patch; do patch -p1 < $$p; done; cd ..
-	cp reform/linux/*.dts linux-imx/arch/arm64/boot/dts/freescale/
+MNT_PATCHES := imx8mp-mnt-pocket-reform/2ghz/0001-imx8mp-2ghz-clk.patch \
+               imx8mp-mnt-pocket-reform/2ghz/0002-imx8mp-2ghz-opp.patch \
+               imx8mp-mnt-pocket-reform/hdmi/0003-phy-freescale-add-Samsung-HDMI-PHY.patch \
+               imx8mp-mnt-pocket-reform/hdmi/0005-drm-imx-add-driver-for-HDMI-TX-Parallel-Video-Interf.patch \
+               imx8mp-mnt-pocket-reform/hdmi/0008-drm-imx-add-bridge-wrapper-driver-for-i.MX8MP-DWC-HD.patch \
+               imx8mp-mnt-pocket-reform/hdmi/0011-hdmi-pvi-makefile.patch \
+               imx8mp-mnt-pocket-reform/mmc-sdio/0001-sdhci-add-no-sd-uhs-sdr104-devicetree-property.patch \
+               imx8mp-mnt-pocket-reform/mmc-sdio/0002-During-the-card-init-the-host-side-sometimes-may-nee.patch \
+               imx8mp-mnt-pocket-reform/mmc-sdio/0003-USDHC-IP-has-one-limitation-the-tuning-circuit-can-t.patch \
+               imx8mp-mnt-pocket-reform/pocket-panel/0001-panel-jdi-lt070me05000-pocket-reform.patch \
+               imx8mq-mnt-reform2/0001-nwl-dsi-fixup-mode-only-for-LCDIF-input-not-DCSS.patch \
+               imx8mq-mnt-reform2/0002-pci-imx6-add-support-for-internal-refclk-imx8mq.patch \
+               imx8mq-mnt-reform2/0003-lcdif-fix-pcie-interference.patch \
+               imx8mq-mnt-reform2/0004-mnt4002-imx-gpcv2-wake-smccc.patch.patch \
+               imx8mq-mnt-reform2/0005-imx8mq-import-HDMI-driver-and-make-DCSS-compatible-w.patch
+
+default: reform-debian-packages.git linux-imx.archive
+	cd linux-imx; for i in $(MNT_PATCHES); do patch -p1 < ../reform/linux/patches6.6/$$i; done; cd ..
 
 #
 # Unfortunately, we have to check manually whether the target linux archive got already

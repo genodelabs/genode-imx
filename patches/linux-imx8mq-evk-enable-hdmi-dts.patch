@@ -1,6 +1,6 @@
 --- a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
 +++ b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-@@ -103,6 +103,89 @@
+@@ -139,6 +139,89 @@ sound-hdmi-arc {
  		spdif-controller = <&spdif2>;
  		spdif-in;
  	};

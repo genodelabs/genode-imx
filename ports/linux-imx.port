@@ -15,11 +15,13 @@ PATCHES += patches/linux-compulab-dts.patch
 PATCHES += patches/linux-imx8mq-evk-enable-hdmi-dts.patch
 PATCHES += patches/linux-mnt-dts.patch
 PATCHES += patches/linux-prevent_pldw_bitops.patch
+PATCHES += patches/linux-fus-dts.patch
 
 PATCH_OPT(patches/linux-compulab-dts.patch)               := -p1 --directory=linux-imx
 PATCH_OPT(patches/linux-imx8mq-evk-enable-hdmi-dts.patch) := -p1 --directory=linux-imx
 PATCH_OPT(patches/linux-mnt-dts.patch)                    := -p1 --directory=linux-imx
 PATCH_OPT(patches/linux-prevent_pldw_bitops.patch)        := -p1 --directory=linux-imx
+PATCH_OPT(patches/linux-fus-dts.patch)                    := -p1 --directory=linux-imx
 
 MNT_PATCHES := imx8mp-mnt-pocket-reform/2ghz/0001-imx8mp-2ghz-clk.patch \
                imx8mp-mnt-pocket-reform/2ghz/0002-imx8mp-2ghz-opp.patch \

@@ -79,7 +79,8 @@ proc cpio_desc { } {
 }
 
 proc uart { } {
-	if {[have_board "mnt_pocket"]} { return "ttymxc1" }
+	if {[have_board "imx8mp_armstone"]} { return "ttymxc1" }
+	if {[have_board "mnt_pocket"]}      { return "ttymxc1" }
 	if {[have_board "imx8mp_iot_gate"]} { return "ttymxc1" }
 	if {[have_board "imx8q_evk"]}       { return "ttymxc0" }
 	if {[have_board "mnt_reform2"]}     { return "ttymxc0" }
@@ -111,6 +112,7 @@ proc linux_arch { } {
 }
 
 proc load_addr { } {
+	if {[have_board "imx8mp_armstone"]} { return 0x40200000 }
 	if {[have_board "mnt_pocket"]}      { return 0x40200000 }
 	if {[have_board "imx8mp_iot_gate"]} { return 0x40200000 }
 	if {[have_board "imx8q_evk"]}       { return 0x40200000 }
@@ -120,6 +122,9 @@ proc load_addr { } {
 }
 
 proc dtb { } {
+	if {[have_board "imx8mp_armstone"]} {
+		return [pwd]/imx_linux/arm_v8a/arch/arm64/boot/dts/F+S/armstonemx8mp.dtb
+	}
 	if {[have_board "mnt_pocket"]} {
 		return [pwd]/imx_linux/arm_v8a/arch/arm64/boot/dts/freescale/imx8mp-mnt-pocket-reform.dtb
 	}

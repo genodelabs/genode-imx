@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2024-05-14
+ * \date   2024-09-06
  */
 
 #include <lx_emul.h>
@@ -102,6 +102,11 @@ int _printk_deferred(const char * fmt,...)
 }
 
 
+#include <linux/mm.h>
+
+atomic_long_t _totalram_pages;
+
+
 #include <linux/random.h>
 
 void __init add_bootloader_randomness(const void * buf,size_t len)
@@ -158,6 +163,11 @@ void async_synchronize_full(void)
 }
 
 
+#include <linux/blkdev.h>
+
+struct class block_class;
+
+
 #include <linux/init.h>
 
 char __initdata boot_command_line[] = {};
@@ -203,17 +213,25 @@ void console_verbose(void)
 }
 
 
-#include <linux/pm_qos.h>
+#include <linux/cpumask.h>
 
-enum pm_qos_flags_status dev_pm_qos_flags(struct device * dev,s32 mask)
+unsigned int cpumask_any_and_distribute(const struct cpumask * src1p,const struct cpumask * src2p)
 {
 	lx_emul_trace_and_stop(__func__);
 }
 
 
-#include <linux/property.h>
+#include <linux/sched/topology.h>
 
-int device_create_managed_software_node(struct device * dev,const struct property_entry * properties,const struct software_node * parent)
+bool cpus_share_cache(int this_cpu,int that_cpu)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/pm_qos.h>
+
+enum pm_qos_flags_status dev_pm_qos_flags(struct device * dev,s32 mask)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -248,6 +266,14 @@ asmlinkage __visible void dump_stack(void)
 }
 
 
+#include <linux/printk.h>
+
+asmlinkage __visible void dump_stack_lvl(const char * log_lvl)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/reboot.h>
 
 void emergency_restart(void)
@@ -269,6 +295,14 @@ void finish_rcuwait(struct rcuwait * w)
 struct kobject *firmware_kobj;
 
 
+#include <linux/mmzone.h>
+
+struct pglist_data * first_online_pgdat(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 extern void flush_dcache_page(struct page * page);
 void flush_dcache_page(struct page * page)
 {
@@ -286,7 +320,31 @@ void * gen_pool_dma_alloc(struct gen_pool * pool,size_t size,dma_addr_t * dma)
 
 #include <linux/genalloc.h>
 
+void * gen_pool_dma_alloc_align(struct gen_pool * pool,size_t size,dma_addr_t * dma,int align)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/genalloc.h>
+
 void gen_pool_free_owner(struct gen_pool * pool,unsigned long addr,size_t size,void ** owner)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/kernel.h>
+
+int get_option(char ** str,int * pint)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gfp.h>
+
+bool gfp_pfmemalloc_allowed(gfp_t gfp_mask)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -313,6 +371,14 @@ struct uts_namespace init_uts_ns;
 #include <linux/init.h>
 
 bool initcall_debug;
+
+
+#include <linux/fs.h>
+
+struct timespec64 inode_set_ctime_current(struct inode * inode)
+{
+	lx_emul_trace_and_stop(__func__);
+}
 
 
 #include <linux/sched.h>
@@ -345,11 +411,6 @@ long __sched io_schedule_timeout(long timeout)
 {
 	lx_emul_trace_and_stop(__func__);
 }
-
-
-#include <linux/swiotlb.h>
-
-struct io_tlb_mem io_tlb_default_mem;
 
 
 #include <linux/ioport.h>
@@ -385,14 +446,6 @@ void irq_work_tick(void)
 }
 
 
-#include <linux/property.h>
-
-bool is_software_node(const struct fwnode_handle * fwnode)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/kobject.h>
 
 struct kobject *kernel_kobj;
@@ -401,14 +454,6 @@ struct kobject *kernel_kobj;
 #include <linux/sched/signal.h>
 
 int kill_pid_usb_asyncio(int sig,int errno,sigval_t addr,struct pid * pid,const struct cred * cred)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/slab.h>
-
-void * kmem_cache_alloc_lru(struct kmem_cache * cachep,struct list_lru * lru,gfp_t flags)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -440,97 +485,25 @@ unsigned long logic_pio_trans_hwaddr(struct fwnode_handle * fwnode,resource_size
 
 #include <linux/delay.h>
 
+unsigned long loops_per_jiffy;
+
+
+#include <linux/delay.h>
+
 unsigned long lpj_fine;
-
-
-#include <linux/memblock.h>
-
-struct memblock memblock;
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_add(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-void __init memblock_cap_memory_range(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_clear_nomap(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-bool __init_memblock memblock_is_region_reserved(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_mark_hotplug(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_mark_nomap(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-bool __init_memblock memblock_overlaps_region(struct memblock_type * type,phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-phys_addr_t __init memblock_phys_alloc_range(phys_addr_t size,phys_addr_t align,phys_addr_t start,phys_addr_t end)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_phys_free(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_reserve(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
 
 
 #include <linux/string.h>
 
 ssize_t memory_read_from_buffer(void * to,size_t count,loff_t * ppos,const void * from,size_t available)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/mmzone.h>
+
+struct pglist_data * next_online_pgdat(struct pglist_data * pgdat)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -565,6 +538,14 @@ void note_interrupt(struct irq_desc * desc,irqreturn_t action_ret)
 }
 
 
+#include <linux/of.h>
+
+ssize_t of_modalias(const struct device_node * np,char * str,ssize_t len)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/serial_core.h>
 
 int __init of_setup_earlycon(const struct earlycon_id * match,unsigned long node,const char * options)
@@ -580,12 +561,12 @@ enum reboot_mode panic_reboot_mode;
 
 #include <linux/blkdev.h>
 
-struct device_type part_type;
+const struct device_type part_type;
 
 
 #include <linux/pci.h>
 
-int pci_alloc_irq_vectors_affinity(struct pci_dev * dev,unsigned int min_vecs,unsigned int max_vecs,unsigned int flags,struct irq_affinity * affd)
+int pci_alloc_irq_vectors(struct pci_dev * dev,unsigned int min_vecs,unsigned int max_vecs,unsigned int flags)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -598,7 +579,7 @@ struct bus_type pci_bus_type;
 
 #include <linux/pci.h>
 
-void pci_clear_mwi(struct pci_dev * dev)
+pci_power_t pci_choose_state(struct pci_dev * dev,pm_message_t state)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -639,14 +620,6 @@ void pci_disable_device(struct pci_dev * dev)
 #include <linux/pci.h>
 
 int pci_enable_device(struct pci_dev * dev)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/pci.h>
-
-u8 pci_find_capability(struct pci_dev * dev,int cap)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -816,6 +789,20 @@ int proc_douintvec(struct ctl_table * table,int write,void * buffer,size_t * len
 }
 
 
+extern void raw_spin_rq_lock_nested(struct rq * rq,int subclass);
+void raw_spin_rq_lock_nested(struct rq * rq,int subclass)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern void raw_spin_rq_unlock(struct rq * rq);
+void raw_spin_rq_unlock(struct rq * rq)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/reboot.h>
 
 enum reboot_mode reboot_mode;
@@ -861,6 +848,14 @@ int remap_pfn_range(struct vm_area_struct * vma,unsigned long addr,unsigned long
 }
 
 
+#include <linux/mm.h>
+
+void __meminit reserve_bootmem_region(phys_addr_t start,phys_addr_t end,int nid)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/reset.h>
 
 int reset_control_reset(struct reset_control * rstc)
@@ -872,6 +867,20 @@ int reset_control_reset(struct reset_control * rstc)
 #include <linux/seq_file.h>
 
 void seq_vprintf(struct seq_file * m,const char * f,va_list args)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern void set_rq_offline(struct rq * rq);
+void set_rq_offline(struct rq * rq)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern void set_rq_online(struct rq * rq);
+void set_rq_online(struct rq * rq)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -932,6 +941,30 @@ int suppress_printk;
 const int sysctl_vals[] = {};
 
 
+#include <linux/sysfs.h>
+
+struct kernfs_node * sysfs_break_active_protection(struct kobject * kobj,const struct attribute * attr)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+void sysfs_unbreak_active_protection(struct kernfs_node * kn)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_update_group(struct kobject * kobj,const struct attribute_group * grp)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/task_work.h>
 
 int task_work_add(struct task_struct * task,struct callback_head * work,enum task_work_notify_mode notify)
@@ -942,7 +975,7 @@ int task_work_add(struct task_struct * task,struct callback_head * work,enum tas
 
 #include <linux/task_work.h>
 
-struct callback_head * task_work_cancel(struct task_struct * task,task_work_func_t func)
+struct callback_head * task_work_cancel_func(struct task_struct * task,task_work_func_t func)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -978,6 +1011,13 @@ void unregister_irq_proc(unsigned int irq,struct irq_desc * desc)
 }
 
 
+extern void update_group_capacity(struct sched_domain * sd,int cpu);
+void update_group_capacity(struct sched_domain * sd,int cpu)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/uuid.h>
 
 const u8 uuid_index[16] = {};
@@ -989,21 +1029,4 @@ void vfree(const void * addr)
 {
 	lx_emul_trace_and_stop(__func__);
 }
-
-
-#include <linux/sched/wake_q.h>
-
-void wake_q_add_safe(struct wake_q_head * head,struct task_struct * task)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/posix-timers.h>
-
-void run_posix_cpu_timers(void)
-{
-	lx_emul_trace(__func__);
-}
-
 

@@ -86,3 +86,17 @@ void do_softirq_own_stack(void)
 {
 	__do_softirq();
 }
+
+
+#include <linux/kernfs.h>
+
+struct kernfs_node * kernfs_find_and_get_ns(struct kernfs_node * parent,const char * name,const void * ns)
+{
+	static struct kernfs_node dummy;
+
+	/* usb_hub_create_port_device requires existing "state" dirent */
+	if (strncmp("state", name, 5) == 0)
+		return &dummy;
+
+	return NULL;
+}

@@ -542,7 +542,6 @@ u64 vabits_actual;
 #include <linux/tracepoint-defs.h>
 
 const struct trace_print_flags vmaflag_names[]  = { {0,NULL}};
-const struct trace_print_flags pageflag_names[]  = { {0,NULL}};
 const struct trace_print_flags gfpflag_names[]  = { {0,NULL}};
 
 
@@ -571,6 +570,15 @@ void __init posix_cputimers_init_work(void)
 {
     lx_emul_trace(__func__);
 }
+
+
+#include <linux/posix-timers.h>
+
+void run_posix_cpu_timers(void)
+{
+	lx_emul_trace(__func__);
+}
+
 
 
 #include <linux/timekeeper_internal.h>
@@ -686,16 +694,15 @@ void sysfs_remove_group(struct kobject * kobj,const struct attribute_group * grp
 
 #include <linux/kernfs.h>
 
-struct kernfs_node * kernfs_find_and_get_ns(struct kernfs_node * parent,const char * name,const void * ns)
+void kernfs_get(struct kernfs_node * kn)
 {
 	lx_emul_trace(__func__);
-	return NULL;
 }
 
 
 #include <linux/kernfs.h>
 
-void kernfs_get(struct kernfs_node * kn)
+void kernfs_notify(struct kernfs_node * kn)
 {
 	lx_emul_trace(__func__);
 }
@@ -754,20 +761,6 @@ void pm_runtime_remove(struct device * dev)
 }
 
 
-extern void software_node_notify(struct device * dev);
-void software_node_notify(struct device * dev)
-{
-	lx_emul_trace(__func__);
-}
-
-
-extern void software_node_notify_remove(struct device * dev);
-void software_node_notify_remove(struct device * dev)
-{
-	lx_emul_trace(__func__);
-}
-
-
 extern int dpm_sysfs_add(struct device * dev);
 int dpm_sysfs_add(struct device * dev)
 {
@@ -779,15 +772,6 @@ int dpm_sysfs_add(struct device * dev)
 #include <linux/logic_pio.h>
 
 struct logic_pio_hwaddr * find_io_range_by_fwnode(struct fwnode_handle * fwnode)
-{
-	lx_emul_trace(__func__);
-	return NULL;
-}
-
-
-#include <linux/sysctl.h>
-
-struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
 {
 	lx_emul_trace(__func__);
 	return NULL;
@@ -813,7 +797,9 @@ bool parse_option_str(const char * str,const char * option)
 
 #include <linux/sysctl.h>
 
-void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name)
+void __init __register_sysctl_init(const char * path, struct ctl_table * table,
+                                   const char * table_name, size_t table_size)
+
 {
 	lx_emul_trace(__func__);
 }

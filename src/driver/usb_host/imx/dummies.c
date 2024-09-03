@@ -46,8 +46,8 @@ void account_process_tick(struct task_struct * p,int user_tick)
 }
 
 
-extern void arch_trigger_cpumask_backtrace(const cpumask_t * mask,bool exclude_self);
-void arch_trigger_cpumask_backtrace(const cpumask_t * mask,bool exclude_self)
+extern void arch_trigger_cpumask_backtrace(const cpumask_t * mask, int exclude_cpu);
+void arch_trigger_cpumask_backtrace(const cpumask_t * mask, int exclude_cpu)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -72,11 +72,6 @@ noinstr void ct_irq_exit(void)
 #include <linux/tracepoint-defs.h>
 
 const struct trace_print_flags vmaflag_names[]  = { {0,NULL}};
-
-
-#include <linux/tracepoint-defs.h>
-
-const struct trace_print_flags pageflag_names[]  = { {0,NULL}};
 
 
 #include <linux/tracepoint-defs.h>
@@ -154,10 +149,9 @@ int kobject_uevent(struct kobject * kobj,enum kobject_action action)
 
 #include <linux/kernfs.h>
 
-struct kernfs_node * kernfs_find_and_get_ns(struct kernfs_node * parent,const char * name,const void * ns)
+void kernfs_notify(struct kernfs_node * kn)
 {
-	lx_emul_trace(__func__);
-	return NULL;
+	lx_emul_trace_and_stop(__func__);
 }
 
 
@@ -319,15 +313,6 @@ void sysfs_remove_file_ns(struct kobject * kobj,const struct attribute * attr,co
 }
 
 
-#include <linux/sysctl.h>
-
-struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
-{
-	lx_emul_trace(__func__);
-	return NULL;
-}
-
-
 #include <linux/syscore_ops.h>
 
 void register_syscore_ops(struct syscore_ops * ops)
@@ -358,7 +343,8 @@ int sysfs_add_file_to_group(struct kobject * kobj,const struct attribute * attr,
 
 #include <linux/sysctl.h>
 
-void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name)
+void __init __register_sysctl_init(const char * path, struct ctl_table * table,
+                                   const char * table_name, size_t table_size)
 {
 	lx_emul_trace(__func__);
 }

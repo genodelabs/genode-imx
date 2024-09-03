@@ -9,7 +9,9 @@ SRC_CC   += lx_emul/random.cc
 SRC_CC   += lx_emul/shared_dma_buffer.cc
 
 SRC_C    += dummies.c
+SRC_C    += gpcv2.c
 SRC_C    += lx_emul.c
+SRC_C    += lx_emul/common_dummies.c
 SRC_C    += lx_emul/shadow/drivers/base/power/runtime.c
 SRC_C    += lx_emul/shadow/drivers/char/random.c
 SRC_C    += lx_emul/usb.c
@@ -27,7 +29,8 @@ CC_OPT_drivers/base/regmap/regmap   += -I$(LX_SRC_DIR)/drivers/base/regmap
 
 SRC_CC  += genode_c_api/usb.cc
 
-vpath genode_c_api/usb.cc $(subst /genode_c_api,,$(call select_from_repositories,src/lib/genode_c_api))
+vpath genode_c_api/usb.cc      $(subst /genode_c_api,,$(call select_from_repositories,src/lib/genode_c_api))
+vpath lx_emul/common_dummies.c $(REP_DIR)/src/lib/imx
 
 # Driver-specific device-tree binary data
 BOARDS                   := imx8q_evk mnt_reform2

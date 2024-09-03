@@ -77,7 +77,7 @@
 	</device>
 
 	<device name="gpio5">
-		<io_mem address="0x30230000" size="0x10000"/>
+		<io_mem address="0x30240000" size="0x10000"/>
 		<irq number="104"/>
 		<irq number="105"/>
 		<clock name="gpio5_gate"/>

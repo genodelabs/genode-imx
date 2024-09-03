@@ -238,7 +238,6 @@ include/asm-generic/emergency-restart.h
 include/asm-generic/error-injection.h
 include/asm-generic/export.h
 include/asm-generic/getorder.h
-include/asm-generic/gpio.h
 include/asm-generic/hardirq.h
 include/asm-generic/hw_irq.h
 include/asm-generic/int-ll64.h
@@ -491,7 +490,6 @@ include/linux/instrumented.h
 include/linux/interrupt.h
 include/linux/interval_tree.h
 include/linux/io.h
-include/linux/ioasid.h
 include/linux/iocontext.h
 include/linux/iommu.h
 include/linux/iopoll.h
@@ -1000,7 +998,6 @@ include/net/netns/xdp.h
 include/net/netns/xfrm.h
 include/net/netprio_cgroup.h
 include/net/nexthop.h
-include/net/page_pool.h
 include/net/pkt_cls.h
 include/net/pkt_sched.h
 include/net/protocol.h

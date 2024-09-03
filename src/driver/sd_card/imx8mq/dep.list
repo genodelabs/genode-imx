@@ -1,10 +1,4 @@
 arch/arm64/boot/dts/compulab/iot-gate-imx8plus.dts
-arch/arm64/boot/dts/compulab/sb-iotgimx8plus.dtsi
-arch/arm64/boot/dts/compulab/ucm-imx8m-plus-can.dtsi
-arch/arm64/boot/dts/compulab/ucm-imx8m-plus.dtsi
-arch/arm64/boot/dts/compulab/ucm-imx8m-plus-hdmi.dtsi
-arch/arm64/boot/dts/compulab/ucm-imx8m-plus-pcie.dtsi
-arch/arm64/boot/dts/compulab/ucm-imx8m-plus-pinctrl.dtsi
 arch/arm64/boot/dts/freescale/imx8mp.dtsi
 arch/arm64/boot/dts/freescale/imx8mp-pinfunc.h
 arch/arm64/boot/dts/freescale/imx8mq.dtsi
@@ -132,7 +126,6 @@ block/blk-map.c
 block/blk-mq-debugfs.h
 block/blk-mq.h
 block/blk-mq-sched.h
-block/blk-mq-tag.h
 block/blk-pm.h
 block/blk-rq-qos.h
 block/blk-stat.h
@@ -227,7 +220,6 @@ include/asm-generic/emergency-restart.h
 include/asm-generic/error-injection.h
 include/asm-generic/export.h
 include/asm-generic/getorder.h
-include/asm-generic/gpio.h
 include/asm-generic/hardirq.h
 include/asm-generic/hw_irq.h
 include/asm-generic/int-ll64.h
@@ -468,7 +460,6 @@ include/linux/instrumentation.h
 include/linux/instrumented.h
 include/linux/interrupt.h
 include/linux/interval_tree.h
-include/linux/ioasid.h
 include/linux/iocontext.h
 include/linux/io.h
 include/linux/iommu.h
@@ -947,7 +938,6 @@ include/net/netns/xdp.h
 include/net/netns/xfrm.h
 include/net/netprio_cgroup.h
 include/net/net_trackers.h
-include/net/page_pool.h
 include/net/request_sock.h
 include/net/route.h
 include/net/rtnetlink.h

@@ -15,7 +15,6 @@ crypto/crypto_null.c
 crypto/ctr.c
 crypto/gcm.c
 crypto/geniv.c
-crypto/gf128mul.c
 crypto/ghash-generic.c
 crypto/hash_info.c
 crypto/kpp.c

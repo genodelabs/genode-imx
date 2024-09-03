@@ -78,6 +78,7 @@ arch/arm64/include/asm/syscall_wrapper.h
 arch/arm64/include/asm/sysreg.h
 arch/arm64/include/asm/thread_info.h
 arch/arm64/include/asm/timex.h
+arch/arm64/include/asm/tlbbatch.h
 arch/arm64/include/asm/topology.h
 arch/arm64/include/asm/uaccess.h
 arch/arm64/include/asm/unistd.h
@@ -107,8 +108,8 @@ drivers/usb/common/led.c
 drivers/usb/common/ulpi.c
 drivers/usb/dwc3/core.h
 drivers/usb/dwc3/debug.h
-drivers/usb/dwc3/io.h
 drivers/usb/dwc3/gadget.h
+drivers/usb/dwc3/io.h
 drivers/usb/dwc3/trace.h
 drivers/usb/host/ehci-dbg.c
 drivers/usb/host/ehci-fsl.c
@@ -137,7 +138,6 @@ drivers/usb/host/xhci-ext-caps.h
 drivers/usb/host/xhci-mvebu.h
 drivers/usb/host/xhci-pci.h
 drivers/usb/host/xhci-plat.h
-drivers/usb/host/xhci-rcar.h
 drivers/usb/host/xhci-trace.h
 drivers/usb/host/xhci.h
 drivers/usb/phy/phy-ulpi.c
@@ -282,6 +282,7 @@ include/linux/compiler.h
 include/linux/compiler_attributes.h
 include/linux/compiler_types.h
 include/linux/completion.h
+include/linux/configfs.h
 include/linux/console.h
 include/linux/const.h
 include/linux/container_of.h
@@ -364,7 +365,6 @@ include/linux/interrupt.h
 include/linux/interval_tree.h
 include/linux/io-64-nonatomic-lo-hi.h
 include/linux/io.h
-include/linux/ioasid.h
 include/linux/iocontext.h
 include/linux/iopoll.h
 include/linux/ioport.h
@@ -708,7 +708,6 @@ include/net/netns/unix.h
 include/net/netns/xdp.h
 include/net/netns/xfrm.h
 include/net/netprio_cgroup.h
-include/net/page_pool.h
 include/net/request_sock.h
 include/net/route.h
 include/net/rtnetlink.h
@@ -723,6 +722,7 @@ include/rdma/rdma_counter.h
 include/rdma/rdma_netlink.h
 include/rdma/restrack.h
 include/rdma/signature.h
+include/trace/events/notifier.h
 include/uapi/asm-generic/bitsperlong.h
 include/uapi/asm-generic/errno-base.h
 include/uapi/asm-generic/errno.h
@@ -758,6 +758,7 @@ include/uapi/linux/elf.h
 include/uapi/linux/errno.h
 include/uapi/linux/ethtool.h
 include/uapi/linux/eventpoll.h
+include/uapi/linux/fanotify.h
 include/uapi/linux/fcntl.h
 include/uapi/linux/fib_rules.h
 include/uapi/linux/fs.h

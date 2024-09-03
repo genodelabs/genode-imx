@@ -183,6 +183,11 @@ include/asm-generic/trace_clock.h
 include/asm-generic/user.h
 include/asm-generic/vmlinux.lds.h
 include/clocksource/arm_arch_timer.h
+include/kunit/assert.h
+include/kunit/resource.h
+include/kunit/test-bug.h
+include/kunit/test.h
+include/kunit/try-catch.h
 include/kvm/arm_arch_timer.h
 include/kvm/arm_pmu.h
 include/kvm/arm_vgic.h
@@ -251,6 +256,7 @@ include/linux/kvm_host.h
 include/linux/kvm_para.h
 include/linux/kvm_types.h
 include/linux/memcontrol.h
+include/linux/memory.h
 include/linux/mmu_notifier.h
 include/linux/msi.h
 include/linux/node.h
@@ -293,6 +299,7 @@ include/linux/verification.h
 include/linux/vmpressure.h
 include/linux/vtime.h
 include/linux/writeback.h
+include/trace/events/kmem.h
 include/uapi/asm-generic/ioctls.h
 include/uapi/asm-generic/kvm_para.h
 include/uapi/asm-generic/signal.h

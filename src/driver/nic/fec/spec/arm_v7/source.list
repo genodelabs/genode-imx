@@ -1,4 +1,4 @@
-arch/arm/boot/dts/imx53-qsb.dts
+arch/arm/boot/dts/nxp/imx/imx53-qsb.dts
 arch/arm/lib/clearbit.S
 arch/arm/lib/csumpartial.S
 arch/arm/lib/div64.S

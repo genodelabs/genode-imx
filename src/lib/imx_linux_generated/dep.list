@@ -44,6 +44,7 @@ include/asm-generic/topology.h
 include/linux/alarmtimer.h
 include/linux/align.h
 include/linux/arch_topology.h
+include/linux/args.h
 include/linux/arm-smccc.h
 include/linux/assoc_array.h
 include/linux/atomic.h
@@ -63,6 +64,7 @@ include/linux/byteorder/generic.h
 include/linux/byteorder/little_endian.h
 include/linux/cache.h
 include/linux/capability.h
+include/linux/cleanup.h
 include/linux/clocksource_ids.h
 include/linux/compiler-gcc.h
 include/linux/compiler-version.h
@@ -73,6 +75,7 @@ include/linux/completion.h
 include/linux/const.h
 include/linux/container_of.h
 include/linux/context_tracking_irq.h
+include/linux/cpu_smt.h
 include/linux/cpumask.h
 include/linux/cred.h
 include/linux/dcache.h
@@ -105,6 +108,7 @@ include/linux/fwnode.h
 include/linux/gfp.h
 include/linux/gfp_types.h
 include/linux/hash.h
+include/linux/hex.h
 include/linux/highuid.h
 include/linux/hrtimer.h
 include/linux/hrtimer_defs.h
@@ -114,11 +118,11 @@ include/linux/init.h
 include/linux/instruction_pointer.h
 include/linux/instrumentation.h
 include/linux/instrumented.h
-include/linux/ioasid.h
 include/linux/iocontext.h
 include/linux/ioport.h
 include/linux/ioprio.h
 include/linux/ipc.h
+include/linux/irqdomain_defs.h
 include/linux/irqflags.h
 include/linux/irqnr.h
 include/linux/jiffies.h
@@ -135,6 +139,7 @@ include/linux/kern_levels.h
 include/linux/kernel.h
 include/linux/kernfs.h
 include/linux/key.h
+include/linux/kfence.h
 include/linux/klist.h
 include/linux/kmod.h
 include/linux/kmsan-checks.h
@@ -150,6 +155,7 @@ include/linux/linkage.h
 include/linux/list.h
 include/linux/list_bl.h
 include/linux/list_lru.h
+include/linux/livepatch_sched.h
 include/linux/llist.h
 include/linux/local_lock.h
 include/linux/local_lock_internal.h
@@ -175,8 +181,10 @@ include/linux/mmzone.h
 include/linux/mnt_idmapping.h
 include/linux/mod_devicetable.h
 include/linux/module.h
+include/linux/module_symbol.h
 include/linux/moduleparam.h
 include/linux/mount.h
+include/linux/msi_api.h
 include/linux/mutex.h
 include/linux/nfs_fs_i.h
 include/linux/nodemask.h
@@ -199,6 +207,7 @@ include/linux/percpu-refcount.h
 include/linux/percpu-rwsem.h
 include/linux/percpu.h
 include/linux/percpu_counter.h
+include/linux/perf/arm_pmuv3.h
 include/linux/pfn.h
 include/linux/pgtable.h
 include/linux/pid.h
@@ -226,8 +235,10 @@ include/linux/rcu_sync.h
 include/linux/rculist.h
 include/linux/rculist_bl.h
 include/linux/rcupdate.h
+include/linux/rcuref.h
 include/linux/rcutree.h
 include/linux/rcuwait.h
+include/linux/reciprocal_div.h
 include/linux/refcount.h
 include/linux/resource.h
 include/linux/restart_block.h
@@ -262,12 +273,14 @@ include/linux/signal.h
 include/linux/signal_types.h
 include/linux/sizes.h
 include/linux/slab.h
+include/linux/slub_def.h
 include/linux/smp.h
 include/linux/smp_types.h
 include/linux/spinlock.h
 include/linux/spinlock_api_smp.h
 include/linux/spinlock_types.h
 include/linux/spinlock_types_raw.h
+include/linux/sprintf.h
 include/linux/srcu.h
 include/linux/srcutree.h
 include/linux/stackdepot.h
@@ -278,6 +291,7 @@ include/linux/static_key.h
 include/linux/stdarg.h
 include/linux/stddef.h
 include/linux/string.h
+include/linux/string_choices.h
 include/linux/stringhash.h
 include/linux/stringify.h
 include/linux/swab.h
@@ -312,6 +326,8 @@ include/linux/wait.h
 include/linux/wait_bit.h
 include/linux/workqueue.h
 include/linux/xarray.h
+include/net/dropreason-core.h
+include/trace/events/maple_tree.h
 include/uapi/asm-generic/Kbuild
 include/uapi/asm-generic/bitsperlong.h
 include/uapi/asm-generic/errno-base.h
@@ -336,6 +352,7 @@ include/uapi/linux/dqblk_xfs.h
 include/uapi/linux/elf-em.h
 include/uapi/linux/elf.h
 include/uapi/linux/errno.h
+include/uapi/linux/eventfd.h
 include/uapi/linux/fcntl.h
 include/uapi/linux/fs.h
 include/uapi/linux/ioctl.h
@@ -345,6 +362,9 @@ include/uapi/linux/irqnr.h
 include/uapi/linux/kdev_t.h
 include/uapi/linux/kernel.h
 include/uapi/linux/limits.h
+include/uapi/linux/mei.h
+include/uapi/linux/mei_uuid.h
+include/uapi/linux/netdev.h
 include/uapi/linux/openat2.h
 include/uapi/linux/param.h
 include/uapi/linux/posix_types.h
@@ -388,12 +408,14 @@ kernel/time/timeconst.bc
 lib/Makefile
 lib/crc32.c
 lib/gen_crc32table.c
+lib/radix-tree.h
 scripts/../arch/x86/entry/syscalls/syscall_32.tbl
 scripts/Kbuild.include
 scripts/Makefile
 scripts/Makefile.asm-generic
 scripts/Makefile.build
 scripts/Makefile.compiler
+scripts/Makefile.defconf
 scripts/Makefile.extrawarn
 scripts/Makefile.host
 scripts/Makefile.lib
@@ -402,7 +424,6 @@ scripts/basic/Makefile
 scripts/basic/fixdep.c
 scripts/cc-can-link.sh
 scripts/cc-version.sh
-scripts/check-local-export
 scripts/checksyscalls.sh
 scripts/config
 scripts/dtc/Makefile
@@ -465,6 +486,7 @@ scripts/mod/mk_elfconfig.c
 scripts/mod/modpost.c
 scripts/mod/modpost.h
 scripts/mod/sumversion.c
+scripts/mod/symsearch.c
 scripts/pahole-flags.sh
 scripts/pahole-version.sh
 scripts/remove-stale-files

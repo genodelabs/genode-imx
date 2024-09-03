@@ -477,7 +477,6 @@ include/linux/interrupt.h
 include/linux/interval_tree.h
 include/linux/interval_tree_generic.h
 include/linux/io.h
-include/linux/ioasid.h
 include/linux/iocontext.h
 include/linux/iommu.h
 include/linux/iopoll.h
@@ -921,7 +920,6 @@ include/net/netns/unix.h
 include/net/netns/xdp.h
 include/net/netns/xfrm.h
 include/net/netprio_cgroup.h
-include/net/page_pool.h
 include/net/request_sock.h
 include/net/rtnetlink.h
 include/net/scm.h

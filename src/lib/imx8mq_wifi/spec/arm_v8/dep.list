@@ -342,7 +342,6 @@ include/asm-generic/early_ioremap.h
 include/asm-generic/emergency-restart.h
 include/asm-generic/error-injection.h
 include/asm-generic/getorder.h
-include/asm-generic/gpio.h
 include/asm-generic/hardirq.h
 include/asm-generic/hw_irq.h
 include/asm-generic/int-ll64.h
@@ -610,7 +609,6 @@ include/linux/instruction_pointer.h
 include/linux/instrumentation.h
 include/linux/instrumented.h
 include/linux/interrupt.h
-include/linux/ioasid.h
 include/linux/iocontext.h
 include/linux/io.h
 include/linux/iommu.h
@@ -1123,7 +1121,6 @@ include/net/netns/xfrm.h
 include/net/netprio_cgroup.h
 include/net/net_trackers.h
 include/net/nexthop.h
-include/net/page_pool.h
 include/net/pkt_cls.h
 include/net/pkt_sched.h
 include/net/protocol.h

@@ -251,11 +251,11 @@ drivers/gpu/drm/drm_vblank.c
 drivers/gpu/drm/drm_vblank_work.c
 drivers/gpu/drm/drm_vma_manager.c
 drivers/gpu/drm/drm_writeback.c
-drivers/gpu/drm/imx/cdn-mhdp-dp-phy.c
-drivers/gpu/drm/imx/cdn-mhdp-hdmi-phy.c
-drivers/gpu/drm/imx/cdn-mhdp-imxdrv.c
-drivers/gpu/drm/imx/cdn-mhdp-phy.h
-drivers/gpu/drm/imx/cdns-mhdp-imx.h
+drivers/gpu/drm/imx/cdns/cdn-mhdp-dp-phy.c
+drivers/gpu/drm/imx/cdns/cdn-mhdp-hdmi-phy.c
+drivers/gpu/drm/imx/cdns/cdn-mhdp-imxdrv.c
+drivers/gpu/drm/imx/cdns/cdn-mhdp-phy.h
+drivers/gpu/drm/imx/cdns/cdns-mhdp-imx.h
 drivers/gpu/drm/imx/dcss/dcss-blkctl.c
 drivers/gpu/drm/imx/dcss/dcss-crtc.c
 drivers/gpu/drm/imx/dcss/dcss-ctxld.c
@@ -269,7 +269,7 @@ drivers/gpu/drm/imx/dcss/dcss-kms.h
 drivers/gpu/drm/imx/dcss/dcss-plane.c
 drivers/gpu/drm/imx/dcss/dcss-scaler.c
 drivers/gpu/drm/imx/dcss/dcss-ss.c
-drivers/gpu/drm/imx/imx-drm.h
+drivers/gpu/drm/imx/ipuv3/imx-drm.h
 drivers/gpu/drm/mxsfb/mxsfb_drv.h
 drivers/gpu/drm/mxsfb/mxsfb_kms.c
 drivers/gpu/drm/mxsfb/mxsfb_regs.h
@@ -694,7 +694,6 @@ include/linux/interrupt.h
 include/linux/interval_tree.h
 include/linux/interval_tree_generic.h
 include/linux/io.h
-include/linux/ioasid.h
 include/linux/iocontext.h
 include/linux/iommu.h
 include/linux/iopoll.h
@@ -1159,7 +1158,6 @@ include/net/netns/unix.h
 include/net/netns/xdp.h
 include/net/netns/xfrm.h
 include/net/netprio_cgroup.h
-include/net/page_pool.h
 include/net/request_sock.h
 include/net/rtnetlink.h
 include/net/scm.h

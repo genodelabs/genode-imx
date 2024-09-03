@@ -66,9 +66,9 @@ SRC_CC  += lx_kit/memory_dma.cc
 #
 
 DTS_PATH(mnt_reform2)     := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
-DTS_PATH(imx53_qsb)       := arch/arm/boot/dts/imx53-qsb.dts
-DTS_PATH(imx6q_sabrelite) := arch/arm/boot/dts/imx6q-sabrelite.dts
-DTS_PATH(imx7d_sabre)     := arch/arm/boot/dts/imx7d-sdb.dts
+DTS_PATH(imx53_qsb)       := arch/arm/boot/dts/nxp/imx/imx53-qsb.dts
+DTS_PATH(imx6q_sabrelite) := arch/arm/boot/dts/nxp/imx/imx6q-sabrelite.dts
+DTS_PATH(imx7d_sabre)     := arch/arm/boot/dts/nxp/imx/imx7d-sdb.dts
 
 CUSTOM_TARGET_DEPS += $(addprefix $(INSTALL_DIR)/$(DRIVER)-,$(addsuffix .dtb,$(BOARDS)))
 

@@ -1,0 +1,9 @@
+_/raw/drivers_nic-imx8mp_iot_gate
+_/raw/imx8mp_iot_gate-devices
+_/src/fec_nic
+_/src/imx8mp_iot_gate-eeprom_reader
+_/src/imx8mp_platform
+_/src/imx8mq_i2c
+_/src/imx_pin
+_/src/report_rom
+_/src/stmmac_nic

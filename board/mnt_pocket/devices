@@ -1,2 +1,54 @@
 <devices>
+	<device name="usb3_phy0" type="fsl,imx8mp-usb-phy">
+		<io_mem address="0x381f0040" size="0x40"/>
+		<power-domain name="usb_otg_1"/>
+		<clock name="usb_phy_gate" driver_name="phy"/>
+		<clock name="usb_phy_clk_root" parent="24m_ref_clk"/>
+		<property name="fsl,phy-tx-preemp-amp-tune" value="3"/>
+	</device>
+
+	<device name="usb3_0" type="fsl,imx8mp-dwc3">
+		<io_mem address="0x32f10100" size="0x8"/>
+		<io_mem address="0x381f0000" size="0x20"/>
+		<irq number="180"/>
+		<clock name="hsio_gate" driver_name="hsio"/>
+		<clock name="32k_ref_clk" driver_name="suspend"/>
+	</device>
+
+	<device name="usb_dwc3_0" type="snps,dwc3">
+		<io_mem address="0x38100000" size="0x10000"/>
+		<irq number="72"/>
+		<clock name="usb_gate"          driver_name="bus_early"/>
+		<clock name="usb_core_clk_root" driver_name="ref"/>
+		<clock name="usb_gate"          driver_name="suspend"/>
+		<property name="snps,gfladj-refclk-lpm-sel-quirk"/>
+		<property name="snps,parkmode-disable-ss-quirk"/>
+	</device>
+
+	<device name="usb3_phy1" type="fsl,imx8mp-usb-phy">
+		<io_mem address="0x382f0040" size="0x40"/>
+		<power-domain name="usb_otg_2"/>
+		<clock name="usb_phy_gate" driver_name="phy"/>
+		<clock name="usb_phy_clk_root" parent="24m_ref_clk"/>
+		<property name="fsl,phy-tx-preemp-amp-tune" value="3"/>
+		<property name="fsl,phy-tx-vref-tune" value="0xb"/>
+	</device>
+
+	<device name="usb3_1" type="fsl,imx8mp-dwc3">
+		<io_mem       address="0x32f10108" size="0x8"/>
+		<io_mem       address="0x382f0000" size="0x20"/>
+		<irq          number="181"/>
+		<clock name="hsio_gate" driver_name="hsio"/>
+		<clock name="usb_gate" driver_name="suspend"/>
+	</device>
+
+	<device name="usb_dwc3_1" type="snps,dwc3">
+		<io_mem       address="0x38200000" size="0x10000"/>
+		<irq          number="73"/>
+		<clock name="usb_gate"          driver_name="bus_early"/>
+		<clock name="usb_core_clk_root" driver_name="ref"/>
+		<clock name="usb_gate"          driver_name="suspend"/>
+		<property name="snps,gfladj-refclk-lpm-sel-quirk"/>
+		<property name="snps,parkmode-disable-ss-quirk"/>
+	</device>
 </devices>

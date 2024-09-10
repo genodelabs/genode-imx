@@ -63,6 +63,7 @@ SRC_CC  += lx_kit/memory_dma.cc
 #
 
 DTS_PATH(mnt_reform2)     := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
+DTS_PATH(mnt_pocket)      := arch/arm64/boot/dts/freescale/imx8mp-mnt-pocket-reform.dts
 DTS_PATH(imx53_qsb)       := arch/arm/boot/dts/nxp/imx/imx53-qsb.dts
 DTS_PATH(imx6q_sabrelite) := arch/arm/boot/dts/nxp/imx/imx6q-sabrelite.dts
 DTS_PATH(imx7d_sabre)     := arch/arm/boot/dts/nxp/imx/imx7d-sdb.dts

@@ -100,3 +100,11 @@ struct kernfs_node * kernfs_find_and_get_ns(struct kernfs_node * parent,const ch
 
 	return NULL;
 }
+
+
+#include <linux/sched.h>
+
+void kick_process(struct task_struct *p)
+{
+	lx_emul_task_unblock(p);
+}

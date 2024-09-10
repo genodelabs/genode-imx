@@ -912,22 +912,6 @@ int sysfs_update_group(struct kobject * kobj,const struct attribute_group * grp)
 }
 
 
-#include <linux/task_work.h>
-
-int task_work_add(struct task_struct * task,struct callback_head * work,enum task_work_notify_mode notify)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/task_work.h>
-
-struct callback_head * task_work_cancel_func(struct task_struct * task,task_work_func_t func)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/clockchips.h>
 
 void tick_broadcast(const struct cpumask * mask)

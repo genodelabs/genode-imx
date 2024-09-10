@@ -9,7 +9,7 @@ SRC_CC   += lx_emul/random.cc
 SRC_CC   += lx_emul/shared_dma_buffer.cc
 
 SRC_C    += dummies.c
-SRC_C    += gpcv2.c
+SRC_C    += platform_dummies.c
 SRC_C    += lx_emul.c
 SRC_C    += lx_emul/common_dummies.c
 SRC_C    += lx_emul/shadow/drivers/base/power/runtime.c
@@ -33,8 +33,10 @@ vpath genode_c_api/usb.cc      $(subst /genode_c_api,,$(call select_from_reposit
 vpath lx_emul/common_dummies.c $(REP_DIR)/src/lib/imx
 
 # Driver-specific device-tree binary data
-BOARDS                   := imx8q_evk mnt_reform2
-DTS_PATH(mnt_reform2)    := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
-DTS_EXTRACT(mnt_reform2) := --select usb_dwc3_0 --select usb_dwc3_1
+BOARDS                   := imx8q_evk mnt_pocket mnt_reform2
 DTS_PATH(imx8q_evk)      := arch/arm64/boot/dts/freescale/imx8mq-evk.dts
 DTS_EXTRACT(imx8q_evk)   := --select usb_dwc3_0 --select usb_dwc3_1
+DTS_PATH(mnt_pocket)     := arch/arm64/boot/dts/freescale/imx8mp-mnt-pocket-reform.dts
+DTS_EXTRACT(mnt_pocket)  := --select usb_dwc3_0 --select usb_dwc3_1
+DTS_PATH(mnt_reform2)    := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
+DTS_EXTRACT(mnt_reform2) := --select usb_dwc3_0 --select usb_dwc3_1

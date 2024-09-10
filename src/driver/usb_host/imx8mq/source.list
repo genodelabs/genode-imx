@@ -59,6 +59,7 @@ drivers/usb/core/sysfs.c
 drivers/usb/core/urb.c
 drivers/usb/core/usb.c
 drivers/usb/dwc3/core.c
+drivers/usb/dwc3/dwc3-imx8mp.c
 drivers/usb/dwc3/host.c
 drivers/usb/host/pci-quirks.c
 drivers/usb/host/xhci-dbg.c
@@ -90,6 +91,7 @@ kernel/smpboot.c
 kernel/smpboot.c
 kernel/softirq.c
 kernel/softirq.c
+kernel/task_work.c
 kernel/time/clockevents.c
 kernel/time/clocksource.c
 kernel/time/hrtimer.c

@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2024-09-06
+ * \date   2024-09-09
  */
 
 #include <lx_emul.h>
@@ -125,6 +125,11 @@ int add_uevent_var(struct kobj_uevent_env * env,const char * format,...)
 
 #include <linux/amba/bus.h>
 
+struct bus_type amba_bustype;
+
+
+#include <linux/amba/bus.h>
+
 int amba_device_add(struct amba_device * dev,struct resource * parent)
 {
 	lx_emul_trace_and_stop(__func__);
@@ -142,6 +147,14 @@ struct amba_device * amba_device_alloc(const char * name,resource_size_t base,si
 #include <linux/amba/bus.h>
 
 void amba_device_put(struct amba_device * dev)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/amba/bus.h>
+
+void amba_device_unregister(struct amba_device * dev)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -960,22 +973,6 @@ void sysfs_unbreak_active_protection(struct kernfs_node * kn)
 #include <linux/sysfs.h>
 
 int sysfs_update_group(struct kobject * kobj,const struct attribute_group * grp)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/task_work.h>
-
-int task_work_add(struct task_struct * task,struct callback_head * work,enum task_work_notify_mode notify)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/task_work.h>
-
-struct callback_head * task_work_cancel_func(struct task_struct * task,task_work_func_t func)
 {
 	lx_emul_trace_and_stop(__func__);
 }

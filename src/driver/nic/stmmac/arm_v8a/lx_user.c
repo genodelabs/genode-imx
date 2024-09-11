@@ -196,7 +196,8 @@ void lx_user_init(void)
 {
 	pid_t pid;
 
-	pid = kernel_thread(user_task_function, NULL, CLONE_FS | CLONE_FILES);
+	pid = kernel_thread(user_task_function, NULL, "fec_user_task",
+	                    CLONE_FS | CLONE_FILES);
 
 	user_task_struct_ptr = find_task_by_pid_ns(pid, NULL);
 }
@@ -207,7 +208,8 @@ void lx_user_init(void)
 /*
  * Called whenever the link state changes
  */
-void rtmsg_ifinfo(int type, struct net_device * dev, unsigned int change, gfp_t flags)
+void rtmsg_ifinfo(int type, struct net_device * dev, unsigned int change, gfp_t flags,
+                  u32 portid, const struct nlmsghdr *nlh)
 {
 	/* trigger handle_create_uplink / handle_destroy_uplink */
 	if (user_task_struct_ptr)

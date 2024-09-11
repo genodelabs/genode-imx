@@ -22,6 +22,7 @@ drivers/base/regmap/regcache-flat.c
 drivers/base/regmap/regcache-rbtree.c
 drivers/base/regmap/regcache.c
 drivers/base/regmap/regmap-i2c.c
+drivers/base/regmap/regcache-maple.c
 drivers/base/regmap/regmap-mmio.c
 drivers/base/regmap/regmap-spi.c
 drivers/base/regmap/regmap.c
@@ -149,6 +150,8 @@ lib/klist.c
 lib/kobject.c
 lib/list_sort.c
 lib/llist.c
+lib/maple_tree.c
+lib/math/reciprocal_div.c
 lib/nlattr.c
 lib/once.c
 lib/radix-tree.c
@@ -160,7 +163,10 @@ lib/string_helpers.c
 lib/timerqueue.c
 lib/vsprintf.c
 lib/xarray.c
+mm/memblock.c
 mm/mempool.c
+mm/slab_common.c
+mm/slub.c
 mm/util.c
 net/core/datagram.c
 net/core/dev.c

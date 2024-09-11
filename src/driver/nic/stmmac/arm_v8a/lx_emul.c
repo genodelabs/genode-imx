@@ -40,20 +40,6 @@ void do_softirq_own_stack(void)
 }
 
 
-#include <linux/slab.h>
-
-struct kmem_cache * kmem_cache_create_usercopy(const char * name,
-                                               unsigned int size,
-                                               unsigned int align,
-                                               slab_flags_t flags,
-                                               unsigned int useroffset,
-                                               unsigned int usersize,
-                                               void (* ctor)(void *))
-{
-	return kmem_cache_create(name, size, align, flags, ctor);
-}
-
-
 #include <linux/proc_ns.h>
 
 int proc_alloc_inum(unsigned int * inum)
@@ -120,18 +106,6 @@ void netdev_rss_key_fill(void *buffer, size_t len)
 	memcpy(buffer, netdev_rss_key, len);
 }
 EXPORT_SYMBOL(netdev_rss_key_fill);
-
-
-#include <linux/slab.h>
-
-int kmem_cache_alloc_bulk(struct kmem_cache * s,gfp_t flags, size_t nr,void ** p)
-{
-	size_t i;
-	for (i = 0; i < nr; i++)
-		p[i] = kmem_cache_alloc(s, flags);
-
-	return nr;
-}
 
 
 #include <linux/gfp.h>

@@ -51,20 +51,27 @@ static int imx_ocotp_read(void *context, unsigned int offset,
 	return 0;
 }
 
-static int imx_ocotp_cell_pp(void *context, const char *id, unsigned int offset,
-			     void *data, size_t bytes)
+static int imx_ocotp_cell_pp(void *context, const char *id, int index,
+                             unsigned int offset, void *data, size_t bytes)
 {
-	struct ocotp_priv *priv = context;
-
 	/* Deal with some post processing of nvmem cell data */
 	if (id && !strcmp(id, "mac-address")) {
-		if (priv->params->reverse_mac_address) {
-			lx_emul_get_mac_address(data);
-		}
+		lx_emul_get_mac_address(data);
 	}
 
 	return 0;
 }
+
+static void imx_ocotp_fixup_cell_info(struct nvmem_device *nvmem,
+				      struct nvmem_layout *layout,
+				      struct nvmem_cell_info *cell)
+{
+	cell->read_post_process = imx_ocotp_cell_pp;
+}
+
+static struct nvmem_layout imx_ocotp_layout = {
+	.fixup_cell_info = imx_ocotp_fixup_cell_info,
+};
 
 static int imx_ocotp_write(void *context, unsigned int offset, void *val,
 			   size_t bytes)
@@ -79,7 +86,6 @@ static struct nvmem_config imx_ocotp_nvmem_config = {
 	.stride = 1,
 	.reg_read = imx_ocotp_read,
 	.reg_write = imx_ocotp_write,
-	.cell_post_process = imx_ocotp_cell_pp,
 };
 
 static const struct ocotp_params imx8mp_params = {
@@ -91,6 +97,8 @@ static const struct ocotp_params imx8mp_params = {
 static const struct of_device_id imx_ocotp_dt_ids[] = {
 	{ .compatible = "fsl,imx8mq-ocotp", .data = &imx8mp_params },
 	{ .compatible = "fsl,imx8mp-ocotp", .data = &imx8mp_params },
+	{ .compatible = "fsl,imx6q-ocotp",  .data = &imx8mp_params },
+	{ .compatible = "fsl,imx7d-ocotp",  .data = &imx8mp_params },
 	{ },
 };
 MODULE_DEVICE_TABLE(of, imx_ocotp_dt_ids);
@@ -108,9 +116,11 @@ static int imx_ocotp_probe(struct platform_device *pdev)
 	priv->dev = dev;
 
 	priv->params = of_device_get_match_data(&pdev->dev);
+	imx_ocotp_nvmem_config.add_legacy_fixed_of_cells = true;
 	imx_ocotp_nvmem_config.size = 4 * priv->params->nregs;
 	imx_ocotp_nvmem_config.dev = dev;
 	imx_ocotp_nvmem_config.priv = priv;
+	imx_ocotp_nvmem_config.layout = &imx_ocotp_layout;
 	priv->config = &imx_ocotp_nvmem_config;
 
 	nvmem = devm_nvmem_register(dev, &imx_ocotp_nvmem_config);

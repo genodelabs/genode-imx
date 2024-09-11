@@ -73,46 +73,6 @@ void page_frag_free(void * addr)
 }
 
 
-#include <../mm/slab.h>
-
-struct kmem_cache * kmem_cache_create_usercopy(const char * name,
-                                               unsigned int size,
-                                               unsigned int align,
-                                               slab_flags_t flags,
-                                               unsigned int useroffset,
-                                               unsigned int usersize,
-                                               void (* ctor)(void *))
-{
-	return kmem_cache_create(name, size, align, flags, ctor);
-}
-
-
-void kmem_cache_free_bulk(struct kmem_cache *s, size_t size, void **p)
-{
-	size_t i;
-
-	for (i = 0; i < size; i++) {
-		kmem_cache_free(s, p[i]);
-	}
-}
-
-
-int kmem_cache_alloc_bulk(struct kmem_cache * s,gfp_t flags, size_t nr,void ** p)
-{
-	size_t i;
-	for (i = 0; i < nr; i++)
-		p[i] = kmem_cache_alloc(s, flags);
-
-	return nr;
-}
-
-
-void * kmem_cache_alloc_lru(struct kmem_cache * cachep,struct list_lru * lru,gfp_t flags)
-{
-	return kmem_cache_alloc(cachep, flags);
-}
-
-
 #include <linux/mm.h>
 
 bool is_vmalloc_addr(const void * x)

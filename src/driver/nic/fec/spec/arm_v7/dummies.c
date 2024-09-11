@@ -51,15 +51,6 @@ unsigned long arm_copy_to_user(void *to, const void *from, unsigned long n)
 }
 
 
-#include <linux/rcupdate.h>
-
-noinstr int notrace debug_lockdep_rcu_enabled(void)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
 #include <linux/rcutree.h>
 
 int rcu_scheduler_active __read_mostly;

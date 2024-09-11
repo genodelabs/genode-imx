@@ -137,3 +137,12 @@ void pm_runtime_set_autosuspend_delay(struct device * dev,int delay)
 }
 
 
+#include <linux/regulator/consumer.h>
+
+int devm_regulator_get_enable_optional(struct device * dev,const char * id)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+

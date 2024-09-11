@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2024-05-21
+ * \date   2024-09-10
  */
 
 #include <lx_emul.h>
@@ -75,6 +75,14 @@ void __show_mem(unsigned int filter,nodemask_t * nodemask,int max_zone_idx)
 }
 
 
+#include <net/gso.h>
+
+struct sk_buff * __skb_gso_segment(struct sk_buff * skb,netdev_features_t features,bool tx_path)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/vmalloc.h>
 
 void * __vmalloc_node_range(unsigned long size,unsigned long align,unsigned long start,unsigned long end,gfp_t gfp_mask,pgprot_t prot,unsigned long vm_flags,int node,const void * caller)
@@ -110,6 +118,11 @@ int _printk_deferred(const char * fmt,...)
 {
 	lx_emul_trace_and_stop(__func__);
 }
+
+
+#include <linux/mm.h>
+
+atomic_long_t _totalram_pages;
 
 
 #include <linux/random.h>
@@ -168,6 +181,11 @@ void async_synchronize_full(void)
 }
 
 
+#include <linux/blkdev.h>
+
+struct class block_class;
+
+
 #include <linux/init.h>
 
 char __initdata boot_command_line[] = {};
@@ -208,6 +226,22 @@ void console_unblank(void)
 #include <linux/printk.h>
 
 void console_verbose(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/cpumask.h>
+
+unsigned int cpumask_any_and_distribute(const struct cpumask * src1p,const struct cpumask * src2p)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/sched/topology.h>
+
+bool cpus_share_cache(int this_cpu,int that_cpu)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -279,6 +313,14 @@ asmlinkage __visible void dump_stack(void)
 }
 
 
+#include <linux/printk.h>
+
+asmlinkage __visible void dump_stack_lvl(const char * log_lvl)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/reboot.h>
 
 void emergency_restart(void)
@@ -329,6 +371,22 @@ int ethnl_cable_test_result(struct phy_device * phydev,u8 pair,u8 result)
 
 #include <linux/ethtool.h>
 
+void ethtool_convert_legacy_u32_to_link_mode(unsigned long * dst,u32 legacy_u32)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/ethtool.h>
+
+bool ethtool_convert_link_mode_to_legacy_u32(u32 * legacy_u32,const unsigned long * src)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/ethtool.h>
+
 u32 ethtool_op_get_link(struct net_device * dev)
 {
 	lx_emul_trace_and_stop(__func__);
@@ -372,6 +430,14 @@ void finish_rcuwait(struct rcuwait * w)
 struct kobject *firmware_kobj;
 
 
+#include <linux/mmzone.h>
+
+struct pglist_data * first_online_pgdat(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/gpio/consumer.h>
 
 struct gpio_desc * fwnode_gpiod_get_index(struct fwnode_handle * fwnode,const char * con_id,int index,enum gpiod_flags flags,const char * label)
@@ -383,6 +449,14 @@ struct gpio_desc * fwnode_gpiod_get_index(struct fwnode_handle * fwnode,const ch
 #include <net/gen_stats.h>
 
 void gen_kill_estimator(struct net_rate_estimator __rcu ** rate_est)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/kernel.h>
+
+int get_option(char ** str,int * pint)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -523,11 +597,6 @@ long __sched io_schedule_timeout(long timeout)
 }
 
 
-#include <linux/swiotlb.h>
-
-struct io_tlb_mem io_tlb_default_mem;
-
-
 #include <linux/ioport.h>
 
 struct resource iomem_resource;
@@ -630,6 +699,22 @@ noinline int kstrtoull(const char * s,unsigned int base,unsigned long long * res
 }
 
 
+#include <linux/leds.h>
+
+int led_classdev_register_ext(struct device * parent,struct led_classdev * led_cdev,struct led_init_data * init_data)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/leds.h>
+
+void led_classdev_unregister(struct led_classdev * led_cdev)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/logic_pio.h>
 
 unsigned long logic_pio_trans_hwaddr(struct fwnode_handle * fwnode,resource_size_t addr,resource_size_t size)
@@ -645,92 +730,12 @@ struct pernet_operations __net_initdata loopback_net_ops;
 
 #include <linux/delay.h>
 
+unsigned long loops_per_jiffy;
+
+
+#include <linux/delay.h>
+
 unsigned long lpj_fine;
-
-
-#include <linux/memblock.h>
-
-struct memblock memblock;
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_add(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-void __init memblock_cap_memory_range(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_clear_nomap(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-bool __init_memblock memblock_is_region_reserved(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_mark_hotplug(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_mark_nomap(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-bool __init_memblock memblock_overlaps_region(struct memblock_type * type,phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-phys_addr_t __init memblock_phys_alloc_range(phys_addr_t size,phys_addr_t align,phys_addr_t start,phys_addr_t end)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_phys_free(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_reserve(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
 
 
 #include <linux/string.h>
@@ -820,6 +825,14 @@ bool netlink_strict_get_check(struct sk_buff * skb)
 }
 
 
+#include <linux/mmzone.h>
+
+struct pglist_data * next_online_pgdat(struct pglist_data * pgdat)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/irq.h>
 
 struct irq_chip no_irq_chip;
@@ -828,6 +841,22 @@ struct irq_chip no_irq_chip;
 #include <linux/irq.h>
 
 void note_interrupt(struct irq_desc * desc,irqreturn_t action_ret)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/of.h>
+
+ssize_t of_modalias(const struct device_node * np,char * str,ssize_t len)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/of.h>
+
+int of_request_module(const struct device_node * np)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -853,7 +882,12 @@ const struct kernel_param_ops param_ops_byte;
 
 #include <linux/blkdev.h>
 
-struct device_type part_type;
+const struct device_type part_type;
+
+
+#include <linux/phylib_stubs.h>
+
+const struct phylib_stubs *phylib_stubs;
 
 
 #include <linux/initrd.h>
@@ -906,9 +940,31 @@ int ptp_clock_index(struct ptp_clock * ptp)
 }
 
 
+extern void raw_spin_rq_lock_nested(struct rq * rq,int subclass);
+void raw_spin_rq_lock_nested(struct rq * rq,int subclass)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern void raw_spin_rq_unlock(struct rq * rq);
+void raw_spin_rq_unlock(struct rq * rq)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/rcutree.h>
 
 void rcu_barrier(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/rcuref.h>
+
+bool rcuref_get_slowpath(rcuref_t * ref)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -951,6 +1007,14 @@ int release_resource(struct resource * old)
 }
 
 
+#include <linux/mm.h>
+
+void __meminit reserve_bootmem_region(phys_addr_t start,phys_addr_t end,int nid)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/reset.h>
 
 int reset_control_assert(struct reset_control * rstc)
@@ -977,7 +1041,7 @@ void reset_control_put(struct reset_control * rstc)
 
 #include <linux/rtnetlink.h>
 
-struct sk_buff * rtmsg_ifinfo_build_skb(int type,struct net_device * dev,unsigned int change,u32 event,gfp_t flags,int * new_nsid,int new_ifindex)
+struct sk_buff * rtmsg_ifinfo_build_skb(int type,struct net_device * dev,unsigned int change,u32 event,gfp_t flags,int * new_nsid,int new_ifindex,u32 portid,const struct nlmsghdr * nlh)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -985,7 +1049,7 @@ struct sk_buff * rtmsg_ifinfo_build_skb(int type,struct net_device * dev,unsigne
 
 #include <linux/rtnetlink.h>
 
-void rtmsg_ifinfo_send(struct sk_buff * skb,struct net_device * dev,gfp_t flags)
+void rtmsg_ifinfo_send(struct sk_buff * skb,struct net_device * dev,gfp_t flags,u32 portid,const struct nlmsghdr * nlh)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1001,7 +1065,7 @@ struct net * rtnl_get_net_ns_capable(struct sock * sk,int netnsid)
 
 #include <linux/rtnetlink.h>
 
-void rtnl_notify(struct sk_buff * skb,struct net * net,u32 pid,u32 group,struct nlmsghdr * nlh,gfp_t flags)
+void rtnl_notify(struct sk_buff * skb,struct net * net,u32 pid,u32 group,const struct nlmsghdr * nlh,gfp_t flags)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1026,6 +1090,20 @@ int rtnl_unicast(struct sk_buff * skb,struct net * net,u32 pid)
 #include <linux/seq_file.h>
 
 void seq_vprintf(struct seq_file * m,const char * f,va_list args)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern void set_rq_offline(struct rq * rq);
+void set_rq_offline(struct rq * rq)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern void set_rq_online(struct rq * rq);
+void set_rq_online(struct rq * rq)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1157,15 +1235,14 @@ void tso_build_hdr(const struct sk_buff * skb,char * hdr,struct tso_t * tso,int 
 
 #include <net/tso.h>
 
-int tso_count_descs(const struct sk_buff * skb)
+int tso_start(struct sk_buff * skb,struct tso_t * tso)
 {
 	lx_emul_trace_and_stop(__func__);
 }
 
 
-#include <net/tso.h>
-
-int tso_start(struct sk_buff * skb,struct tso_t * tso)
+extern void update_group_capacity(struct sched_domain * sd,int cpu);
+void update_group_capacity(struct sched_domain * sd,int cpu)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1184,9 +1261,9 @@ void vfree(const void * addr)
 }
 
 
-#include <linux/sched/wake_q.h>
+#include <linux/filter.h>
 
-void wake_q_add_safe(struct wake_q_head * head,struct task_struct * task)
+void xdp_do_flush(void)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1202,7 +1279,16 @@ int xdp_do_generic_redirect(struct net_device * dev,struct sk_buff * skb,struct 
 
 #include <linux/filter.h>
 
+int xdp_do_redirect(struct net_device * dev,struct xdp_buff * xdp,struct bpf_prog * xdp_prog)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/filter.h>
+
 u32 xdp_master_redirect(struct xdp_buff * xdp)
 {
 	lx_emul_trace_and_stop(__func__);
 }
+

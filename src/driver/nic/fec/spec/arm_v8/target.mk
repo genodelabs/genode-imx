@@ -2,14 +2,10 @@ REQUIRES := arm_v8a
 SRC_C    += spec/arm_v8/dummies.c
 SRC_C    += lx_emul/shadow/drivers/base/power/runtime.c
 SRC_C    += gpio.c
-SRC_C    += ocotp.c
 
 CC_OPT_gpio   = -DKBUILD_MODFILE='"gpio"'
 CC_OPT_gpio  += -DKBUILD_BASENAME='"gpio"'
 CC_OPT_gpio  += -DKBUILD_MODNAME='"gpio"'
-CC_OPT_ocotp  = -DKBUILD_MODFILE='"ocotp"'
-CC_OPT_ocotp += -DKBUILD_BASENAME='"ocotp"'
-CC_OPT_ocotp += -DKBUILD_MODNAME='"ocotp"'
 
 # Driver-specific device-tree binary data
 BOARDS                       := mnt_reform2 imx8q_evk imx8mp_iot_gate

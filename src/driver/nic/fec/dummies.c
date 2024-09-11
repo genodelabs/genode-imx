@@ -346,7 +346,6 @@ u64 vabits_actual;
 #include <linux/tracepoint-defs.h>
 
 const struct trace_print_flags vmaflag_names[]  = { {0,NULL}};
-const struct trace_print_flags pageflag_names[]  = { {0,NULL}};
 const struct trace_print_flags gfpflag_names[]  = { {0,NULL}};
 
 
@@ -384,10 +383,9 @@ struct proc_dir_entry * proc_symlink(const char * name,struct proc_dir_entry * p
 
 #include <linux/sysctl.h>
 
-struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
+void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name,size_t table_size)
 {
 	lx_emul_trace(__func__);
-	return NULL;
 }
 
 
@@ -405,14 +403,6 @@ bool parse_option_str(const char * str,const char * option)
 {
 	lx_emul_trace(__func__);
 	return false;
-}
-
-
-#include <linux/sysctl.h>
-
-void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name)
-{
-	lx_emul_trace(__func__);
 }
 
 
@@ -655,15 +645,6 @@ struct regmap * syscon_node_to_regmap(struct device_node * np)
 }
 
 
-#include <linux/of_gpio.h>
-
-int of_get_named_gpio_flags(const struct device_node * np,const char * list_name,int index,enum of_gpio_flags * flags)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
 #include <linux/rcupdate.h>
 
 void rcu_sched_clock_irq(int user)
@@ -730,3 +711,6 @@ void gnet_stats_basic_sync_init(struct gnet_stats_basic_sync * b)
 {
 	lx_emul_trace(__func__);
 }
+
+
+DEFINE_PER_CPU(struct bpf_redirect_info, bpf_redirect_info);

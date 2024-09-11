@@ -7,6 +7,7 @@ $(MIRROR_FROM_OS_DIR):
 	cp -r $(GENODE_DIR)/repos/os/$@ $@
 
 MIRRORED_FROM_REP_DIR := src/include/spec/arm_v8a/lx_emul \
+                         src/lib/imx/lx_emul/common_dummies.c \
                          src/driver/sd_card/imx8mq
 
 content: $(MIRRORED_FROM_REP_DIR)

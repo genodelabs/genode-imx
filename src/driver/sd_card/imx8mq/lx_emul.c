@@ -40,17 +40,10 @@ long __sched io_schedule_timeout(long timeout)
 }
 
 
-#include <../mm/slab.h>
-
-void * kmem_cache_alloc_lru(struct kmem_cache * cachep,struct list_lru * lru,gfp_t flags)
-{
-	return kmem_cache_alloc(cachep, flags);
-}
-
-
 #include <linux/blkdev.h>
 
-int bd_prepare_to_claim(struct block_device * bdev,void * holder)
+int bd_prepare_to_claim(struct block_device * bdev,void * holder,
+                        const struct blk_holder_ops *hops)
 {
 	struct block_device *whole = bdev_whole(bdev);
 	whole->bd_claiming = holder;

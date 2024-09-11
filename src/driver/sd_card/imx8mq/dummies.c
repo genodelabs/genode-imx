@@ -55,11 +55,6 @@ const struct trace_print_flags vmaflag_names[]  = { {0,NULL}};
 
 #include <linux/tracepoint-defs.h>
 
-const struct trace_print_flags pageflag_names[]  = { {0,NULL}};
-
-
-#include <linux/tracepoint-defs.h>
-
 const struct trace_print_flags gfpflag_names[]  = { {0,NULL}};
 
 
@@ -548,7 +543,7 @@ unsigned long pci_address_to_pio(phys_addr_t addr)
 
 #include <linux/blkdev.h>
 
-void blkdev_put(struct block_device * bdev,fmode_t mode)
+void blkdev_put(struct block_device *bdev, void *holder)
 {
 	lx_emul_trace(__func__);
 }
@@ -769,10 +764,9 @@ struct logic_pio_hwaddr * find_io_range_by_fwnode(struct fwnode_handle * fwnode)
 
 #include <linux/sysctl.h>
 
-struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
+void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name,size_t table_size)
 {
 	lx_emul_trace(__func__);
-	return NULL;
 }
 
 
@@ -790,14 +784,6 @@ struct proc_dir_entry * proc_create_seq_private(const char * name,umode_t mode,s
 {
 	lx_emul_trace(__func__);
 	return NULL;
-}
-
-
-#include <linux/sysctl.h>
-
-void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name)
-{
-	lx_emul_trace(__func__);
 }
 
 
@@ -902,4 +888,20 @@ int pinctrl_select_state(struct pinctrl * p,struct pinctrl_state * state)
 	lx_emul_trace(__func__);
 	return 0;
 }
+
+
+int of_get_required_opp_performance_state(struct device_node *np, int index)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/group_cpus.h>
+
+struct cpumask * group_cpus_evenly(unsigned int numgrps)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
 

@@ -1,7 +1,7 @@
 /*
  * \brief  Array defining order of Linux Kernel initcalls
  * \author Automatically generated file - do no edit
- * \date   2024-09-03
+ * \date   2024-09-10
  */
 
 #pragma once
@@ -109,6 +109,7 @@ static const char * lx_emul_initcall_order[] = {
 	"__initcall_pps_init4",
 	"__initcall_ptp_init4",
 	"__initcall_mmc_init4",
+	"__initcall_nvmem_init4",
 	"__initcall_mux_init4",
 	"__initcall_proto_init4",
 	"__initcall_net_dev_init4",
@@ -231,6 +232,7 @@ static const char * lx_emul_initcall_order[] = {
 	"__initcall_hid_generic_init6",
 	"__initcall_hid_init6",
 	"__initcall_extcon_class_init6",
+	"__initcall_imx_ocotp_driver_init6",
 	"__initcall_mux_mmio_driver_init6",
 	"__initcall_sock_diag_init6",
 	"__initcall_gre_offload_init6",

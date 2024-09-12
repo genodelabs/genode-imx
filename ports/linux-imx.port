@@ -10,7 +10,7 @@ URL(reform-debian-packages) := https://source.mnt.re/reform/reform-debian-packag
 REV(reform-debian-packages) := c4e993a72d077086c96f4e5ca5854841d53bfae0
 DIR(reform-debian-packages) := reform
 
-PATCHES := src/driver/usb_host/imx8mq/imx8mq-evk-enable-usb-c-dts.patch
+PATCHES := src/driver/usb_host/imx8m/imx8mq-evk-enable-usb-c-dts.patch
 PATCHES += patches/linux-compulab-dts.patch
 PATCHES += patches/linux-imx8mq-evk-enable-hdmi-dts.patch
 PATCHES += patches/linux-mnt-dts.patch

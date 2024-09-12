@@ -10,7 +10,7 @@ build {
 	server/event_dump
 	server/report_rom
 	driver/platform/imx8mq
-	driver/usb_host/imx8mq
+	driver/usb_host/imx8m
 }
 
 install_config {
@@ -60,11 +60,11 @@ install_config {
 	</start>
 
 	<start name="usb_host" caps="250">
-		<binary name="imx8mq_usb_host"/>
+		<binary name="imx8m_usb_host"/>
 		<resource name="RAM" quantum="40M"/>
 		<provides> <service name="Usb"/> </provides>
 		<route>
-			<service name="ROM" label="dtb"> <parent label="imx8mq_usb_host-mnt_reform2.dtb"/> </service>
+			<service name="ROM" label="dtb"> <parent label="imx8m_usb_host-mnt_reform2.dtb"/> </service>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>
 			<service name="PD">       <parent/> </service>

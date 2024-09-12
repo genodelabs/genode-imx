@@ -3,5 +3,5 @@ _/raw/imx8q_evk-devices
 _/src/event_filter
 _/src/imx8mq_fb
 _/src/imx8mq_platform
-_/src/imx8mq_usb_host
+_/src/imx8m_usb_host
 _/src/usb_hid

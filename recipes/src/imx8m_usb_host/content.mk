@@ -3,7 +3,7 @@
 #
 
 MIRROR_FROM_REP_DIR := src/include/spec/arm_v8a/lx_emul \
-                       src/driver/usb_host/imx8mq \
+                       src/driver/usb_host/imx8m \
                        src/lib/imx/lx_emul
 
 #

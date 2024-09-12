@@ -12,6 +12,7 @@
  */
 
 #include <lx_emul/task.h>
+#include <lx_emul/shmem_file.h>
 #include <lx_user/init.h>
 #include <lx_user/io.h>
 
@@ -20,7 +21,6 @@
 #include "emul.h"
 #include "lx_emul.h"
 #include "lx_drm.h"
-
 
 #include <drm/drm_device.h>
 
@@ -58,11 +58,10 @@ void *lx_drm_open(void)
 {
 	int err;
 	struct lx_drm_private *lx_drm_prv;
-
 	if (!_drm_fops || !_drm_fops->open)
 		return NULL;
 
-	lx_drm_prv = (struct lx_drm_private*)kzalloc(sizeof (struct lx_drm_private), 0);
+	lx_drm_prv = (struct lx_drm_private*)kzalloc(sizeof (struct lx_drm_private), GFP_KERNEL);
 	if (!lx_drm_prv)
 		return NULL;
 
@@ -72,7 +71,7 @@ void *lx_drm_open(void)
 
 	lx_drm_prv->inode->i_rdev = MKDEV(DRM_MAJOR, DRM_MINOR_PRIMARY);
 
-	lx_drm_prv->file = (struct file*)kzalloc(sizeof (struct file), 0);
+	lx_drm_prv->file = (struct file*)kzalloc(sizeof (struct file), GFP_KERNEL);
 	if (!lx_drm_prv->file)
 		goto free_inode;
 
@@ -459,7 +458,6 @@ int lx_drm_ioctl_gem_close(void *lx_drm_prv, unsigned int handle)
 
 #include <drm/drm_gem.h>
 #include <drm/drm_vma_manager.h>
-#include <lx_emul/shmem_file.h>
 
 void *genode_lookup_mapping_from_offset(void *p,
                                         unsigned long offset,
@@ -537,7 +535,7 @@ struct inode *alloc_anon_inode(struct super_block *s)
 {
 	struct inode *inode;
 
-	inode = kzalloc(sizeof (struct inode), 0);
+	inode = kzalloc(sizeof (struct inode), GFP_KERNEL);
 	if (!inode) {
 		return (struct inode*)ERR_PTR(-ENOMEM);
 	}
@@ -576,7 +574,7 @@ struct vfsmount * kern_mount(struct file_system_type * type)
 {
 	struct vfsmount *m;
 
-	m = kzalloc(sizeof (struct vfsmount), 0);
+	m = kzalloc(sizeof (struct vfsmount), GFP_KERNEL);
 	if (!m) {
 		return (struct vfsmount*)ERR_PTR(-ENOMEM);
 	}
@@ -595,4 +593,22 @@ int dma_map_sgtable(struct device *dev, struct sg_table *sgt,
 		return nents;
 	sgt->nents = nents;
 	return 0;
+}
+
+
+#include <linux/mm.h>
+
+bool folio_mark_dirty(struct folio * folio)
+{
+	if (!folio_test_dirty(folio))
+		return !folio_test_set_dirty(folio);
+	return false;
+}
+
+
+#include <linux/swap.h>
+
+void check_move_unevictable_folios(struct folio_batch *fbatch)
+{
+	lx_emul_trace(__func__);
 }

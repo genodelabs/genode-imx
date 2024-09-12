@@ -12,6 +12,8 @@ SRC_CC   += lx_emul/shared_dma_buffer.cc
 
 SRC_C    := dummies.c
 SRC_C    += lx_emul.c
+SRC_C    += platform_dummies.c
+SRC_C    += lx_emul/common_dummies.c
 SRC_C    += lx_emul/shadow/drivers/base/power/runtime.c
 SRC_C    += lx_emul/shadow/drivers/char/random.c
 SRC_C    += lx_user.c
@@ -19,6 +21,7 @@ SRC_C    += $(notdir $(wildcard $(PRG_DIR)/generated_dummies.c))
 
 CC_OPT_drivers/base/regmap/regmap   += -I$(LX_SRC_DIR)/drivers/base/regmap
 
+vpath lx_emul/common_dummies.c $(REP_DIR)/src/lib/imx
 
 # Driver-specific device-tree binary data
 BOARDS                   := mnt_reform2 imx8q_evk

@@ -14,6 +14,7 @@ SRC_CC  += lx_emul/random.cc
 
 SRC_C   += $(notdir $(wildcard $(TARGET_LIB_DIR)/generated_dummies.c))
 
+SRC_C   += lx_emul/common_dummies.c
 SRC_C   += lx_emul/shadow/drivers/char/random.c
 SRC_C   += lx_emul/shadow/drivers/pci/host-bridge.c
 SRC_C   += lx_emul/shadow/drivers/pci/pci-sysfs.c
@@ -37,5 +38,6 @@ CC_C_OPT += -I$(LX_SRC_DIR)/drivers/net/wireless/intel/iwlwifi
 CC_C_OPT += -I$(LX_SRC_DIR)/drivers/net/wireless/realtek/rtlwifi
 CC_C_OPT += -I$(LX_SRC_DIR)/drivers/net/wireless/realtek/rtlwifi/rtl8188ee
 
+vpath lx_emul/common_dummies.c $(REP_DIR)/src/lib/imx
 vpath %.c  $(TARGET_LIB_DIR)
 vpath %.cc $(TARGET_LIB_DIR)

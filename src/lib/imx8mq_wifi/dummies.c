@@ -24,7 +24,6 @@ void account_process_tick(struct task_struct * p,int user_tick)
 #include <linux/tracepoint-defs.h>
 
 const struct trace_print_flags gfpflag_names[]  = { {0,NULL}};
-const struct trace_print_flags pageflag_names[] = { {0,NULL}};
 const struct trace_print_flags vmaflag_names[]  = { {0,NULL}};
 
 
@@ -136,16 +135,16 @@ void led_trigger_event(struct led_trigger *trigger,  enum led_brightness event)
 }
 
 
-void led_trigger_blink(struct led_trigger *trigger, unsigned long *delay_on,
-                       unsigned long *delay_off)
+void led_trigger_blink(struct led_trigger *trigger, unsigned long delay_on,
+                       unsigned long delay_off)
 {
 	lx_emul_trace(__func__);
 }
 
 
 void led_trigger_blink_oneshot(struct led_trigger *trigger,
-                               unsigned long *delay_on,
-                               unsigned long *delay_off,
+                               unsigned long delay_on,
+                               unsigned long delay_off,
                                int invert)
 {
 	lx_emul_trace_and_stop(__func__);
@@ -431,7 +430,7 @@ int sysfs_create_link(struct kobject * kobj,struct kobject * target,const char *
 
 #include <linux/of_device.h>
 
-void of_device_uevent(struct device * dev,struct kobj_uevent_env * env)
+void of_device_uevent(const struct device * dev,struct kobj_uevent_env * env)
 {
 	lx_emul_trace(__func__);
 }
@@ -456,7 +455,7 @@ void add_device_randomness(const void * buf,size_t len)
 
 #include <linux/of_device.h>
 
-int of_device_uevent_modalias(struct device * dev,struct kobj_uevent_env * env)
+int of_device_uevent_modalias(const struct device * dev,struct kobj_uevent_env * env)
 {
 	lx_emul_trace(__func__);
 	return 0;
@@ -475,10 +474,10 @@ struct proc_dir_entry * proc_create_seq_private(const char * name,umode_t mode,s
 
 #include <linux/sysctl.h>
 
-struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
+void __register_sysctl_init(const char *path, struct ctl_table *table,
+                            const char *table_name, size_t table_size)
 {
 	lx_emul_trace(__func__);
-	return NULL;
 }
 
 
@@ -493,14 +492,6 @@ void register_syscore_ops(struct syscore_ops * ops)
 #include <net/gen_stats.h>
 
 void gnet_stats_basic_sync_init(struct gnet_stats_basic_sync * b)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/sysctl.h>
-
-void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name)
 {
 	lx_emul_trace(__func__);
 }
@@ -815,3 +806,19 @@ void flush_dcache_page(struct page * page)
 {
 	lx_emul_trace(__func__);
 }
+
+
+#include <linux/mnt_idmapping.h>
+
+struct mnt_idmap { int dummy; };
+struct mnt_idmap nop_mnt_idmap;
+
+
+#include <linux/fs.h>
+
+void inode_init_once(struct inode * inode)
+{
+	lx_emul_trace(__func__);
+}
+
+

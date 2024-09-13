@@ -267,12 +267,14 @@ int devtmpfs_create_node(struct device * dev)
 }
 
 
-#include <linux/fb.h>
+#include <video/cmdline.h>
 
-int fb_get_options(const char * name,char ** option)
+const char * video_get_options(const char * name)
 {
-	*option = "";
-	return 0;
+	static char * const option = "";
+	lx_emul_trace(__func__);
+
+	return option;
 }
 
 
@@ -567,7 +569,6 @@ u64 vabits_actual;
 #include <linux/tracepoint-defs.h>
 
 const struct trace_print_flags vmaflag_names[]  = { {0,NULL}};
-const struct trace_print_flags pageflag_names[]  = { {0,NULL}};
 const struct trace_print_flags gfpflag_names[]  = { {0,NULL}};
 
 
@@ -608,10 +609,10 @@ struct proc_dir_entry * proc_symlink(const char * name,struct proc_dir_entry * p
 
 #include <linux/sysctl.h>
 
-struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
+void __init __register_sysctl_init(const char * path, struct ctl_table * table,
+                                   const char * table_name, size_t table_size)
 {
 	lx_emul_trace(__func__);
-	return NULL;
 }
 
 
@@ -629,14 +630,6 @@ bool parse_option_str(const char * str,const char * option)
 {
 	lx_emul_trace(__func__);
 	return false;
-}
-
-
-#include <linux/sysctl.h>
-
-void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name)
-{
-	lx_emul_trace(__func__);
 }
 
 
@@ -890,15 +883,6 @@ struct logic_pio_hwaddr * find_io_range_by_fwnode(struct fwnode_handle * fwnode)
 }
 
 
-#include <drm/drm.h>
-
-bool drm_firmware_drivers_only(void)
-{
-	lx_emul_trace(__func__);
-	return false;
-}
-
-
 #include <linux/pm_domain.h>
 
 int dev_pm_domain_attach(struct device * dev,bool power_on)
@@ -1027,6 +1011,33 @@ struct mux_control * devm_mux_control_get(struct device * dev,const char * mux_n
 #include <linux/mux/consumer.h>
 
 int mux_control_try_select_delay(struct mux_control * mux,unsigned int state,unsigned int delay_us)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <video/nomodeset.h>
+
+bool video_firmware_drivers_only(void)
+{
+	lx_emul_trace(__func__);
+	return false;
+}
+
+
+#include <linux/regulator/consumer.h>
+
+struct regulator * devm_regulator_get_optional(struct device * dev,const char * id)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
+
+#include <linux/gpio/consumer.h>
+
+int gpiod_direction_output(struct gpio_desc * desc,int value)
 {
 	lx_emul_trace(__func__);
 	return 0;

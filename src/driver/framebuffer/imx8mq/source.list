@@ -22,6 +22,7 @@ drivers/base/driver.c
 drivers/base/platform.c
 drivers/base/property.c
 drivers/base/regmap/regcache-flat.c
+drivers/base/regmap/regcache-maple.c
 drivers/base/regmap/regcache-rbtree.c
 drivers/base/regmap/regcache.c
 drivers/base/regmap/regmap-i2c.c
@@ -80,6 +81,7 @@ drivers/gpu/drm/drm_encoder.c
 drivers/gpu/drm/drm_encoder_slave.c
 drivers/gpu/drm/drm_fb_dma_helper.c
 drivers/gpu/drm/drm_fb_helper.c
+drivers/gpu/drm/drm_fbdev_dma.c
 drivers/gpu/drm/drm_file.c
 drivers/gpu/drm/drm_flip_work.c
 drivers/gpu/drm/drm_format_helper.c
@@ -232,6 +234,8 @@ lib/klist.c
 lib/kobject.c
 lib/kstrtox.c
 lib/list_sort.c
+lib/maple_tree.c
+lib/math/reciprocal_div.c
 lib/radix-tree.c
 lib/rbtree.c
 lib/sort.c
@@ -240,5 +244,8 @@ lib/string_helpers.c
 lib/timerqueue.c
 lib/vsprintf.c
 lib/xarray.c
+mm/memblock.c
 mm/mempool.c
+mm/slab_common.c
+mm/slub.c
 mm/util.c

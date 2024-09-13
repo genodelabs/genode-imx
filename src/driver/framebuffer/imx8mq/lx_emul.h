@@ -25,3 +25,6 @@
 
 /* fix for warning in drm/bridge/cdns-mhdp-common.h */
 #include <linux/platform_device.h>
+
+/* defined in  drm/bridge/cadence/cdns-mhdp8546-core.h */
+struct cdns_mhdp_device;

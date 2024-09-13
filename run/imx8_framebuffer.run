@@ -4,6 +4,7 @@ create_boot_directory
 
 import_from_depot [depot_user]/src/[base_src] \
                   [depot_user]/src/init \
+                  [depot_user]/src/imx8mq_fb \
                   [depot_user]/raw/[board]-devices
 
 set build_components {

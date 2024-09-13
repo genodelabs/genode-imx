@@ -16,10 +16,12 @@
 #include <linux/platform_device.h>
 #include <linux/pwm.h>
 
-static void pwm_imx27_get_state(struct pwm_chip *chip,
+static int pwm_imx27_get_state(struct pwm_chip *chip,
                                 struct pwm_device *pwm,
                                 struct pwm_state *state)
-{ }
+{
+	return 0;
+}
 
 static int pwm_imx27_apply(struct pwm_chip *chip, struct pwm_device *pwm,
                            const struct pwm_state *state)

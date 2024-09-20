@@ -16,12 +16,16 @@ PATCHES += patches/linux-imx8mq-evk-enable-hdmi-dts.patch
 PATCHES += patches/linux-mnt-dts.patch
 PATCHES += patches/linux-prevent_pldw_bitops.patch
 PATCHES += patches/linux-fus-dts.patch
+PATCHES += patches/linux-mnt-pocket-lt070me05000.patch
+PATCHES += patches/linux-mnt-pocket-samsung-dsim.patch
 
 PATCH_OPT(patches/linux-compulab-dts.patch)               := -p1 --directory=linux-imx
 PATCH_OPT(patches/linux-imx8mq-evk-enable-hdmi-dts.patch) := -p1 --directory=linux-imx
 PATCH_OPT(patches/linux-mnt-dts.patch)                    := -p1 --directory=linux-imx
 PATCH_OPT(patches/linux-prevent_pldw_bitops.patch)        := -p1 --directory=linux-imx
 PATCH_OPT(patches/linux-fus-dts.patch)                    := -p1 --directory=linux-imx
+PATCH_OPT(patches/linux-mnt-pocket-lt070me05000.patch)    := -p1 --directory=linux-imx
+PATCH_OPT(patches/linux-mnt-pocket-samsung-dsim.patch)    := -p1 --directory=linux-imx
 
 MNT_PATCHES := imx8mp-mnt-pocket-reform/2ghz/0001-imx8mp-2ghz-clk.patch \
                imx8mp-mnt-pocket-reform/2ghz/0002-imx8mp-2ghz-opp.patch \
@@ -32,7 +36,6 @@ MNT_PATCHES := imx8mp-mnt-pocket-reform/2ghz/0001-imx8mp-2ghz-clk.patch \
                imx8mp-mnt-pocket-reform/mmc-sdio/0001-sdhci-add-no-sd-uhs-sdr104-devicetree-property.patch \
                imx8mp-mnt-pocket-reform/mmc-sdio/0002-During-the-card-init-the-host-side-sometimes-may-nee.patch \
                imx8mp-mnt-pocket-reform/mmc-sdio/0003-USDHC-IP-has-one-limitation-the-tuning-circuit-can-t.patch \
-               imx8mp-mnt-pocket-reform/pocket-panel/0001-panel-jdi-lt070me05000-pocket-reform.patch \
                imx8mq-mnt-reform2/0001-nwl-dsi-fixup-mode-only-for-LCDIF-input-not-DCSS.patch \
                imx8mq-mnt-reform2/0002-pci-imx6-add-support-for-internal-refclk-imx8mq.patch \
                imx8mq-mnt-reform2/0003-lcdif-fix-pcie-interference.patch \

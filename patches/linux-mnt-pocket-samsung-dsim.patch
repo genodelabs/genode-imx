@@ -1,0 +1,27 @@
+diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+index f24666b48..28dca4dfc 100644
+--- a/drivers/gpu/drm/bridge/samsung-dsim.c
++++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+@@ -1017,13 +1017,19 @@ static int samsung_dsim_wait_for_hdr_fifo(struct samsung_dsim *dsi)
+ 				 * Wait a little bit, so the pending data can
+ 				 * actually leave the FIFO to avoid overflow.
+ 				 */
+-				if (!cond_resched())
+-					usleep_range(950, 1050);
++				/* On Genode we have to wait, because we might be just re-scheduled with
++				 * cond_resched return 1
++				 * if (!cond_resched())
++				 */
++				usleep_range(950, 1050);
+ 				return 0;
+ 			}
+ 		}
+ 
+-		if (!cond_resched())
++		/* On Genode we have to wait, because we might be just re-scheduled with
++		 * cond_resched return 1
++		 * if (!cond_resched())
++		 */
+ 			usleep_range(950, 1050);
+ 	} while (--timeout);
+ 

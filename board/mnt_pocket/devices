@@ -51,4 +51,20 @@
 		<property name="snps,gfladj-refclk-lpm-sel-quirk"/>
 		<property name="snps,parkmode-disable-ss-quirk"/>
 	</device>
+
+	<device name="gpio2">
+		<io_mem address="0x30210000" size="0x10000"/>
+		<irq number="98"/>
+		<irq number="99"/>
+		<clock name="gpio2_gate"/>
+	</device>
+
+	<device name="usdhc2" type="fsl,imx8mp-usdhc">
+		<io_mem address="0x30b50000" size="0x10000"/>
+		<irq    number="55"/>
+		<clock  name="usdhc2_clk_root"/>
+		<clock  name="no_clk" driver_name="ipg"/>
+		<clock  name="nand_usdhc_bus_clk_root" driver_name="ahb"/>
+		<clock  name="usdhc2_gate" driver_name="per"/>
+	</device>
 </devices>

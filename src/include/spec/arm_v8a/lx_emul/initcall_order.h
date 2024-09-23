@@ -1,7 +1,7 @@
 /*
  * \brief  Array defining order of Linux Kernel initcalls
  * \author Automatically generated file - do no edit
- * \date   2024-09-10
+ * \date   2024-09-24
  */
 
 #pragma once
@@ -271,14 +271,17 @@ static const char * lx_emul_initcall_order[] = {
 	"__initcall_cdns_mhdp_imx_platform_driver_init6",
 	"__initcall_panel_lvds_driver_init6",
 	"__initcall_panel_edp_init6",
+	"__initcall_jdi_panel_driver_init6",
 	"__initcall_rad_panel_driver_init6",
 	"__initcall_lvds_codec_driver_init6",
+	"__initcall_samsung_dsim_driver_init6",
 	"__initcall_simple_bridge_driver_init6",
 	"__initcall_ti_sn65dsi86_init6",
 	"__initcall_nwl_dsi_driver_init6",
 	"__initcall_mhdp_driver_init6",
 	"__initcall_etnaviv_init6",
 	"__initcall_mxsfb_platform_driver_init6",
+	"__initcall_lcdif_platform_driver_init6",
 	"__initcall_topology_sysfs_init6",
 	"__initcall_cacheinfo_sysfs_init6",
 	"__initcall_wm8994_i2c_driver_init6",
@@ -297,6 +300,7 @@ static const char * lx_emul_initcall_order[] = {
 	"__initcall_imx_dwmac_driver_init6",
 	"__initcall_ath9k_init6",
 	"__initcall_ath9k_cmn_init6",
+	"__initcall_ath10k_sdio_init6",
 	"__initcall_iwl_drv_init6",
 	"__initcall_iwl_init6",
 	"__initcall_iwl_mvm_init6",
@@ -333,6 +337,7 @@ static const char * lx_emul_initcall_order[] = {
 	"__initcall_sdhci_esdhc_imx_driver_init6",
 	"__initcall_sdhci_esdhc_driver_init6",
 	"__initcall_smccc_devices_init6",
+	"__initcall_hdd_module_init6",
 	"__initcall_hid_init6",
 	"__initcall_hid_generic_init6",
 	"__initcall_hid_init6",

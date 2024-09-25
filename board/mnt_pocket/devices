@@ -1,4 +1,47 @@
 <devices>
+
+	<device name="i2c2">
+		<io_mem address="0x30a30000" size="0x10000"/>
+		<irq number="68"/>
+		<clock name="i2c2_clk_root"/>
+		<clock name="i2c2_gate"/>
+	</device>
+
+	<device name="gpio1">
+		<io_mem address="0x30200000" size="0x10000"/>
+		<irq number="96"/>
+		<irq number="97"/>
+		<clock name="gpio1_gate"/>
+	</device>
+
+	<device name="gpio2">
+		<io_mem address="0x30210000" size="0x10000"/>
+		<irq number="98"/>
+		<irq number="99"/>
+		<clock name="gpio2_gate"/>
+	</device>
+
+	<device name="gpio3">
+		<io_mem address="0x30220000" size="0x10000"/>
+		<irq number="100"/>
+		<irq number="101"/>
+		<clock name="gpio3_gate"/>
+	</device>
+
+	<device name="gpio4">
+		<io_mem address="0x30230000" size="0x10000"/>
+		<irq number="102"/>
+		<irq number="103"/>
+		<clock name="gpio4_gate"/>
+	</device>
+
+	<device name="gpio5">
+		<io_mem address="0x30240000" size="0x10000"/>
+		<irq number="104"/>
+		<irq number="105"/>
+		<clock name="gpio5_gate"/>
+	</device>
+
 	<device name="usb3_phy0" type="fsl,imx8mp-usb-phy">
 		<io_mem address="0x381f0040" size="0x40"/>
 		<power-domain name="usb1_phy"/>
@@ -52,13 +95,6 @@
 		<property name="snps,parkmode-disable-ss-quirk"/>
 	</device>
 
-	<device name="gpio2">
-		<io_mem address="0x30210000" size="0x10000"/>
-		<irq number="98"/>
-		<irq number="99"/>
-		<clock name="gpio2_gate"/>
-	</device>
-
 	<device name="usdhc2" type="fsl,imx8mp-usdhc">
 		<io_mem address="0x30b50000" size="0x10000"/>
 		<irq    number="55"/>
@@ -67,4 +103,48 @@
 		<clock  name="nand_usdhc_bus_clk_root" driver_name="ahb"/>
 		<clock  name="usdhc2_gate" driver_name="per"/>
 	</device>
+
+	<device name="mipi_dsi" type="fsl,imx8mp-mipi-dsim">
+		<io_mem address="0x32e60000" size="0x400"/>
+		<irq number="50"/>
+		<power-domain name="mipi_phy1"/>
+		<power-domain name="mediamix"/>
+		<clock name="media_gate" />
+		<clock name="hdmi_gate" />
+		<clock name="media_apb_clk_root"
+		       rate="200000000"
+		       parent="system_pll1_clk"
+		       driver_name="bus_clk"/>
+		<clock name="media_mipi_phy1_ref_clk_root"
+		       rate="24000000"
+		       parent="24m_ref_clk"
+		       driver_name="sclk_mipi"/>
+		<clock name="media_axi_clk_root"
+		       rate="500000000"
+		       parent="system_pll2_clk"/>
+		<clock name="video_pll1_clk"
+		       rate="1039500000"/>
+	</device>
+
+	<device name="lcdif1" type="fsl,imx8mp-lcdif">
+		<io_mem address="0x32e80000" size="0x10000"/>
+		<irq number="37"/>
+		<clock name="media_disp1_pix_clk_root"
+		       rate="148500000"
+		       parent="video_pll1_clk"
+		       driver_name="pix"/>
+		<clock name="media_apb_clk_root"
+		       driver_name="axi"/>
+		<clock name="media_axi_clk_root"
+		       driver_name="disp_axi"/>
+	</device>
+
+	<device name="irqsteer" type="fsl,imx-irqsteer">
+		<io_mem address="0x32fc2000" size="0x44"/>
+		<irq    number="75" />
+		<clock  name="hdmi_apb_clk_root"
+		        driver_name="ipg"/>
+		<clock name="irq_steer_gate"/>
+	</device>
+
 </devices>

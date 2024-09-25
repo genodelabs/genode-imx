@@ -17,7 +17,7 @@
 
 #include <iomuxc.h>
 #include <ccm.h>
-#include <common/gpc.h>
+#include <gpc.h>
 #include <common/src.h>
 #include <common.h>
 #include <watchdog.h>

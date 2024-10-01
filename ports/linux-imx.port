@@ -1,6 +1,6 @@
 LICENSE   := GPLv2
 VERSION   := 6.6.47
-DOWNLOADS := linux-imx.archive reform-debian-packages.git
+DOWNLOADS := linux-imx.archive reform-debian-packages.git qcacld2.archive
 
 URL(linux-imx) := https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-$(VERSION).tar.xz
 SHA(linux-imx) := d43376c9e9eaa92bb1b926054bd160d329c58a62d64bd65fe1222c11c6564f50
@@ -10,6 +10,11 @@ URL(reform-debian-packages) := https://source.mnt.re/reform/reform-debian-packag
 REV(reform-debian-packages) := c4e993a72d077086c96f4e5ca5854841d53bfae0
 DIR(reform-debian-packages) := reform
 
+QCACLD2_REV  := 072e24dcdafda9d1d3d79710ba3f2f2f9c34c6e5
+URL(qcacld2) := https://github.com/cnuke/qcacld-2.0/archive/$(QCACLD2_REV).tar.gz
+SHA(qcacld2) := 31de2b3a387f8cbf8628f9286bebb9037a12cc2d0ff10e4876dfd6ce4baf1191
+DIR(qcacld2) := linux-imx/qca
+
 PATCHES := src/driver/usb_host/imx8m/imx8mq-evk-enable-usb-c-dts.patch
 PATCHES += patches/linux-compulab-dts.patch
 PATCHES += patches/linux-imx8mq-evk-enable-hdmi-dts.patch
@@ -18,6 +23,7 @@ PATCHES += patches/linux-prevent_pldw_bitops.patch
 PATCHES += patches/linux-fus-dts.patch
 PATCHES += patches/linux-mnt-pocket-lt070me05000.patch
 PATCHES += patches/linux-mnt-pocket-samsung-dsim.patch
+PATCHES += patches/linux-imx8mp_qcacld2_wifi.patch
 
 PATCH_OPT(patches/linux-compulab-dts.patch)               := -p1 --directory=linux-imx
 PATCH_OPT(patches/linux-imx8mq-evk-enable-hdmi-dts.patch) := -p1 --directory=linux-imx
@@ -26,6 +32,7 @@ PATCH_OPT(patches/linux-prevent_pldw_bitops.patch)        := -p1 --directory=lin
 PATCH_OPT(patches/linux-fus-dts.patch)                    := -p1 --directory=linux-imx
 PATCH_OPT(patches/linux-mnt-pocket-lt070me05000.patch)    := -p1 --directory=linux-imx
 PATCH_OPT(patches/linux-mnt-pocket-samsung-dsim.patch)    := -p1 --directory=linux-imx
+PATCH_OPT(patches/linux-imx8mp_qcacld2_wifi.patch)        := -p1 --directory=linux-imx
 
 MNT_PATCHES := imx8mp-mnt-pocket-reform/2ghz/0001-imx8mp-2ghz-clk.patch \
                imx8mp-mnt-pocket-reform/2ghz/0002-imx8mp-2ghz-opp.patch \
@@ -42,7 +49,7 @@ MNT_PATCHES := imx8mp-mnt-pocket-reform/2ghz/0001-imx8mp-2ghz-clk.patch \
                imx8mq-mnt-reform2/0004-mnt4002-imx-gpcv2-wake-smccc.patch.patch \
                imx8mq-mnt-reform2/0005-imx8mq-import-HDMI-driver-and-make-DCSS-compatible-w.patch
 
-default: reform-debian-packages.git linux-imx.archive
+default: reform-debian-packages.git linux-imx.archive qcacld2.archive
 	cd linux-imx; for i in $(MNT_PATCHES); do patch -p1 < ../reform/linux/patches6.6/$$i; done; cd ..
 
 #

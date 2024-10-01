@@ -1,0 +1,20 @@
+This patch is only needed by the 'imx8mp_qcacld2_wifi' driver.
+
+This patch makes 'driver_deferred_probe_enable' accessible from the
+outside so that we can set at the appropriate time. This is needed
+because the way the 'qcacld-2.0' driver is currently enabled requires
+items from the deferred list to be processed even before the late
+initcall stage is reach where is type of deferred probing is normally
+performed.
+
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -153,7 +153,7 @@ void driver_deferred_probe_del(struct device *dev)
+ 	mutex_unlock(&deferred_probe_mutex);
+ }
+ 
+-static bool driver_deferred_probe_enable;
++bool driver_deferred_probe_enable;
+ /**
+  * driver_deferred_probe_trigger() - Kick off re-probing deferred devices
+  *

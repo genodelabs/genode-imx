@@ -46,6 +46,7 @@ drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
 drivers/gpu/drm/bridge/lvds-codec.c
 drivers/gpu/drm/bridge/nwl-dsi.c
 drivers/gpu/drm/bridge/panel.c
+drivers/gpu/drm/bridge/samsung-dsim.c
 drivers/gpu/drm/bridge/simple-bridge.c
 drivers/gpu/drm/bridge/ti-sn65dsi86.c
 drivers/gpu/drm/display/drm_display_helper_mod.c
@@ -138,8 +139,11 @@ drivers/gpu/drm/imx/dcss/dcss-kms.c
 drivers/gpu/drm/imx/dcss/dcss-plane.c
 drivers/gpu/drm/imx/dcss/dcss-scaler.c
 drivers/gpu/drm/imx/dcss/dcss-ss.c
+drivers/gpu/drm/mxsfb/lcdif_drv.c
+drivers/gpu/drm/mxsfb/lcdif_kms.c
 drivers/gpu/drm/mxsfb/mxsfb_kms.c
 drivers/gpu/drm/panel/panel-edp.c
+drivers/gpu/drm/panel/panel-jdi-lt070me05000.c
 drivers/gpu/drm/panel/panel-lvds.c
 drivers/gpu/drm/panel/panel-raydium-rm67191.c
 drivers/i2c/i2c-core-base.c

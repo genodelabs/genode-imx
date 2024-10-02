@@ -12,7 +12,6 @@ SRC_CC   += reset.cc
 
 SRC_C    := dummies.c
 SRC_C    += fb.c
-SRC_C    += gpcv2.c
 SRC_C    += gpio-mxc.c
 SRC_C    += i2c_imx.c
 SRC_C    += lx_emul.c
@@ -21,6 +20,7 @@ SRC_C    += lx_emul/shadow/drivers/base/power/runtime.c
 SRC_C    += lx_emul/shadow/drivers/char/random.c
 SRC_C    += lx_user.c
 SRC_C    += pinctrl.c
+SRC_C    += platform_dummies.c
 SRC_C    += pwm-imx27.c
 SRC_C    += regulator-fixed.c
 SRC_C    += reset_core.c
@@ -53,7 +53,9 @@ vpath lx_emul/common_dummies.c $(REP_DIR)/src/lib/imx
 
 # Driver-specific device-tree binary data
 
-BOARDS                        := mnt_reform2 mnt_reform2-hdmi imx8q_evk
+BOARDS                        := mnt_pocket mnt_reform2 mnt_reform2-hdmi imx8q_evk
+DTS_PATH(mnt_pocket)          := arch/arm64/boot/dts/freescale/imx8mp-mnt-pocket-reform.dts
+DTS_EXTRACT(mnt_pocket)       := --select lcdif1 --select mipi_dsi
 DTS_PATH(mnt_reform2)         := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
 DTS_EXTRACT(mnt_reform2)      := --select dcss --select edp_bridge --select lcdif
 DTS_PATH(mnt_reform2-hdmi)    := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2-hdmi.dts

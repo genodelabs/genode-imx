@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2024-09-13
+ * \date   2024-09-20
  */
 
 #include <lx_emul.h>
@@ -576,6 +576,22 @@ int gpiod_get_value_cansleep(const struct gpio_desc * desc)
 }
 
 
+#include <linux/gpio/consumer.h>
+
+void gpiod_put(struct gpio_desc * desc)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+int gpiod_to_irq(const struct gpio_desc * desc)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/uuid.h>
 
 const u8 guid_index[16] = {};
@@ -918,14 +934,6 @@ void refcount_warn_saturate(refcount_t * r,enum refcount_saturation_type t)
 #include <linux/regulator/consumer.h>
 
 int regulator_bulk_disable(int num_consumers,struct regulator_bulk_data * consumers)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/regulator/consumer.h>
-
-int regulator_bulk_enable(int num_consumers,struct regulator_bulk_data * consumers)
 {
 	lx_emul_trace_and_stop(__func__);
 }

@@ -241,6 +241,14 @@ struct gpio_desc * __must_check devm_gpiod_get_optional(struct device * dev,cons
 }
 
 
+#include <linux/gpio/consumer.h>
+
+void gpiod_set_value(struct gpio_desc * desc,int value)
+{
+	lx_emul_trace(__func__);
+}
+
+
 #include <linux/regulator/consumer.h>
 
 int devm_regulator_bulk_get(struct device * dev,int num_consumers,struct regulator_bulk_data * consumers)
@@ -256,6 +264,15 @@ struct regulator * devm_regulator_get(struct device * dev,const char * id)
 {
 	lx_emul_trace(__func__);
 	return NULL;
+}
+
+
+#include <linux/regulator/consumer.h>
+
+int regulator_bulk_enable(int num_consumers,struct regulator_bulk_data * consumers)
+{
+	lx_emul_trace(__func__);
+	return 0;
 }
 
 

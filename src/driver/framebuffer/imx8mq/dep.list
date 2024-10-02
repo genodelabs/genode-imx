@@ -270,6 +270,8 @@ drivers/gpu/drm/imx/dcss/dcss-plane.c
 drivers/gpu/drm/imx/dcss/dcss-scaler.c
 drivers/gpu/drm/imx/dcss/dcss-ss.c
 drivers/gpu/drm/imx/ipuv3/imx-drm.h
+drivers/gpu/drm/mxsfb/lcdif_drv.h
+drivers/gpu/drm/mxsfb/lcdif_regs.h
 drivers/gpu/drm/mxsfb/mxsfb_drv.h
 drivers/gpu/drm/mxsfb/mxsfb_kms.c
 drivers/gpu/drm/mxsfb/mxsfb_regs.h
@@ -411,6 +413,7 @@ include/asm-generic/user.h
 include/clocksource/arm_arch_timer.h
 include/drm/bridge/cdns-mhdp-cbs.h
 include/drm/bridge/cdns-mhdp-common.h
+include/drm/bridge/samsung-dsim.h
 include/drm/display/drm_dp.h
 include/drm/display/drm_dp_aux_bus.h
 include/drm/display/drm_dp_dual_mode_helper.h

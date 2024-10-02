@@ -22,6 +22,7 @@
 
 static const struct of_device_id imx_pinctrl_of_match[] = {
 	{ .compatible = "fsl,imx8mq-iomuxc", },
+	{ .compatible = "fsl,imx8mp-iomuxc", },
 	{ /* sentinel */ }
 };
 MODULE_DEVICE_TABLE(of, imx_pinctrl_of_match);

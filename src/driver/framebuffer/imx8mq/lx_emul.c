@@ -44,3 +44,18 @@ struct vfsmount * kern_mount(struct file_system_type * type)
 
 	return m;
 }
+
+
+#include <linux/printk.h>
+
+bool printk_timed_ratelimit(unsigned long *caller_jiffies,
+                            unsigned int interval_msecs)
+{
+	unsigned long elapsed = jiffies - *caller_jiffies;
+
+	if (*caller_jiffies && elapsed <= msecs_to_jiffies(interval_msecs))
+		return false;
+
+	*caller_jiffies = jiffies;
+	return true;
+}

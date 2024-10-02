@@ -177,7 +177,7 @@ void Driver::Ccm::Frac_pll1443::rate(Rate fout)
 	while(!_mmio.read<Pll14xx::Gen_ctrl::Lock_signal>())
 	{
 		/* not using Timer::one_shot_timout is on purpose */
-		if (count == 1024) {
+		if (count == 2048) {
 			warning(" PLL=", name, " did not achieved lock.");
 			break;
 		}

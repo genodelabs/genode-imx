@@ -385,13 +385,13 @@ struct Driver::Ccm
 	                                           system_pll2_clk, system_pll1_clk,
 	                                           system_pll3_clk, system_pll1_div20,
 	                                           audio_pll2_clk, ext_clk_1,
-	                                           system_pll2_div2 };
+	                                           system_pll2_div2, true };
 	Root_clock media_apb_clk_root           { clocks, "media_apb_clk_root",
 	                                           root_range(21), m24_ref_clk,
 	                                           system_pll2_div8, system_pll1_clk,
 	                                           system_pll3_clk, system_pll1_div20,
 	                                           audio_pll2_clk, ext_clk_1,
-	                                           system_pll1_div6 };
+	                                           system_pll1_div6, true };
 	Root_clock hdmi_apb_clk_root             { clocks, "hdmi_apb_clk_root",
 	                                           root_range(22), m24_ref_clk,
 	                                           system_pll2_div8, system_pll1_clk,
@@ -793,7 +793,7 @@ struct Driver::Ccm
 	                                           system_pll2_div3, system_pll2_div10,
 	                                           system_pll1_clk, system_pll2_clk,
 	                                           ext_clk_2, audio_pll2_clk,
-	                                           video_pll_clk };
+	                                           video_pll_clk, true };
 	Root_clock media_disp1_pix_clk_root      { clocks, "media_disp1_pix_clk_root",
 	                                           root_range(124), m24_ref_clk,
 	                                           video_pll_clk, audio_pll2_clk,
@@ -996,7 +996,7 @@ struct Driver::Ccm
 	Gate hsio_gate        { clocks, "hsio_gate",
 	                        gate_range(92),  hsio_axi_clk_root };
 	Gate media_gate       { clocks, "media_gate",
-	                        gate_range(93),  media_mipi_phy1_ref_clk_root};
+	                        gate_range(93),  media_mipi_phy1_ref_clk_root, true };
 	Gate usdhc3_gate      { clocks, "usdhc3_gate",
 	                        gate_range(94),  usdhc3_clk_root };
 	Gate hdmi_gate        { clocks, "hdmi_gate",

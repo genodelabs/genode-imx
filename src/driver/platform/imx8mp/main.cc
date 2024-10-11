@@ -37,7 +37,7 @@ struct Driver::Main
 
 	bool _verbose { _config_rom.xml().attribute_value("verbose", false) };
 
-	Iomuxc   _iomuxc   { _env };
+	Iomuxc   _iomuxc   { _env, _common.platform_info() };
 	Watchdog _watchdog { _env };
 
 	Ccm _ccm { _env, _common.devices().clocks(), _verbose };

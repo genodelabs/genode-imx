@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2024-09-11
+ * \date   2024-10-14
  */
 
 #include <lx_emul.h>
@@ -985,6 +985,22 @@ void proc_free_inum(unsigned int inum)
 
 #include <linux/ptp_clock_kernel.h>
 
+void ptp_cancel_worker_sync(struct ptp_clock * ptp)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/ptp_classify.h>
+
+unsigned int ptp_classify_raw(const struct sk_buff * skb)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/ptp_clock_kernel.h>
+
 void ptp_clock_event(struct ptp_clock * ptp,struct ptp_clock_event * event)
 {
 	lx_emul_trace_and_stop(__func__);
@@ -1002,6 +1018,22 @@ int ptp_clock_index(struct ptp_clock * ptp)
 #include <linux/ptp_clock_kernel.h>
 
 int ptp_clock_unregister(struct ptp_clock * ptp)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/ptp_clock_kernel.h>
+
+int ptp_find_pin_unlocked(struct ptp_clock * ptp,enum ptp_pin_function func,unsigned int chan)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/ptp_classify.h>
+
+struct ptp_header * ptp_parse_header(struct sk_buff * skb,unsigned int type)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1048,6 +1080,14 @@ void * rdev_get_drvdata(struct regulator_dev * rdev)
 #include <linux/reboot.h>
 
 enum reboot_mode reboot_mode;
+
+
+#include <linux/refcount.h>
+
+bool refcount_dec_and_mutex_lock(refcount_t * r,struct mutex * lock)
+{
+	lx_emul_trace_and_stop(__func__);
+}
 
 
 #include <linux/refcount.h>
@@ -1187,6 +1227,14 @@ u64 siphash_1u64(const u64 first,const siphash_key_t * key)
 #include <net/sock.h>
 
 void sk_error_report(struct sock * sk)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <net/sock.h>
+
+void sk_free(struct sock * sk)
 {
 	lx_emul_trace_and_stop(__func__);
 }

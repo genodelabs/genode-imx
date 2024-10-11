@@ -1,0 +1,121 @@
+assert_spec arm_v8a
+
+create_boot_directory
+import_from_depot [depot_user]/src/[base_src] \
+                  [depot_user]/src/init \
+                  [depot_user]/src/imx8mp_platform \
+                  [depot_user]/src/stmmac_nic \
+                  [depot_user]/src/nic_router \
+                  [depot_user]/src/libc \
+                  [depot_user]/src/report_rom \
+                  [depot_user]/src/vfs \
+                  [depot_user]/src/vfs_lwip \
+                  [depot_user]/src/init \
+                  [depot_user]/raw/[board]-devices
+
+build { test/lwip/http_srv }
+
+install_config {
+<config>
+	<parent-provides>
+		<service name="ROM"/>
+		<service name="IRQ"/>
+		<service name="IO_MEM"/>
+		<service name="IO_PORT"/>
+		<service name="PD"/>
+		<service name="RM"/>
+		<service name="CPU"/>
+		<service name="LOG"/>
+	</parent-provides>
+	<default-route>
+		<any-service> <parent/> <any-child/> </any-service>
+	</default-route>
+	<default caps="100"/>
+
+	<start name="timer">
+		<resource name="RAM" quantum="1M"/>
+		<provides><service name="Timer"/></provides>
+	</start>
+
+	<start name="platform" caps="150" managing_system="yes">
+		<binary name="imx8mp_platform"/>
+		<resource name="RAM" quantum="2M"/>
+		<provides> <service name="Platform"/> </provides>
+		<config>
+			<policy label="nic -> " info="yes">
+				<device name="eqos"/> </policy>
+		</config>
+		<route> <any-service> <parent/> </any-service> </route>
+	</start>
+
+	<start name="report_rom">
+		<resource name="RAM" quantum="2M"/>
+		<provides> <service name="Report"/> <service name="ROM"/> </provides>
+		<config verbose="no">
+		</config>
+	</start>
+
+	<start name="nic" caps="200">
+		<binary name="stmmac_nic"/>
+		<resource name="RAM" quantum="20M"/>
+		<config mac_address_by_rom="false"/>
+		<route>
+			<service name="ROM" label="dtb">
+				<parent label="stmmac_nic-mnt_pocket.dtb"/>
+			</service>
+			<service name="Uplink"><child name="nic_router"/></service>
+			<any-service> <parent/> <any-child/> </any-service>
+		</route>
+	</start>
+
+	<start name="nic_router" caps="200">
+		<resource name="RAM" quantum="10M"/>
+		<provides>
+			<service name="Nic"/>
+			<service name="Uplink"/>
+		</provides>
+		<config verbose_domain_state="yes">
+
+			<policy label_prefix="test-lwip_httpsrv" domain="downlink"/>
+			<policy label_prefix="nic"               domain="uplink"/>
+
+			<domain name="uplink">
+
+				<nat domain="downlink" tcp-ports="16384"/>
+				<tcp-forward port="443" domain="downlink" to="10.0.3.2"/>
+				<tcp-forward port="80"  domain="downlink" to="10.0.3.2"/>
+
+			</domain>
+
+			<domain name="downlink" interface="10.0.3.1/24">
+
+				<dhcp-server ip_first="10.0.3.2" ip_last="10.0.3.2"/>
+
+			</domain>
+
+		</config>
+	</start>
+
+	<start name="test-lwip_httpsrv" caps="120">
+		<resource name="RAM" quantum="6M"/>
+		<config>
+			<vfs>
+				<dir name="dev">    <log/>             </dir>
+				<dir name="socket"> <lwip dhcp="yes"/> </dir>
+			</vfs>
+			<libc stdout="/dev/log" stderr="/dev/log" socket="/socket"/>
+		</config>
+		<route>
+			<service name="Nic"><child name="nic_router"/></service>
+			<any-service> <parent/> <any-child/> </any-service>
+		</route>
+	</start>
+</config>}
+
+# create simple system state ROM
+set fd [open [run_dir]/genode/system w]
+puts $fd { <system state=""/> }
+close $fd
+
+build_boot_image [build_artifacts]
+run_genode_until forever

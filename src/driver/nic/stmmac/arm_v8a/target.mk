@@ -42,6 +42,8 @@ GENODE_C_API_SRC_DIR := $(call select_from_repositories,src/lib/genode_c_api)
 vpath % $(dir $(GENODE_C_API_SRC_DIR))
 
 # Driver-specific device-tree binary data
-BOARDS                       := imx8mp_iot_gate
+BOARDS                       := imx8mp_iot_gate mnt_pocket
 DTS_PATH(imx8mp_iot_gate)    := arch/arm64/boot/dts/compulab/iot-gate-imx8plus.dts
 DTS_EXTRACT(imx8mp_iot_gate) := --select eqos
+DTS_PATH(mnt_pocket)         := arch/arm64/boot/dts/freescale/imx8mq-mnt-pocket.dts
+DTS_EXTRACT(mnt_pocket)      := --select eqos

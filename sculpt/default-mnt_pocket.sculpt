@@ -1,0 +1,13 @@
+drivers: mnt_pocket
+
+# supplemental depot content added to the system image
+import: pkg/sculpt_drivers-mnt_pocket
+
+# selection of launcher-menu entries
+launcher: download_debug_info black_hole trace_logger recall_fs
+
+presets: empty nano3d window_manager falkon_web_browser
+
+depot: genodelabs cnuke alex-ab mstein nfeske cproc chelmuth jschlatow ssumpf skalk
+
+build: driver/platform/imx8mp app/sculpt_manager monitor

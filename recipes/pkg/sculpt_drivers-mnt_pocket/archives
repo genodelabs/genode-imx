@@ -1,0 +1,12 @@
+_/raw/mnt_pocket-devices
+_/pkg/imx8mp_qcacld2_wifi
+_/src/stmmac_nic
+_/src/imx8mq_fb
+_/src/imx_pin
+_/src/imx8mp_platform
+_/src/imx8mq_sd_card
+_/src/imx8m_usb_host
+_/src/rom_filter
+_/src/rom_reporter
+_/src/usb_block
+_/src/usb_hid

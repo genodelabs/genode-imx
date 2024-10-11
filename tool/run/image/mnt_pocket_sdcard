@@ -1,0 +1,85 @@
+proc run_image { } {
+
+	set elf_img [file join [run_dir] boot [kernel_specific_binary image.elf]]
+
+	set sgdisk     [installed_command sgdisk]
+	set mkimage [installed_command mkimage]
+
+	#
+	# Build uImage
+	#
+
+	set bin_img   [file join [run_dir] boot image.bin]
+	set uboot_img [file join [run_dir] boot uImage]
+	set entrypoint [exec [cross_dev_prefix]readelf -h $elf_img | \
+	                grep "Entry point address: " | \
+	                sed -e "s/.*Entry point address: *//"]
+	set load_addr [exec [cross_dev_prefix]readelf -l $elf_img | \
+	               grep -m 1 "LOAD"]
+	set load_addr [lindex [regexp -inline -all -- {\S+} $load_addr] 3]
+
+	exec [cross_dev_prefix]objcopy -O binary $elf_img $bin_img
+	exec gzip --best --force $bin_img
+	exec [installed_command mkimage] -A arm64 -O linux -T kernel -C gzip \
+	     -a $load_addr -e $entrypoint -d $bin_img.gz $uboot_img
+	exec rm -rf $bin_img.gz $elf_img
+
+	#
+	# Prepare /boot directory on ext2 partition
+	#
+	set ext2_dir [file join [run_dir] ext2]
+	set ext2_boot_dir [file join $ext2_dir boot]
+	exec mkdir -p $ext2_boot_dir
+	exec cp $uboot_img $ext2_boot_dir
+
+	#
+	# U-Boot boot script
+	#
+	set image_load_addr [get_cmd_arg --image-load-address "0x60000000"]
+
+	set boot_cfg_file [run_dir].boot.cfg
+	set boot_scr_file [file join $ext2_dir boot.scr]
+	exec echo "ext2load mmc 0:1 $image_load_addr /boot/uImage; bootm start $image_load_addr;" \
+	          "bootm loados; bootm go\n" > $boot_cfg_file
+	exec $mkimage -A arm -O linux -T script -C none -a 0 -e 0 -d $boot_cfg_file $boot_scr_file
+
+	#
+	# Create GPT partitioning scheme with an ext2 file system in partition 1
+	#
+
+	set part_start_kb      4096
+	set bytes_per_block    512
+	set gpt_start_blocks   2048
+	set tailroom_kb        64
+	set meta_data_overhead 1800
+	set content_size_bytes [expr [regsub {\s.*} [exec du -b [run_dir]/ext2] {}]]
+	set part_size_kb       [expr ($content_size_bytes / 1024) + $meta_data_overhead]
+	set part_start_bytes   [expr $part_start_kb*1024]
+	set part_blocks        [expr ($part_size_kb*1024) / $bytes_per_block]
+	set part_first_block   [expr $part_start_bytes / $bytes_per_block]
+	set part_last_block    [expr $part_first_block + $part_blocks - 1]
+	set disk_size_kb       [expr $part_start_kb + $part_size_kb + $tailroom_kb]
+
+	set img_file [run_dir].img.incomplete
+
+	exec dd if=/dev/zero of=$img_file bs=1K count=$disk_size_kb 2> /dev/null
+
+	# create ext2 file system with content copied from [run_dir]/ext2
+	exec [installed_command mkfs.ext2] \
+	     -q -F -L 'GENODE' -T default -E offset=$part_start_bytes \
+	     -t ext2 -d [run_dir]/ext2 \
+	     $img_file ${part_size_kb}K
+
+	# create GPT partition table
+	exec $sgdisk -z $img_file 2>@1
+	exec $sgdisk -j $gpt_start_blocks $img_file 2>@1
+	exec $sgdisk --new=1:$part_first_block:$part_last_block $img_file
+	exec $sgdisk --change-name=1:GENODE $img_file
+	exec $sgdisk --hybrid $img_file
+
+	exec mv $img_file [run_dir].img
+
+	exec rm $boot_cfg_file
+
+	puts "Created SD-card image file [run_dir].img (${disk_size_kb}kiB)"
+}

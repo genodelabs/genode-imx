@@ -29,7 +29,9 @@ SRC_CC  += genode_c_api/block.cc
 vpath genode_c_api/block.cc $(subst /genode_c_api,,$(call select_from_repositories,src/lib/genode_c_api))
 
 # Driver-specific device-tree binary data
-BOARDS                       := mnt_reform2 imx8q_evk imx8mp_iot_gate
+BOARDS                       := mnt_pocket mnt_reform2 imx8q_evk imx8mp_iot_gate
+DTS_PATH(mnt_pocket)         := arch/arm64/boot/dts/freescale/imx8mq-mnt-pocket.dts
+DTS_EXTRACT(mnt_pocket)      := --select usdhc1 --select usdhc3
 DTS_PATH(mnt_reform2)        := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
 DTS_EXTRACT(mnt_reform2)     := --select usdhc1 --select usdhc2
 DTS_PATH(imx8q_evk)          := arch/arm64/boot/dts/freescale/imx8mq-evk.dts

@@ -95,6 +95,15 @@
 		<property name="snps,parkmode-disable-ss-quirk"/>
 	</device>
 
+	<device name="usdhc1" type="fsl,imx8mp-usdhc">
+		<io_mem address="0x30b40000" size="0x10000"/>
+		<irq    number="54"/>
+		<clock  name="usdhc1_clk_root"/>
+		<clock  name="no_clk" driver_name="ipg"/>
+		<clock  name="nand_usdhc_bus_clk_root" driver_name="ahb"/>
+		<clock  name="usdhc1_gate" driver_name="per"/>
+	</device>
+
 	<device name="usdhc2" type="fsl,imx8mp-usdhc">
 		<io_mem address="0x30b50000" size="0x10000"/>
 		<irq    number="55"/>
@@ -102,6 +111,15 @@
 		<clock  name="no_clk" driver_name="ipg"/>
 		<clock  name="nand_usdhc_bus_clk_root" driver_name="ahb"/>
 		<clock  name="usdhc2_gate" driver_name="per"/>
+	</device>
+
+	<device name="usdhc3" type="fsl,imx8mp-usdhc">
+		<io_mem address="0x30b60000" size="0x10000"/>
+		<irq    number="56"/>
+		<clock  name="usdhc3_clk_root"/>
+		<clock  name="no_clk" driver_name="ipg"/>
+		<clock  name="nand_usdhc_bus_clk_root" driver_name="ahb"/>
+		<clock  name="usdhc3_gate" driver_name="per"/>
 	</device>
 
 	<device name="mipi_dsi" type="fsl,imx8mp-mipi-dsim">

@@ -1,0 +1,100 @@
+assert_spec arm_v8a
+
+create_boot_directory
+import_from_depot [depot_user]/src/[base_src] \
+                  [depot_user]/src/imx8mp_platform \
+                  [depot_user]/src/imx8mq_sd_card \
+                  [depot_user]/src/init \
+                  [depot_user]/src/report_rom \
+                  [depot_user]/raw/[board]-devices
+
+build { app/block_tester }
+
+install_config {
+<config>
+	<parent-provides>
+		<service name="ROM"/>
+		<service name="IRQ"/>
+		<service name="IO_MEM"/>
+		<service name="PD"/>
+		<service name="RM"/>
+		<service name="CPU"/>
+		<service name="LOG"/>
+	</parent-provides>
+	<default caps="100"/>
+
+	<start name="timer">
+		<resource name="RAM" quantum="1M"/>
+		<provides><service name="Timer"/></provides>
+		<route> <any-service> <parent/> </any-service> </route>
+	</start>
+
+	<start name="report_rom">
+		<resource name="RAM" quantum="2M"/>
+		<provides> <service name="Report"/> <service name="ROM"/> </provides>
+		<config verbose="no">
+			<default-policy report="dummy-report"/>
+		</config>
+		<route> <any-service> <parent/> </any-service> </route>
+	</start>
+
+	<start name="imx8mp_platform" managing_system="yes">
+		<resource name="RAM" quantum="2M"/>
+		<provides><service name="Platform"/></provides>
+		<config>
+			<policy label="sd_card -> " info="yes">
+				<device name="usdhc1"/>
+				<device name="usdhc3"/>
+			</policy>
+		</config>
+		<route>
+			<service name="ROM" label="system"> <child name="report_rom"/> </service>
+			<any-service> <parent/> </any-service>
+		</route>
+	</start>
+
+	<start name="sd_card" caps="300">
+		<binary name="imx8mq_sd_card"/>
+		<resource name="RAM" quantum="16M"/>
+		<provides><service name="Block"/></provides>
+		<config report="yes">
+			<!-- mmcblk0 is the SD-Card, mmcblk1 the eMMC -->
+			<default-policy device="mmcblk0"/>
+		</config>
+		<route>
+			<service name="ROM" label="dtb">
+				<parent label="imx8mq_sd_card-mnt_pocket.dtb"/>
+			</service>
+			<service name="ROM"> <parent/> </service>
+			<service name="PD">  <parent/> </service>
+			<service name="RM">  <parent/> </service>
+			<service name="CPU"> <parent/> </service>
+			<service name="LOG"> <parent/> </service>
+			<any-service> <any-child/> </any-service>
+		</route>
+	</start>
+
+	<start name="block_tester">
+		<resource name="RAM" quantum="64M" />
+		<config verbose="no" report="no" log="yes" stop_on_error="no">
+			<tests>
+				<sequential length="256M" size="1M" io_buffer="8M" batch="4"/>
+				<sequential start="2097152" write="no" length="256M" size="1M" io_buffer="8M" batch="4"/>
+			</tests>
+		</config>
+		<route>
+			<service name="ROM"> <parent/> </service>
+			<service name="PD">  <parent/> </service>
+			<service name="RM">  <parent/> </service>
+			<service name="CPU"> <parent/> </service>
+			<service name="LOG"> <parent/> </service>
+			<any-service> <any-child/> </any-service>
+		</route>
+	</start>
+</config> }
+
+build_boot_image [build_artifacts]
+
+run_genode_until forever
+
+# vi: set ft=tcl :

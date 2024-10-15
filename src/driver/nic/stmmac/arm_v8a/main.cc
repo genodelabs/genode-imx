@@ -16,7 +16,8 @@
 #include <lx_kit/init.h>
 #include <lx_kit/env.h>
 #include <lx_emul/init.h>
-#include <lx_emul/task.h>
+#include <lx_emul/nic.h>
+#include <lx_user/io.h>
 #include <genode_c_api/uplink.h>
 
 #include <net/mac_address.h>
@@ -26,11 +27,7 @@ namespace Stmmac_driver {
 	struct Main;
 }
 
-
-extern task_struct *user_task_struct_ptr;
-
 static Genode::uint8_t mac_address[6];
-
 
 struct Stmmac_driver::Main
 {
@@ -69,11 +66,8 @@ struct Stmmac_driver::Main
 
 	void _handle_signal()
 	{
-		if (user_task_struct_ptr)
-			lx_emul_task_unblock(user_task_struct_ptr);
-
+		lx_user_handle_io();
 		Lx_kit::env().scheduler.execute();
-
 		genode_uplink_notify_peers();
 	}
 

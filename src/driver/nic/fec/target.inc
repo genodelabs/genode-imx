@@ -11,6 +11,7 @@ SRC_CC   += lx_emul/random.cc
 SRC_C    += dummies.c
 SRC_C    += lx_emul.c
 SRC_C    += lx_emul/common_dummies.c
+SRC_C    += lx_emul/nic.c
 SRC_C    += lx_emul/shadow/drivers/char/random.c
 SRC_C    += lx_user.c
 SRC_C    += ocotp.c

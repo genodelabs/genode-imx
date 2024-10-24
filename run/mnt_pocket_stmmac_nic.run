@@ -60,7 +60,7 @@ install_config {
 		<resource name="RAM" quantum="20M"/>
 		<config mac_address_by_rom="false"/>
 		<route>
-			<service name="ROM" label="dtb">
+			<service name="ROM" label="nic.dtb">
 				<parent label="stmmac_nic-mnt_pocket.dtb"/>
 			</service>
 			<service name="Uplink"><child name="nic_router"/></service>

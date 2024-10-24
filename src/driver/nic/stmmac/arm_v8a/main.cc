@@ -50,9 +50,9 @@ struct Stmmac_driver::Main
 	Attached_rom_dataspace _config  { _env, "config" };
 
 	bool _mac_by_rom { _config.xml().attribute_value("mac_address_by_rom",
-	                                                 true) };
+	                                                 false) };
 
-	Attached_rom_dataspace _dtb { _env, "dtb" };
+	Attached_rom_dataspace _dtb { _env, "nic.dtb" };
 
 	Constructible<Attached_rom_dataspace> _mac { };
 	Constructible<Driver>                 _driver { };

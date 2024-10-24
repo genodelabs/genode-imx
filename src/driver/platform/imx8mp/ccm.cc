@@ -374,5 +374,4 @@ Driver::Ccm::Ccm(Genode::Env       &env,
 	audio_pll2_clk.disable();
 	gpu_pll_clk.disable();
 	vpu_pll_clk.disable();
-	system_pll3_clk.disable();
 }

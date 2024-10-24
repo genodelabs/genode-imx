@@ -452,6 +452,12 @@ struct Driver::Ccm
 	                                           system_pll2_clk, system_pll2_div6,
 	                                           system_pll3_clk, audio_pll1_clk,
 	                                           video_pll_clk };
+	Root_clock mipi_dsi_esc_rx_clk_root      { clocks, "mipi_dsi_esc_rx_clk_root",
+	                                           root_range(36), m24_ref_clk,
+	                                           system_pll2_div10, system_pll1_div10,
+	                                           system_pll1_clk, system_pll2_clk,
+	                                           system_pll3_clk, ext_clk_3,
+	                                           audio_pll2_clk };
 	Root_clock media_disp2_clk_root          { clocks, "media_disp2_clk_root",
 	                                           root_range(38), m24_ref_clk,
 	                                           video_pll_clk, audio_pll2_clk,
@@ -656,6 +662,18 @@ struct Driver::Ccm
 	                                           system_pll2_div10, system_pll3_clk,
 	                                           ext_clk_2, ext_clk_3,
 	                                           audio_pll2_clk };
+	Root_clock usb_core_clk_root             { clocks, "usb_core_clk_root",
+	                                           root_range(98), m24_ref_clk,
+	                                           system_pll1_div8, system_pll1_div20,
+	                                           system_pll2_div10, system_pll2_div5,
+	                                           ext_clk_2, ext_clk_3,
+	                                           audio_pll2_clk };
+	Root_clock usb_phy_clk_root              { clocks, "usb_phy_clk_root",
+	                                           root_range(99), m24_ref_clk,
+	                                           system_pll1_div8, system_pll1_div20,
+	                                           system_pll2_div10, system_pll2_div5,
+	                                           ext_clk_2, ext_clk_3,
+	                                           audio_pll2_clk };
 	Root_clock gic_clk_root                  { clocks, "gic_clk_root",
 	                                           root_range(100), m24_ref_clk,
 	                                           system_pll2_div5, system_pll1_div20,
@@ -770,6 +788,12 @@ struct Driver::Ccm
 	                                           system_pll1_clk, system_pll2_clk,
 	                                           system_pll3_clk, audio_pll2_clk,
 	                                           video_pll_clk };
+	Root_clock hdmi_24m_clk_root             { clocks, "hdmi_24m_clk_root",
+	                                           root_range(119), m24_ref_clk,
+	                                           system_pll1_div5, system_pll2_div20,
+	                                           system_pll3_clk, system_pll1_clk,
+	                                           video_pll_clk, audio_pll2_clk,
+	                                           system_pll1_div6 };
 	Root_clock hdmi_ref_266m_clk_root        { clocks, "hdmi_ref_266m_clk_root",
 	                                           root_range(120), m24_ref_clk,
 	                                           system_pll1_div2, system_pll3_clk,
@@ -841,16 +865,6 @@ struct Driver::Ccm
 	                                           audio_pll1_clk, audio_pll2_clk,
 	                                           video_pll_clk, system_pll1_div6,
 	                                           no_clk, ext_clk_3, ext_clk_4 };
-	Root_clock usb_core_clk_root             { clocks, "usb_core_clk_root",
-	                                           ccm_regs.range_at(0xb100), m24_ref_clk,
-	                                           system_pll1_div8, system_pll1_div20,
-	                                           system_pll2_div10, system_pll2_div5,
-	                                           ext_clk_2, ext_clk_3, audio_pll2_clk };
-	Root_clock usb_phy_clk_root              { clocks, "usb_phy_clk_root",
-	                                           ccm_regs.range_at(0xb180), m24_ref_clk,
-	                                           system_pll1_div8, system_pll1_div20,
-	                                           system_pll2_div10, system_pll2_div5,
-	                                           ext_clk_2, ext_clk_3, audio_pll2_clk };
 
 	Root_clock_divider ipg_clk_root          { clocks, "ipg_clk_root",
 	                                           root_range(33), ahb_clk_root };

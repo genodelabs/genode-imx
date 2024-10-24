@@ -21,6 +21,9 @@ extern "C" {
 void lx_emul_framebuffer_ready(void * base, unsigned long size,
                                unsigned xres, unsigned yres);
 
+
+bool lx_emul_machine_is_compatible(char const *compat);
+
 #ifdef __cplusplus
 }
 #endif

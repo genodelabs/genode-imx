@@ -14,6 +14,7 @@
 #include <linux/kernel.h>
 #include <linux/slab.h>
 #include <linux/fb.h>
+#include <linux/of.h>
 #include <lx_emul/fb.h>
 
 struct fb_info * framebuffer_alloc(size_t size,struct device * dev)
@@ -56,4 +57,10 @@ int register_framebuffer(struct fb_info * fb_info)
 	lx_emul_framebuffer_ready(fb_info->screen_base, fb_info->screen_size,
 	                          fb_info->var.xres, fb_info->var.yres);
 	return 0;
+}
+
+
+bool lx_emul_machine_is_compatible(char const *compat)
+{
+	return of_machine_is_compatible(compat);
 }

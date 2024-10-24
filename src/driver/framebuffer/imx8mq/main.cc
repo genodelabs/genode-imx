@@ -42,6 +42,7 @@ struct Framebuffer::Driver
 			Capture::Area const         _size;
 			Capture::Connection::Screen _captured_screen;
 			void                      * _base;
+			bool                        _ccw; /* blit 90 deg counterclockwise */
 
 			/*
 			 * Noncopyable
@@ -49,21 +50,95 @@ struct Framebuffer::Driver
 			Fb(const Fb&);
 			Fb & operator=(const Fb&);
 
+			struct Pixel_access
+			{
+				Capture::Area const _size;
+				Capture::Pixel     *_addr;
+
+				Pixel_access(Capture::Area const size,
+				             Capture::Pixel *addr)
+				: _size(size), _addr(addr) { }
+
+				Capture::Pixel *at(int x, int y)
+				{
+					return _addr + y * _size.w + x;
+				}
+
+				Capture::Pixel *at_ccw(int x, int y)
+				{
+					return _addr + (_size.w - x - 1) * _size.h + y;
+				}
+			};
+
+			void _blit_ccw(Surface<Capture::Pixel> &surface,
+			               Texture<Capture::Pixel> const &texture)
+			{
+				using Rect = Capture::Rect;
+				Rect const clipped = Rect::intersect(Rect({0, 0}, texture.size()),
+				                                     surface.clip());
+
+				if (!clipped.valid())
+					return;
+
+				Pixel_access src { _size, const_cast<Capture::Pixel *>(texture.pixel()) };
+				Pixel_access dst { _size, surface.addr()  };
+
+				Capture::Pixel *spx = src.at(clipped.x1(), clipped.y1());
+				Capture::Pixel *dpx = dst.at_ccw(clipped.x1(), clipped.y1());
+
+				/*
+				 * BIG time optimization necessary, at least avoid any expansive
+				 * operation (like mul/div etc.) for now
+				 */
+				size_t w = 0;
+
+				/* col and row refer to src, they have inverted meaning at dst */
+				for (unsigned row = 0; row < clipped.h(); row++, w += _size.w) {
+					size_t h = 0;
+					for (unsigned col = 0; col < clipped.w(); col++, h += _size.h)
+						(dpx - h + row)->pixel = (spx + w + col)->pixel;
+				}
+			}
+
+			void _apply_to_surface_ccw(Surface<Capture::Pixel> &surface)
+			{
+				using Pixel = Capture::Pixel;
+				using Affected_rects = Capture::Session::Affected_rects;
+
+				Affected_rects const affected = _capture.capture_at(Capture::Point(0, 0));
+
+				_captured_screen.with_texture([&] (Texture<Pixel> const &texture) {
+
+					affected.for_each_rect([&] (Capture::Rect const rect) {
+
+						surface.clip(rect);
+
+						_blit_ccw(surface, texture);
+					});
+				});
+			}
+
 		public:
 
 			void paint()
 			{
 				using Pixel = Capture::Pixel;
 				Surface<Pixel> surface((Pixel*)_base, _size);
-				_captured_screen.apply_to_surface(surface);
+
+				if (_ccw)
+					_apply_to_surface_ccw(surface);
+				else
+					_captured_screen.apply_to_surface(surface);
 			}
 
-			Fb(Env & env, void * base, unsigned xres, unsigned yres)
+
+			Fb(Env & env, void * base, unsigned xres, unsigned yres, bool ccw)
 			:
 				_capture(env),
-				_size{xres, yres},
+				_size{ ccw ? yres : xres, ccw ? xres : yres },
 				_captured_screen(_capture, env.rm(), { .px = _size, .mm = { } }),
-				_base(base) {}
+				_base(base),
+				_ccw(ccw) {}
 	};
 
 	enum { MAX_SCREENS = 2 };
@@ -72,7 +147,7 @@ struct Framebuffer::Driver
 	void handle_timer()
 	{
 		for (unsigned i = 0; i < MAX_SCREENS; i++)
-			 if (fb[i].constructed()) fb[i]->paint();
+			if (fb[i].constructed()) fb[i]->paint();
 	}
 
 	Signal_handler<Driver> timer_handler { env.ep(), *this,
@@ -124,7 +199,13 @@ extern "C" void lx_emul_framebuffer_ready(void * base, unsigned long,
 		if (driver(env).fb[i].constructed())
 			continue;
 
-		driver(env).fb[i].construct(env, base, xres, yres);
+		/* rotate */
+		bool ccw = false;
+
+		/* check for MNT Pocket Reform in device tree */
+		if (lx_emul_machine_is_compatible("mntre,pocket-reform")) ccw = true;
+
+		driver(env).fb[i].construct(env, base, xres, yres, ccw);
 
 		Genode::log("--- i.MX 8MQ framebuffer driver screen ", i, " initialized ---");
 		return;

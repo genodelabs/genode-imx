@@ -21,8 +21,10 @@ namespace Hw::Mnt_pocket_board {
 	using Serial = Hw::Imx_uart;
 
 	enum {
-		RAM_BASE   = 0x40000000,
-		RAM_SIZE   = 0x80000000, /* 2 GiB */
+		RAM_0_BASE   =  0x40000000,
+		RAM_0_SIZE   =  0x16000000,
+		RAM_1_BASE   =  0x58000000,
+		RAM_1_SIZE   = 0x1e8000000,
 
 		UART_BASE  = 0x30890000, /* UART2 */
 		UART_SIZE  = 0x1000,

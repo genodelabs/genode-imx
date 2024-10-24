@@ -16,8 +16,8 @@
 
 Bootstrap::Platform::Board::Board()
 :
-	early_ram_regions(Memory_region { ::Board::RAM_BASE, ::Board::RAM_SIZE }),
-	late_ram_regions(Memory_region { }),
+	early_ram_regions(Memory_region { ::Board::RAM_0_BASE, ::Board::RAM_0_SIZE }),
+	late_ram_regions(Memory_region { ::Board::RAM_1_BASE, ::Board::RAM_1_SIZE }),
 	core_mmio(Memory_region { ::Board::UART_BASE, ::Board::UART_SIZE },
 	          Memory_region { ::Board::Cpu_mmio::IRQ_CONTROLLER_DISTR_BASE,
 	                          ::Board::Cpu_mmio::IRQ_CONTROLLER_DISTR_SIZE },

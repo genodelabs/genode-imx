@@ -110,9 +110,36 @@ EXPORT_SYMBOL(netdev_rss_key_fill);
 
 #include <linux/gfp.h>
 
+void * page_frag_alloc_align(struct page_frag_cache *nc,
+                             unsigned int fragsz, gfp_t gfp_mask,
+                             unsigned int align_mask)
+{
+	struct page *page;
+
+	if (fragsz > PAGE_SIZE) {
+		printk("no support for fragments larger than PAGE_SIZE\n");
+		lx_emul_backtrace();
+		return NULL;
+	}
+
+	page = __alloc_pages(gfp_mask, 0, 0, NULL);
+
+	if (!page)
+		return NULL;
+
+	return page->virtual;
+}
+
+
 void page_frag_free(void * addr)
 {
-	lx_emul_mem_free(addr);
+	struct page *page = virt_to_page(addr);
+	if (!page) {
+		printk("BUG %s: page for addr: %p not found\n", __func__, addr);
+		lx_emul_backtrace();
+	}
+
+	__free_pages(page, 0ul);
 }
 
 

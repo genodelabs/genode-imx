@@ -1,4 +1,5 @@
 drivers: mnt_pocket
+event_filter: mnt_pocket
 
 # supplemental depot content added to the system image
 import: pkg/sculpt_drivers-mnt_pocket

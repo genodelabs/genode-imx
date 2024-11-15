@@ -4,7 +4,7 @@ drivers: mnt_pocket
 import: pkg/sculpt_drivers-mnt_pocket
 
 # selection of launcher-menu entries
-launcher: download_debug_info black_hole trace_logger recall_fs
+launcher: download_debug_info black_hole trace_logger recall_fs mixer system_clock
 
 presets: empty nano3d window_manager falkon_web_browser
 

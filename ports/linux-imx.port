@@ -10,9 +10,9 @@ URL(reform-debian-packages) := https://source.mnt.re/reform/reform-debian-packag
 REV(reform-debian-packages) := c4e993a72d077086c96f4e5ca5854841d53bfae0
 DIR(reform-debian-packages) := reform
 
-QCACLD2_REV  := 072e24dcdafda9d1d3d79710ba3f2f2f9c34c6e5
+QCACLD2_REV  := aa28568797a337c62abb89f96ecf5cbee32ef608
 URL(qcacld2) := https://github.com/cnuke/qcacld-2.0/archive/$(QCACLD2_REV).tar.gz
-SHA(qcacld2) := 31de2b3a387f8cbf8628f9286bebb9037a12cc2d0ff10e4876dfd6ce4baf1191
+SHA(qcacld2) := e4386cdfc58f668af86930db8e565ed697f6ac9887a372de31d11a9ccb955cef
 DIR(qcacld2) := linux-imx/qca
 
 PATCHES := src/driver/usb_host/imx8m/imx8mq-evk-enable-usb-c-dts.patch

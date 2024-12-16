@@ -22,8 +22,10 @@ namespace Hw::Imx8mp_iot_gate_board {
 	using Serial = Hw::Imx_uart;
 
 	enum {
-		RAM_BASE   = 0x40000000,
-		RAM_SIZE   = 0xC0000000,       /* 2 GiB */
+		RAM_0_BASE = 0x40000000,
+		RAM_0_SIZE = 0x16000000,
+		RAM_1_BASE = 0x58000000,
+		RAM_1_SIZE = 0x68000000,
 
 		UART_BASE  = 0x30890000,       /* UART3 */
 		UART_SIZE  = 0x1000,

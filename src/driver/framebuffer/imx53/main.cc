@@ -53,7 +53,10 @@ struct Framebuffer::Main
 	Ipu                         _ipu      { _device   };
 	Capture::Connection         _capture  { _env };
 	Capture::Connection::Screen _captured_screen { _capture, _env.rm(), {
-	                                               .px = _size, .mm = { } } };
+	                                               .px     = _size,
+	                                               .mm     = { },
+	                                               .rotate = { },
+	                                               .flip   = { } } };
 	Timer::Connection           _timer { _env };
 	Signal_handler<Main>        _timer_handler { _env.ep(), *this,
 	                                             &Main::_handle_timer };

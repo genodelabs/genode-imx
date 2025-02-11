@@ -42,8 +42,7 @@
 			<service name="Gui"/>
 		</parent-provides>
 
-		<start name="imx8mq_gpu" caps="300">
-			<resource name="RAM" quantum="76M"/>
+		<start name="imx8mq_gpu" caps="300" ram="76M">
 			<provides>
 				<service name="Gpu"/>
 			</provides>
@@ -58,8 +57,7 @@
 			</route>
 		</start>
 
-		<start name="glmark2" caps="500">
-			<resource name="RAM" quantum="116M"/>
+		<start name="glmark2" caps="500" ram="116M">
 			<config>
 				<vfs>
 					<dir name="dev"> <log/> </dir>

@@ -36,16 +36,14 @@ set config {
 	<default-route>
 		<any-service> <parent/> <any-child/> </any-service>
 	</default-route>
-	<default caps="100"/>
+	<default caps="100" ram="1M"/>
 
 	<start name="timer">
-		<resource name="RAM" quantum="1M"/>
 		<provides><service name="Timer"/></provides>
 	</start>
 
 	<start name="platform" caps="150" managing_system="yes">
 		<binary name="imx8mq_platform"/>
-		<resource name="RAM" quantum="1M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config>
 			<policy label="fb -> " info="yes">
@@ -82,9 +80,8 @@ append config {
 	</start>}
 
 append_if [have_board mnt_reform2] config {
-	<start name="gpio" caps="150">
+	<start name="gpio" caps="150" ram="2M">
 		<binary name="imx_pio"/>
-		<resource name="RAM" quantum="2M"/>
 		<provides>
 			<service name="Pin_state"/>
 			<service name="Pin_control"/>
@@ -104,9 +101,8 @@ append_if [have_board mnt_reform2] config {
 		</config>
 	</start>
 
-	<start name="i2c" caps="150">
+	<start name="i2c" caps="150" ram="2M">
 		<binary name="imx8q_evk_i2c"/>
-		<resource name="RAM" quantum="2M"/>
 		<provides><service name="I2c"/></provides>
 		<route>
 			<service name="RM">       <parent/> </service>
@@ -122,8 +118,7 @@ append_if [have_board mnt_reform2] config {
 		</config>
 	</start>
 
-	<start name="imx8mq_pwm" caps="100">
-		<resource name="RAM" quantum="2M"/>
+	<start name="imx8mq_pwm" caps="100" ram="2M">
 		<route>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>
@@ -136,9 +131,8 @@ append_if [have_board mnt_reform2] config {
 	</start>}
 
 append config {
-	<start name="fb" caps="250">
+	<start name="fb" caps="250" ram="128M">
 		<binary name="imx8mq_fb"/>
-		<resource name="RAM" quantum="128M"/>
 		<route>
 			<service name="ROM" label="dtb"> <parent label="} imx8mq_fb-[board].dtb {"/> </service>
 			<service name="RM">       <parent/> </service>
@@ -155,8 +149,7 @@ append config {
 		</route>
 	</start>
 
-	<start name="test-framebuffer">
-		<resource name="RAM" quantum="10M"/>
+	<start name="test-framebuffer" ram="10M">
 		<provides> <service name="Capture"/> </provides>
 		<config/>
 	</start>

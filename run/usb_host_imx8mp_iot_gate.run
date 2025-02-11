@@ -30,15 +30,13 @@ install_config {
 		<any-service> <parent/> <any-child/> </any-service>
 	</default-route>
 
-	<default caps="100"/>
+	<default caps="100" ram="1M"/>
 
 	<start name="timer">
-		<resource name="RAM" quantum="1M"/>
 		<provides><service name="Timer"/></provides>
 	</start>
 
-	<start name="report_rom">
-		<resource name="RAM" quantum="2M"/>
+	<start name="report_rom" ram="2M">
 		<provides> <service name="Report"/> <service name="ROM"/> </provides>
 		<config verbose="yes">
 			<default-policy report="usb_host -> devices"/>
@@ -46,9 +44,8 @@ install_config {
 		<route> <any-service> <parent/> </any-service> </route>
 	</start>
 
-	<start name="platform" caps="150" managing_system="yes">
+	<start name="platform" caps="150" ram="2M" managing_system="yes">
 		<binary name="imx8mp_platform"/>
-		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config verbose="yes">
 			<policy label="usb_host -> " info="yes">
@@ -66,9 +63,8 @@ install_config {
 		</route>
 	</start>
 
-	<start name="usb_host" caps="250">
+	<start name="usb_host" caps="250" ram="40M">
 		<binary name="imx8m_usb_host"/>
-		<resource name="RAM" quantum="40M"/>
 		<provides> <service name="Usb"/> </provides>
 		<route>
 			<service name="ROM" label="dtb"> <parent label="imx8m_usb_host-imx8mp_iot_gate.dtb"/> </service>
@@ -86,8 +82,7 @@ install_config {
 		</config>
 	</start>
 
-	<start name="usb_hid" caps="140">
-		<resource name="RAM" quantum="11M"/>
+	<start name="usb_hid" caps="140" ram="11M">
 		<route>
 			<service name="ROM" label="report"> <child name="report_rom"/> </service>
 			<service name="Event"> <child name="event_dump"/> </service>
@@ -96,7 +91,6 @@ install_config {
 	</start>
 
 	<start name="event_dump">
-		<resource name="RAM" quantum="1M"/>
 		<provides> <service name="Event"/> </provides>
 		<config/>
 		<route>

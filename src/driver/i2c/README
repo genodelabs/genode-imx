@@ -46,8 +46,7 @@ Configuration
 The driver acts as a server that must be configured via a policy, that states
 which client can access a certain device(s) on the bus:
 
-!<start name="imx8q_evk_i2c">
-!  <resource name="RAM" quantum="1M"/>
+!<start name="imx8q_evk_i2c" ram="1M">
 !  <provides> <service name="I2c"/> </provides>
 !
 !  <config bus_no="2" verbose="yes">

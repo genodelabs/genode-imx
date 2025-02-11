@@ -21,16 +21,14 @@ install_config {
 		<service name="CPU"/>
 		<service name="LOG"/>
 	</parent-provides>
-	<default caps="100"/>
+	<default caps="100" ram="1M"/>
 
 	<start name="timer">
-		<resource name="RAM" quantum="1M"/>
 		<provides><service name="Timer"/></provides>
 		<route> <any-service> <parent/> </any-service> </route>
 	</start>
 
-	<start name="report_rom">
-		<resource name="RAM" quantum="2M"/>
+	<start name="report_rom" ram="2M">
 		<provides> <service name="Report"/> <service name="ROM"/> </provides>
 		<config verbose="no">
 			<default-policy report="dummy-report"/>
@@ -38,8 +36,7 @@ install_config {
 		<route> <any-service> <parent/> </any-service> </route>
 	</start>
 
-	<start name="imx8mp_platform" managing_system="yes">
-		<resource name="RAM" quantum="2M"/>
+	<start name="imx8mp_platform" ram="2M" managing_system="yes">
 		<provides><service name="Platform"/></provides>
 		<config>
 			<policy label="sd_card -> " info="yes">
@@ -53,9 +50,8 @@ install_config {
 		</route>
 	</start>
 
-	<start name="sd_card" caps="300">
+	<start name="sd_card" caps="300" ram="16M">
 		<binary name="imx8mq_sd_card"/>
-		<resource name="RAM" quantum="16M"/>
 		<provides><service name="Block"/></provides>
 		<config report="yes">
 			<!-- mmcblk0 is the SD-Card, mmcblk1 the eMMC -->
@@ -74,8 +70,7 @@ install_config {
 		</route>
 	</start>
 
-	<start name="block_tester">
-		<resource name="RAM" quantum="64M" />
+	<start name="block_tester" ram="64M">
 		<config verbose="no" report="no" log="yes" stop_on_error="no">
 			<tests>
 				<sequential length="256M" size="1M" io_buffer="8M" batch="4"/>

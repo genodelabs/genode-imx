@@ -39,15 +39,13 @@ set config {
 	<default-route>
 		<any-service> <parent/> <any-child/> </any-service>
 	</default-route>
-	<default caps="100"/>
+	<default caps="100" ram="1M"/>
 
 	<start name="timer">
-		<resource name="RAM" quantum="1M"/>
 		<provides><service name="Timer"/></provides>
 	</start>
 
-	<start name="black_hole">
-		<resource name="RAM" quantum="2M"/>
+	<start name="black_hole" ram="2M">
 		<provides> <service name="ROM"/> </provides>
 		<config> <rom/> </config>
 		<route> <any-service> <parent/> </any-service> </route>
@@ -55,7 +53,6 @@ set config {
 
 	<start name="platform" caps="150" managing_system="yes">
 		<binary name="imx8mp_platform"/>
-		<resource name="RAM" quantum="1M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config system_rom="false" verbose="no">
 			<policy label="fb -> " info="yes">
@@ -77,9 +74,8 @@ set config {
 		</route>
 	</start>
 
-	<start name="gpio" caps="150">
+	<start name="gpio" caps="150" ram="2M">
 		<binary name="imx_pio"/>
-		<resource name="RAM" quantum="2M"/>
 		<provides>
 			<service name="Pin_state"/>
 			<service name="Pin_control"/>
@@ -100,9 +96,8 @@ set config {
 }
 
 append config {
-	<start name="fb" caps="250">
+	<start name="fb" caps="250" ram="128M">
 		<binary name="imx8mq_fb"/>
-		<resource name="RAM" quantum="128M"/>
 		<route>
 			<service name="ROM" label="dtb"> <parent label="} imx8mq_fb-[board].dtb {"/> </service>
 			<service name="RM">       <parent/> </service>
@@ -116,8 +111,7 @@ append config {
 		</route>
 	</start>
 
-	<start name="test-framebuffer">
-		<resource name="RAM" quantum="10M"/>
+	<start name="test-framebuffer" ram="10M">
 		<provides> <service name="Capture"/> </provides>
 		<config/>
 	</start>

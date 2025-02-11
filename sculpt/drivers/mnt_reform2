@@ -20,7 +20,7 @@
 		<any-service> <parent/> <any-child/> </any-service>
 	</default-route>
 
-	<default caps="100"/>
+	<default caps="100" ram="1M"/>
 
 	<service name="I2c">
 		<default-policy> <child name="i2c"/> </default-policy> </service>
@@ -28,8 +28,7 @@
 	<service name="Platform">
 		<default-policy> <child name="platform"/> </default-policy> </service>
 
-	<start name="report_rom">
-		<resource name="RAM" quantum="2M"/>
+	<start name="report_rom" ram="2M">
 		<provides> <service name="Report"/> <service name="ROM"/> </provides>
 		<config verbose="no">
 			<policy label="rom_reporter -> pci_devices"   report="imx8mq_pci_host -> devices"/>
@@ -38,7 +37,6 @@
 	</start>
 
 	<start name="rom_filter" caps="70">
-		<resource name="RAM" quantum="1M"/>
 		<provides> <service name="ROM" /> </provides>
 		<config buffer="32K">
 			<input name="devices"/>
@@ -58,7 +56,6 @@
 	</start>
 
 	<start name="rom_reporter">
-		<resource name="RAM" quantum="1M"/>
 		<config> <rom label="pci_devices"/> </config>
 		<route>
 			<service name="ROM"    label="pci_devices">   <child name="report_rom"/> </service>
@@ -70,9 +67,8 @@
 		</route>
 	</start>
 
-	<start name="platform" caps="300" managing_system="yes">
+	<start name="platform" caps="300" ram="3M" managing_system="yes">
 		<binary name="imx8mq_platform"/>
-		<resource name="RAM" quantum="3M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config ld_verbose="yes">
 			<report devices="yes"/>
@@ -144,9 +140,8 @@
 		</route>
 	</start>
 
-	<start name="gpio" caps="150">
+	<start name="gpio" caps="150" ram="2M">
 		<binary name="imx_pio"/>
-		<resource name="RAM" quantum="2M"/>
 		<provides>
 			<service name="Pin_state"/>
 			<service name="Pin_control"/>
@@ -170,7 +165,6 @@
 	</start>
 
 	<start name="imx8mq_pci_host">
-		<resource name="RAM" quantum="1M"/>
 		<route>
 			<service name="RM">        <parent/> </service>
 			<service name="ROM">       <parent/> </service>
@@ -184,9 +178,8 @@
 		</route>
 	</start>
 
-	<start name="i2c" caps="150">
+	<start name="i2c" caps="150" ram="2M">
 		<binary name="imx8q_evk_i2c"/>
-		<resource name="RAM" quantum="2M"/>
 		<provides><service name="I2c"/></provides>
 		<route>
 			<service name="RM">       <parent/> </service>
@@ -202,8 +195,7 @@
 		</config>
 	</start>
 
-	<start name="imx8mq_pwm" caps="100">
-		<resource name="RAM" quantum="2M"/>
+	<start name="imx8mq_pwm" caps="100" ram="2M">
 		<route>
 			<service name="RM">       <parent/> </service>
 			<service name="ROM">      <parent/> </service>

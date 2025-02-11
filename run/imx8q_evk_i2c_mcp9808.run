@@ -25,16 +25,14 @@ install_config {
 			<any-service> <parent/> <any-child/> </any-service>
 		</default-route>
 
-		<default caps="100"/>
+		<default caps="100" ram="1M"/>
 
 		<start name="timer">
-			<resource name="RAM" quantum="1M"/>
 			<provides><service name="Timer"/></provides>
 		</start>
 
-		<start name="platform" caps="800" managing_system="yes">
+		<start name="platform" caps="800" ram="4M" managing_system="yes">
 			<binary name="imx8mq_platform"/>
-			<resource name="RAM" quantum="4M"/>
 			<provides>
 				<service name="Platform"/>
 			</provides>
@@ -44,7 +42,6 @@ install_config {
 		</start>
 
 		<start name="imx8q_evk_i2c">
-			<resource name="RAM" quantum="1M"/>
 			<provides> <service name="I2c"/> </provides>
 			<config bus_no="2" verbose="yes">
 				<policy label_prefix="MCP_9808"  bus_address="0x18"/>
@@ -55,7 +52,6 @@ install_config {
 		</start>
 
 		<start name="i2c_mcp9808">
-			<resource name="RAM" quantum="1M"/>
 			<route>
 				<service name="I2c"> <child name="imx8q_evk_i2c" label="MCP_9808"/> </service>
 				<any-service> <parent/> </any-service>

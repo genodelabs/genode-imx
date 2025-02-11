@@ -47,15 +47,13 @@ append config {
 	<default-route>
 		<any-service> <parent/> <any-child/> </any-service>
 	</default-route>
-	<default caps="100"/>
+	<default caps="100" ram="1M"/>
 
 	<start name="timer">
-		<resource name="RAM" quantum="1M"/>
 		<provides> <service name="Timer"/> </provides>
 	</start>
 
-	<start name="report_rom">
-		<resource name="RAM" quantum="2M"/>
+	<start name="report_rom" ram="2M">
 		<provides> <service name="Report"/> <service name="ROM"/> </provides>
 		<config verbose="no">
 			<policy label="rom_filter -> pci_devices" report="imx8mq_pci_host -> devices"/>
@@ -63,7 +61,6 @@ append config {
 	</start>
 
 	<start name="rom_filter" caps="70">
-		<resource name="RAM" quantum="1M"/>
 		<provides> <service name="ROM" /> </provides>
 		<config buffer="32K">
 			<input name="devices"/>
@@ -82,9 +79,8 @@ append config {
 		</route>
 	</start>
 
-	<start name="platform" caps="300" managing_system="yes">
+	<start name="platform" caps="300" ram="2M" managing_system="yes">
 		<binary name="imx8mq_platform"/>
-		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Platform"/> </provides>
 		<config>
 			<policy label="gpio -> " info="yes">
@@ -112,9 +108,8 @@ append config {
 		</route>
 	</start>
 
-	<start name="gpio" caps="150">
+	<start name="gpio" caps="150" ram="2M">
 		<binary name="imx_pio"/>
-		<resource name="RAM" quantum="2M"/>
 		<provides>
 			<service name="Pin_control"/>
 			<service name="Pin_state"/>
@@ -136,7 +131,6 @@ append config {
 	</start>
 
 	<start name="imx8mq_pci_host">
-		<resource name="RAM" quantum="1M"/>
 		<route>
 			<service name="RM">        <parent/> </service>
 			<service name="ROM">       <parent/> </service>
@@ -151,7 +145,6 @@ append config {
 	</start>
 
 	<start name="dummy_rtc">
-		<resource name="RAM" quantum="1M"/>
 		<provides> <service name="Rtc"/> </provides>
 		<config year="2023" month="01" day="19" hour="16" minute="0" second="0"/>
 		<route>
@@ -159,8 +152,7 @@ append config {
 		</route>
 	</start>
 
-	<start name="test-lwip_httpsrv">
-		<resource name="RAM" quantum="128M"/>
+	<start name="test-lwip_httpsrv" ram="128M">
 		<config>
 			<libc stdout="/dev/null" stderr="/dev/log" socket="/socket"/>
 			<vfs>
@@ -174,23 +166,20 @@ append config {
 		</route>
 	</start>
 
-	<start name="state_report_rom">
+	<start name="state_report_rom" ram="2M">
 		<binary name="report_rom"/>
-		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Report"/> <service name="ROM"/> </provides>
 		<config verbose="no"/>
 	</start>
 
-	<start name="accesspoints_report_rom">
+	<start name="accesspoints_report_rom" ram="2M">
 		<binary name="report_rom"/>
-		<resource name="RAM" quantum="2M"/>
 		<provides> <service name="Report"/> <service name="ROM"/> </provides>
 		<config verbose="no"/>
 	</start>
 
-	<start name="config_rom">
+	<start name="config_rom" ram="4M">
 		<binary name="dynamic_rom"/>
-		<resource name="RAM" quantum="4M"/>
 		<provides><service name="ROM"/></provides>
 		<config verbose="yes">
 			<rom name="wifi_config">
@@ -214,8 +203,7 @@ append config {
 		</config>
 	</start>
 
-	<start name="nic_router" caps="150">
-		<resource name="RAM" quantum="8M"/>
+	<start name="nic_router" caps="150" ram="8M">
 		<provides>
 			<service name="Nic"/>
 			<service name="Uplink"/>
@@ -242,15 +230,13 @@ append config {
 		</config>
 	</start>
 
-	<start name="devices_report_rom">
+	<start name="devices_report_rom" ram="1200K">
 		<binary name="report_rom"/>
-		<resource name="RAM" quantum="1200K"/>
 		<provides> <service name="Report"/> <service name="ROM"/> </provides>
 		<config verbose="yes"/>
 	</start>
 
-	<start name="wifi" caps="250" priority="-1">
-		<resource name="RAM" quantum="32M"/>
+	<start name="wifi" caps="250" ram="32M" priority="-1">
 		<config ld_verbose="yes">
 			<report mac_address="true"/>
 			<libc stdout="/dev/log" stderr="/dev/log" rtc="/dev/rtc" rng="/dev/urandom"/>

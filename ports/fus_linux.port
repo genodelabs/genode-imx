@@ -1,0 +1,12 @@
+LICENSE   := GPLv2
+VERSION   := 5.15.160
+DOWNLOADS := fus-linux.archive
+
+URL(fus-linux)  := https://github.com/FSEmbedded/linux-fus/tarball/53b46c6
+NAME(fus-linux) := fus-linux.tgz
+SHA(fus-linux)  := abe7351dc210bc023015867e1251e49ef4c2ae61df6efe9116b5f8207f15fc6a
+DIR(fus-linux)  := fus-linux
+
+PATCHES += patches/fus-linux-irqsteer.patch
+
+PATCH_OPT(patches/fus-linux-irqsteer.patch) := -p1 --directory=fus-linux

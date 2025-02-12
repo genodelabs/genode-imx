@@ -1,0 +1,124 @@
+assert_spec arm_v8a
+
+create_boot_directory
+
+import_from_depot [depot_user]/src/[base_src] \
+                  [depot_user]/src/init \
+                  [depot_user]/raw/[board]-devices
+
+set build_components {
+	driver/framebuffer/armstone
+	driver/platform/imx8mp
+	driver/pin/imx
+	test/framebuffer
+}
+
+build $build_components
+
+set config {
+<config verbose="yes">
+	<parent-provides>
+		<service name="ROM"/>
+		<service name="IRQ"/>
+		<service name="IO_MEM"/>
+		<service name="IO_PORT"/>
+		<service name="PD"/>
+		<service name="RM"/>
+		<service name="CPU"/>
+		<service name="LOG"/>
+	</parent-provides>
+	<default-route>
+		<any-service> <parent/> <any-child/> </any-service>
+	</default-route>
+	<default caps="100"/>
+
+	<start name="timer">
+		<resource name="RAM" quantum="1M"/>
+		<provides><service name="Timer"/></provides>
+	</start>
+
+	<start name="platform" caps="150" managing_system="yes">
+		<binary name="imx8mp_platform"/>
+		<resource name="RAM" quantum="1M"/>
+		<provides> <service name="Platform"/> </provides>
+		<config>
+			<policy label="fb -> " info="yes">
+				<device name="hdmimix_pd"/>
+				<device name="hdmi_pd"/>
+				<device name="hdmi"/>
+				<device name="hdmi_pavi"/>
+				<device name="hdmi_phy"/>
+				<device name="hdmi_blk_ctrl"/>
+				<device name="irqsteer"/>
+				<device name="lcdif3"/>
+				<device name="pwm3"/>
+			</policy>
+
+			<policy label="gpio -> " info="yes">
+				<device name="gpio1"/>
+				<device name="gpio2"/>
+				<device name="gpio3"/>
+				<device name="gpio4"/>
+				<device name="gpio5"/>
+			</policy>
+		</config>
+		<route>
+ 			<any-service> <parent/> </any-service>
+		</route>
+	</start>
+
+	<start name="gpio" caps="150">
+		<binary name="imx_pio"/>
+		<resource name="RAM" quantum="2M"/>
+		<provides>
+			<service name="Pin_state"/>
+			<service name="Pin_control"/>
+			<service name="IRQ"/>
+		</provides>
+		<route>
+			<service name="RM">       <parent/> </service>
+			<service name="ROM">      <parent/> </service>
+			<service name="PD">       <parent/> </service>
+			<service name="CPU">      <parent/> </service>
+			<service name="LOG">      <parent/> </service>
+			<service name="Platform"> <child name="platform"/> </service>
+		</route>
+		<config>
+			<out name="backlight" index="28" bank="3" default="on"/>
+		</config>
+	</start>
+
+	<start name="fb" caps="250">
+		<binary name="imx8mp_armstone_fb"/>
+		<resource name="RAM" quantum="128M"/>
+		<route>
+			<service name="ROM" label="dtb"> <parent label="imx8mp_armstone_fb-imx8mp_armstone.dtb"/> </service>
+			<service name="RM">       <parent/> </service>
+			<service name="ROM">      <parent/> </service>
+			<service name="PD">       <parent/> </service>
+			<service name="CPU">      <parent/> </service>
+			<service name="LOG">      <parent/> </service>
+			<service name="Timer">    <child name="timer"/>            </service>
+			<service name="Platform"> <child name="platform"/>         </service>
+			<service name="Capture">  <child name="test-framebuffer"/> </service>
+		</route>
+	</start>
+
+	<start name="test-framebuffer">
+		<resource name="RAM" quantum="10M"/>
+		<provides> <service name="Capture"/> </provides>
+		<config/>
+	</start>
+
+</config>}
+
+install_config $config
+
+set fd [open [run_dir]/genode/system w]
+puts $fd {
+<system state=""/> }
+close $fd
+
+build_boot_image [build_artifacts]
+
+run_genode_until forever

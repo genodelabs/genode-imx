@@ -1,2 +1,92 @@
 <devices>
+	
+	<device name="hdmimix_pd" type="hdmimix">
+		<power-domain name="hdmimix"/>
+		<clock  name="hdmi_apb_clk_root" parent="system_pll1_div6"
+		        rate="133333333" driver_name="iahb"/>
+		<clock  name="hdmi_ref_266m_clk_root"/>
+		<clock  name="hdmi_gate"/>
+	</device>
+
+	<device name="hdmi_pd" type="hdmi">
+		<power-domain name="hdmi"/>
+	</device>
+
+	<device name="hdmi_blk_ctrl" type="fsl,imx8mp-hdmi-blk-ctrl">
+		<io_mem address="0x32fc0000" size="0x1000"/>
+	</device>
+
+	<device name="hdmi" type="fsl,imx8mp-hdmi">
+		<io_mem address="0x32fd8000" size="0x7eff"/>
+		<clock  name="hdmi_apb_clk_root" driver_name="iahb"/>
+		<clock  name="hdmi_axi_clk_root" parent="system_pll2_div2"
+		        rate="500000000"/>
+		<clock  name="hdmi_24m_clk_root" parent="24m_ref_clk"
+		        rate="24000000" driver_name="isfr"/>
+	</device>
+
+	<device name="hdmi_phy" type="fsl,samsung-hdmi-phy">
+		<io_mem address="0x32fdff00" size="0x100"/>
+	</device>
+
+	<device name="hdmi_pavi" type="fsl,imx8mp-hdmi-pavi">
+		<io_mem address="0x32fc4000" size="0x1000"/>
+	</device>
+
+	<device name="irqsteer" type="fsl,imx-irqsteer">
+		<io_mem address="0x32fc2000" size="0x1000"/>
+		<irq    number="75" />
+		<clock  name="hdmi_apb_clk_root" parent="system_pll1_div6"
+		        rate="133333333"/>
+	</device>
+
+	<device name="lcdif3" type="fsl,imx8mp-lcdif3">
+		<io_mem address="0x32fc6000" size="0x10000"/>
+		<clock  name="hdmi_axi_clk_root" parent="system_pll2_div2"
+		        rate="500000000" driver_name="disp-axi"/>
+		<clock  name="hdmi_apb_clk_root" parent="system_pll1_div6"
+		        rate="133333333" driver_name="disp-apb"/>
+	</device>
+
+	<device name="pwm3" type="fsl,imx8mp-pwm">
+		<io_mem address="0x30680000" size="0x10000"/>
+		<irq    number="115"/>
+		<clock  name="pwm3_clk_root" driver_name="ipg"/>
+		<clock  name="pwm3_gate"     driver_name="per"/>
+	</device>
+
+	<device name="gpio1">
+		<io_mem address="0x30200000" size="0x10000"/>
+		<irq number="96"/>
+		<irq number="97"/>
+		<clock name="gpio1_gate"/>
+	</device>
+
+	<device name="gpio2">
+		<io_mem address="0x30210000" size="0x10000"/>
+		<irq number="98"/>
+		<irq number="99"/>
+		<clock name="gpio2_gate"/>
+	</device>
+
+	<device name="gpio3">
+		<io_mem address="0x30220000" size="0x10000"/>
+		<irq number="100"/>
+		<irq number="101"/>
+		<clock name="gpio3_gate"/>
+	</device>
+
+	<device name="gpio4">
+		<io_mem address="0x30230000" size="0x10000"/>
+		<irq number="102"/>
+		<irq number="103"/>
+		<clock name="gpio4_gate"/>
+	</device>
+
+	<device name="gpio5">
+		<io_mem address="0x30240000" size="0x10000"/>
+		<irq number="104"/>
+		<irq number="105"/>
+		<clock name="gpio5_gate"/>
+	</device>
 </devices>

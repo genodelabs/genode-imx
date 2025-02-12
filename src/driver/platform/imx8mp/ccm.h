@@ -397,13 +397,13 @@ struct Driver::Ccm
 	                                           system_pll2_div8, system_pll1_clk,
 	                                           system_pll3_clk, system_pll1_div20,
 	                                           audio_pll2_clk, ext_clk_1,
-	                                           system_pll1_div6 };
+	                                           system_pll1_div6, true };
 	Root_clock hdmi_axi_clk_root             { clocks, "hdmi_axi_clk_root",
 	                                           root_range(23), m24_ref_clk,
 	                                           system_pll2_clk, system_pll1_clk,
 	                                           system_pll3_clk, system_pll1_div20,
 	                                           audio_pll2_clk, ext_clk_1,
-	                                           system_pll2_div2 };
+	                                           system_pll2_div2, true };
 	Root_clock gpu_axi_clk_root              { clocks, "gpu_axi_clk_root",
 	                                           root_range(24), m24_ref_clk,
 	                                           system_pll1_clk, gpu_pll_clk,
@@ -787,19 +787,19 @@ struct Driver::Ccm
 	                                           system_pll1_div3, system_pll2_div4,
 	                                           system_pll1_clk, system_pll2_clk,
 	                                           system_pll3_clk, audio_pll2_clk,
-	                                           video_pll_clk };
+	                                           video_pll_clk, true };
 	Root_clock hdmi_24m_clk_root             { clocks, "hdmi_24m_clk_root",
 	                                           root_range(119), m24_ref_clk,
 	                                           system_pll1_div5, system_pll2_div20,
 	                                           system_pll3_clk, system_pll1_clk,
 	                                           video_pll_clk, audio_pll2_clk,
-	                                           system_pll1_div6 };
+	                                           system_pll1_div6, true };
 	Root_clock hdmi_ref_266m_clk_root        { clocks, "hdmi_ref_266m_clk_root",
 	                                           root_range(120), m24_ref_clk,
 	                                           system_pll1_div2, system_pll3_clk,
 	                                           system_pll2_div3, system_pll1_div3,
 	                                           system_pll2_div5, audio_pll1_clk,
-	                                           video_pll_clk };
+	                                           video_pll_clk, true };
 	Root_clock usdhc3_clk_root               { clocks, "usdhc3_clk_root",
 	                                           root_range(121), m24_ref_clk,
 	                                           system_pll1_div2, system_pll1_clk,
@@ -1014,7 +1014,7 @@ struct Driver::Ccm
 	Gate usdhc3_gate      { clocks, "usdhc3_gate",
 	                        gate_range(94),  usdhc3_clk_root };
 	Gate hdmi_gate        { clocks, "hdmi_gate",
-	                        gate_range(95),  hdmi_apb_clk_root };
+	                        gate_range(95),  hdmi_apb_clk_root, true };
 	Gate vpu_gate         { clocks, "vpu_gate",
 	                        gate_range(99),  vpu_bus_clk_root};
 	Gate mrpr_gate        { clocks, "mrpr_gate",

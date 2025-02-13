@@ -17,7 +17,7 @@
 			<service name="ROM" label="hover">             <child name="wm"/> </service>
 			<service name="ROM" label="decorator_margins"> <child name="wm"/> </service>
 			<service name="Report">                        <child name="wm"/> </service>
-			<service name="File_system" label="recall">
+			<service name="File_system" label_prefix="recall ->">
 				<child name="recall_fs"/>
 			</service>
 		</route>

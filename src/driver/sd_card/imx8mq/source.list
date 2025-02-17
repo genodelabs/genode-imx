@@ -1,5 +1,6 @@
 arch/arm64/boot/dts/freescale/imx8mq-evk.dts
 arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
+arch/arm64/boot/dts/F+S/armstonemx8mp.dts
 arch/arm64/lib/memchr.S
 arch/arm64/lib/memcmp.S
 arch/arm64/lib/memcpy.S

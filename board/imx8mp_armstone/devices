@@ -89,4 +89,103 @@
 		<irq number="105"/>
 		<clock name="gpio5_gate"/>
 	</device>
+
+	<device name="usb3_phy0" type="fsl,imx8mp-usb-phy">
+		<io_mem address="0x381f0040" size="0x40"/>
+		<power-domain name="usb1_phy"/>
+		<clock name="usb_phy_gate" driver_name="phy"/>
+		<clock name="usb_phy_clk_root" parent="24m_ref_clk"/>
+	</device>
+
+	<device name="usb3_0" type="fsl,imx8mp-dwc3">
+		<io_mem address="0x32f10100" size="0x8"/>
+		<io_mem address="0x381f0000" size="0x20"/>
+		<irq number="180"/>
+		<power-domain name="hsiomix"/>
+		<clock name="hsio_gate" driver_name="hsio"/>
+		<clock name="32k_ref_clk" driver_name="suspend"/>
+	</device>
+
+	<device name="usb_dwc3_0" type="snps,dwc3">
+		<io_mem address="0x38100000" size="0x10000"/>
+		<irq number="72"/>
+		<clock name="usb_gate"          driver_name="bus_early"/>
+		<clock name="usb_core_clk_root" driver_name="ref"/>
+		<clock name="usb_gate"          driver_name="suspend"/>
+	</device>
+
+	<device name="usb3_phy1" type="fsl,imx8mp-usb-phy">
+		<io_mem address="0x382f0040" size="0x40"/>
+		<power-domain name="usb2_phy"/>
+		<clock name="usb_phy_gate" driver_name="phy"/>
+		<clock name="usb_phy_clk_root" parent="24m_ref_clk"/>
+	</device>
+
+	<device name="usb3_1" type="fsl,imx8mp-dwc3">
+		<io_mem       address="0x32f10108" size="0x8"/>
+		<io_mem       address="0x382f0000" size="0x20"/>
+		<irq          number="181"/>
+		<power-domain name="hsiomix"/>
+		<clock name="hsio_gate" driver_name="hsio"/>
+		<clock name="usb_gate" driver_name="suspend"/>
+	</device>
+
+	<device name="usb_dwc3_1" type="snps,dwc3">
+		<io_mem       address="0x38200000" size="0x10000"/>
+		<irq          number="73"/>
+		<clock name="usb_gate"          driver_name="bus_early"/>
+		<clock name="usb_core_clk_root" driver_name="ref"/>
+		<clock name="usb_gate"          driver_name="suspend"/>
+	</device>
+
+	<device name="usdhc1" type="fsl,imx8mp-usdhc">
+		<io_mem address="0x30b40000" size="0x10000"/>
+		<irq    number="54"/>
+		<clock  name="usdhc1_clk_root"/>
+		<clock  name="no_clk" driver_name="ipg"/>
+		<clock  name="nand_usdhc_bus_clk_root" driver_name="ahb"/>
+		<clock  name="usdhc1_gate" driver_name="per"/>
+	</device>
+
+	<device name="usdhc2" type="fsl,imx8mp-usdhc">
+		<io_mem address="0x30b50000" size="0x10000"/>
+		<irq    number="55"/>
+		<clock  name="usdhc2_clk_root"/>
+		<clock  name="no_clk" driver_name="ipg"/>
+		<clock  name="nand_usdhc_bus_clk_root" driver_name="ahb"/>
+		<clock  name="usdhc2_gate" driver_name="per"/>
+	</device>
+
+	<device name="usdhc3" type="fsl,imx8mp-usdhc">
+		<io_mem address="0x30b60000" size="0x10000"/>
+		<irq    number="56"/>
+		<clock  name="usdhc3_clk_root"/>
+		<clock  name="no_clk" driver_name="ipg"/>
+		<clock  name="nand_usdhc_bus_clk_root" driver_name="ahb"/>
+		<clock  name="usdhc3_gate" driver_name="per"/>
+	</device>
+
+	<device name="fec" type="fsl,imx8mp-fec">
+		<io_mem address="0x30be0000" size="0x10000"/>
+		<irq    number="150"/>
+		<irq    number="151"/>
+		<irq    number="152"/>
+		<irq    number="153"/>
+		<clock  name="enet_axi_clk_root"
+		        parent="system_pll1_div3"/>
+		<clock  name="enet_timer_clk_root"
+		        parent="system_pll2_div10"
+		        rate="100000000"
+		        driver_name="ptp"/>
+		<clock  name="enet_ref_clk_root"
+		        parent="system_pll2_div8"
+		        rate="125000000"
+		        driver_name="enet_clk_ref"/>
+		<clock  name="enet_phy_ref_clk_root"
+		        parent="system_pll2_div20"
+		        driver_name="enet_out"/>
+		<clock  name="enet1_gate" driver_name="ipg"/>
+		<clock  name="sim_enet_gate" driver_name="ahb"/>
+	</device>
+
 </devices>

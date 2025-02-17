@@ -1,3 +1,4 @@
+arch/arm64/boot/dts/F+S/armstonemx8mp.dts
 arch/arm64/boot/dts/freescale/imx8mp-mnt-pocket-reform.dts
 arch/arm64/boot/dts/freescale/imx8mq-evk.dts
 arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts

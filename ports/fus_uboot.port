@@ -1,0 +1,10 @@
+LICENSE := GPLv2
+VERSION := 2
+
+DOWNLOADS := fus_uboot.git
+
+URL(fus_uboot) := https://github.com/FSEmbedded/u-boot-fus
+DIR(fus_uboot) := uboot
+REV(fus_uboot) := 143396da408bfbd948396c006b252fbc71e563c0
+PATCHES        := patches/uboot-fus.patch
+PATCH_OPT      := -p1 --directory=uboot

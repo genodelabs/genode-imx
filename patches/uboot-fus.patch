@@ -1,0 +1,45 @@
+commit e028e2ef988567068be2d589da9efbd78f1733e1
+Author: Stefan Kalkowski <stefan.kalkowski@genode-labs.com>
+Date:   Tue Sep 3 13:46:48 2024 +0200
+
+    use armStone per default, disable initialization, increase image size
+
+diff --git a/common/board_r.c b/common/board_r.c
+index bd0b5485d..e8bd5fbea 100644
+--- a/common/board_r.c
++++ b/common/board_r.c
+@@ -677,7 +677,7 @@ static init_fnc_t init_sequence_r[] = {
+ 	console_record_init,
+ #endif
+ #ifdef CONFIG_SYS_NONCACHED_MEMORY
+-	noncached_init,
++	//noncached_init,
+ #endif
+ 	initr_of_live,
+ #ifdef CONFIG_DM
+diff --git a/configs/fsimx8mp_defconfig b/configs/fsimx8mp_defconfig
+index bcaa7c2d7..eef688f45 100644
+--- a/configs/fsimx8mp_defconfig
++++ b/configs/fsimx8mp_defconfig
+@@ -23,7 +23,7 @@ CONFIG_SPL=y
+ CONFIG_ENV_OFFSET_REDUND=0x0
+ CONFIG_IDENT_STRING=" for F&S"
+ CONFIG_SPL_IMX_ROMAPI_LOADADDR=0x48000000
+-CONFIG_DEFAULT_DEVICE_TREE="picocoremx8mp"
++CONFIG_DEFAULT_DEVICE_TREE="armstonemx8mp"
+ CONFIG_OF_BOARD_FIXUP=y
+ CONFIG_DISASM=y
+ CONFIG_SPL_DISASM=y
+diff --git a/include/configs/fsimx8mp.h b/include/configs/fsimx8mp.h
+index 81d8d4d28..a98a54b74 100644
+--- a/include/configs/fsimx8mp.h
++++ b/include/configs/fsimx8mp.h
+@@ -83,7 +83,7 @@
+ #define IMX_SIP_SRC_M4_START		IMX_SIP_SRC_MCU_START
+ #define IMX_SIP_SRC_M4_STARTED		IMX_SIP_SRC_MCU_STARTED
+ 
+-#define CONFIG_SYS_BOOTM_LEN		(64 * SZ_1M)
++#define CONFIG_SYS_BOOTM_LEN		(256 * SZ_1M)
+ 
+ #define CONFIG_SPL_MAX_SIZE		(152 * 1024)
+ #define CONFIG_SYS_MONITOR_LEN		(1024 * 1024)

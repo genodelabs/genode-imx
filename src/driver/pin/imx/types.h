@@ -57,7 +57,7 @@ struct Pin_driver::Index
 
 	class Invalid : Exception { };
 
-	static Index from_xml(Xml_node node)
+	static Index from_xml(Xml_node const &node)
 	{
 		if (!node.has_attribute("index")) {
 			warning("pin declaration lacks 'index' attribute: ", node);
@@ -77,7 +77,7 @@ struct Pin_driver::Function
 
 	class Invalid : Exception { };
 
-	static Function from_xml(Xml_node node)
+	static Function from_xml(Xml_node const &node)
 	{
 		if (node.has_type("in"))
 			return Function { INPUT };
@@ -117,7 +117,7 @@ struct Pin_driver::Pull
 
 	class Invalid : Exception { };
 
-	static Pull from_xml(Xml_node node)
+	static Pull from_xml(Xml_node const &node)
 	{
 		if (node.has_attribute("pull"))
 			warning("pull-up/pull-down not supported, must be done via IOMUXC");
@@ -133,7 +133,7 @@ struct Pin_driver::Irq_trigger
 
 	class Invalid : Exception { };
 
-	static Irq_trigger from_xml(Xml_node node)
+	static Irq_trigger from_xml(Xml_node const &node)
 	{
 		if (!node.has_attribute("irq"))
 			return Irq_trigger { RISING, OFF };
@@ -211,7 +211,7 @@ struct Pio_driver::Bank
 
 	class Invalid : Exception { };
 
-	static Bank from_xml(Xml_node node)
+	static Bank from_xml(Xml_node const &node)
 	{
 		unsigned name = node.attribute_value("bank", (unsigned)NUM);
 

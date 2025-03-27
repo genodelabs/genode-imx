@@ -59,7 +59,7 @@ void Block_driver::Request_cache::remove(void *pkt, void **req)
  **************************/
 
 Block_driver::Device::Device(Env              &env,
-                             Xml_node          node,
+                             Xml_node   const &node,
                              Range_allocator  &alloc,
                              Id_space<Device> &id_space,
                              Id                id,

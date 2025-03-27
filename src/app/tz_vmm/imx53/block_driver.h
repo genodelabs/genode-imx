@@ -96,7 +96,7 @@ class Genode::Block_driver
 				struct Invalid : Exception { };
 
 				Device(Env              &env,
-				       Xml_node          node,
+				       Xml_node   const &node,
 				       Range_allocator  &alloc,
 				       Id_space<Device> &id_space,
 				       Id                id,

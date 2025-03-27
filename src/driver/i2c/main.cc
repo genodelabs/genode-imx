@@ -48,7 +48,7 @@ struct I2c::Main
 
 		I2c::Driver _driver { _env, _driver_args_from_config(_config.xml()) };
 		I2c::Root   _root { _env.ep().rpc_ep(), _sliced_heap,
-		                    _driver, _config.xml() };
+		                    _driver, _config };
 
 	public:
 

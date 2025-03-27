@@ -55,7 +55,7 @@ class I2c::Root : public Root_component<I2c::Session_component>
 
 		Rpc_entrypoint   &_ep;
 		I2c::Driver_base &_driver;
-		Xml_node const    _config;
+		Attached_rom_dataspace const & _config_rom;
 
 	protected:
 
@@ -65,27 +65,40 @@ class I2c::Root : public Root_component<I2c::Session_component>
 			Arg_string::find_arg(args, "label").string(device_name_c_string, sizeof(device_name_c_string), "");
 			Device_name const device_name(device_name_c_string);
 
-			Genode::Session_policy policy(device_name, _config);
-			uint8_t const device_address = policy.attribute_value("bus_address", static_cast<uint8_t>(0));
+			Session_component *session_ptr = nullptr;
 
-			/* address 0x0 is reserved, so if we return 0x0 it is an error */
-			if (device_address == 0) {
-				warning("Session with label '",
-				        device_name,
-				        "' could not be created, no such policy");
+			with_matching_policy(device_name, _config_rom.xml(),
+
+				[&] (Xml_node const &policy) {
+
+					uint8_t const device_address = policy.attribute_value("bus_address", static_cast<uint8_t>(0));
+
+					/* address 0x0 is reserved, so if we return 0x0 it is an error */
+					if (device_address == 0) {
+						warning("Session with label '", device_name,
+						        "' could not be created, no such policy");
+						return;
+					}
+
+					session_ptr = new (md_alloc())
+						I2c::Session_component(_ep, _driver, device_address);
+				},
+				[&] { }
+			);
+
+			if (session_ptr)
+				return session_ptr;
+			else
 				throw Service_denied();
-			}
-
-			return new (md_alloc()) I2c::Session_component(_ep, _driver, device_address);
 		}
 
 	public:
 
 		Root(Rpc_entrypoint &ep, Allocator &md_alloc,
-		     I2c::Driver_base &driver, Xml_node const &config)
+		     I2c::Driver_base &driver, Attached_rom_dataspace const &config_rom)
 		:
 			Root_component<I2c::Session_component>(&ep, &md_alloc),
-			_ep(ep), _driver(driver), _config(config)
+			_ep(ep), _driver(driver), _config_rom(config_rom)
 		{ }
 };
 

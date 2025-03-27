@@ -288,44 +288,45 @@ struct Scanner
 	struct Io_64bit_bus_address_not_supported {};
 	struct Invalid_interrupt {};
 
-	uint32_t _io_base(Xml_node & node)
+	uint32_t _io_base(Xml_node const &node)
 	{
 		addr_t   addr = ~0UL;
 		unsigned idx  = 0;
-		node.for_each_sub_node("io_mem", [&] (Xml_node xml) {
+		node.for_each_sub_node("io_mem", [&] (Xml_node const &xml) {
 			if (idx++ == 1) addr = xml.attribute_value("phys_addr", ~0UL); });
 		if (addr > 0xffffffff)
 			throw Io_64bit_bus_address_not_supported();
 		return (uint32_t) addr;
 	}
 
-	unsigned _irq(Xml_node & node)
+	unsigned _irq(Xml_node const &node)
 	{
 		unsigned irq = 0;
 		unsigned idx = 0;
-		node.for_each_sub_node("irq", [&] (Xml_node xml) {
+		node.for_each_sub_node("irq", [&] (Xml_node const &xml) {
 			if (idx++ == 0) irq = xml.attribute_value("number", 0U); });
 		if (irq < 32)
 			throw Invalid_interrupt();
 		return irq;
 	}
 
-	Xml_node         xml;
-	Device_name      name { xml.attribute_value("name", Device_name()) };
+	Device_name      name;
 	Platform::Device device;
-	uint32_t         io_base { _io_base(xml) };
-	unsigned         irq     { _irq(xml) };
+	uint32_t         io_base;
+	unsigned         irq;
 	Pcie_controller  controller;
 	Pci_device       pci_dev;
 
 	Scanner(Pci::bus_t             bus,
-	        Xml_node               xml,
+	        Xml_node       const & xml,
 	        Platform::Connection & platform,
 	        Timer::Connection    & timer,
 	        Xml_generator        & generator)
 	:
-		xml(xml),
+		name(xml.attribute_value("name", Device_name())),
 		device(platform, name),
+		io_base(_io_base(xml)),
+		irq(_irq(xml)),
 		controller(timer, device, { 0 }, bus, io_base),
 		pci_dev(device, { 1 })
 	{
@@ -437,9 +438,9 @@ struct Main
 
 		reporter.generate([&] (Xml_generator & generator)
 		{
-			platform.with_xml([&] (Xml_node xml)
+			platform.with_xml([&] (Xml_node const &xml)
 			{
-				xml.for_each_sub_node("device", [&] (Xml_node xml)
+				xml.for_each_sub_node("device", [&] (Xml_node const &xml)
 				{
 					try {
 						scanner.construct(bus, xml, platform, timer, generator);

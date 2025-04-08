@@ -8,7 +8,7 @@ CC_OPT_gpio  += -DKBUILD_BASENAME='"gpio"'
 CC_OPT_gpio  += -DKBUILD_MODNAME='"gpio"'
 
 # Driver-specific device-tree binary data
-BOARDS                       := mnt_reform2 imx8q_evk imx8mp_armstone
+BOARDS                       := mnt_reform2 imx8q_evk imx8mp_iot_gate imx8mp_armstone
 DTS_PATH(mnt_reform2)        := arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts
 DTS_EXTRACT(mnt_reform2)     := --select fec1
 DTS_PATH(imx8q_evk)          := arch/arm64/boot/dts/freescale/imx8mq-evk.dts

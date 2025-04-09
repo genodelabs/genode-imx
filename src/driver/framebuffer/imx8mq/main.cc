@@ -136,10 +136,11 @@ struct Framebuffer::Driver
 			:
 				_capture(env),
 				_size{ ccw ? yres : xres, ccw ? xres : yres },
-				_captured_screen(_capture, env.rm(), { .px     = _size,
-				                                       .mm     = { },
-				                                       .rotate = { },
-				                                       .flip   = { } }),
+				_captured_screen(_capture, env.rm(), { .px       = _size,
+				                                       .mm       = { },
+				                                       .viewport = _size,
+				                                       .rotate   = { },
+				                                       .flip     = { } }),
 				_base(base),
 				_ccw(ccw) {}
 	};

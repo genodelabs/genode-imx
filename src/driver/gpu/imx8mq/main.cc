@@ -193,7 +193,7 @@ struct Gpu::Buffer : Vram
 	       Gpu::Buffer_id  id,
 	       uint32_t        handle,
 	       Dataspace_capability cap,
-	       Region_map &rm)
+	       Env::Local_rm  &rm)
 	:
 		_elem       { *this, space, id },
 		handle      { handle },
@@ -249,7 +249,7 @@ struct Gpu::Buffer_space : Vram_id_space
 	}
 
 	void insert(Gpu::Buffer_id id, uint32_t handle,
-	            Dataspace_capability cap, Region_map &rm)
+	            Dataspace_capability cap, Env::Local_rm &rm)
 	{
 		// XXX assert id is not assosicated with other handle and
 		//     handle is not already present in registry
@@ -312,8 +312,8 @@ struct Client_notifier : Genode::Interface
 
 struct Gpu::Worker_args
 {
-	Region_map   &rm;
-	Buffer_space &buffers;
+	Env::Local_rm &rm;
+	Buffer_space  &buffers;
 
 	Client_notifier &_client_notifier;
 
@@ -327,7 +327,7 @@ struct Gpu::Worker_args
 
 	Gpu::Info_etnaviv info { };
 
-	Worker_args(Region_map      &rm,
+	Worker_args(Env::Local_rm   &rm,
 	            Buffer_space    &buffers,
 	            Client_notifier &notifier)
 	:
@@ -445,7 +445,7 @@ extern "C" int gpu_task_func(void *p)
 	while (true) {
 
 		Gpu::Buffer_space &buffers = args.buffers;
-		Region_map        &rm      = args.rm;
+		Env::Local_rm     &rm      = args.rm;
 
 		/* handle local requests first */
 		bool destroy_task = false;

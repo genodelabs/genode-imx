@@ -15,7 +15,7 @@
 /* local includes */
 #include <serial_driver.h>
 
-using namespace Genode;
+using namespace Vmm;
 
 
 void Serial_driver::_flush()

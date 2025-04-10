@@ -20,7 +20,7 @@
 #include <vm.h>
 #include <mmu.h>
 
-using namespace Genode;
+using namespace Vmm;
 
 
 void Vm::_load_kernel(Vcpu_state &state)

@@ -28,14 +28,16 @@
 #include <atag.h>
 #include <ram.h>
 
-namespace Genode
+namespace Vmm
 {
+	using namespace Genode;
+
 	class Board_revision;
 	class Vm;
 	class Machine_type;
 }
 
-struct Genode::Board_revision
+struct Vmm::Board_revision
 {
 	unsigned long value;
 
@@ -43,7 +45,7 @@ struct Genode::Board_revision
 };
 
 
-struct Genode::Machine_type
+struct Vmm::Machine_type
 {
 	unsigned long value;
 
@@ -51,7 +53,7 @@ struct Genode::Machine_type
 };
 
 
-class Genode::Vm : Noncopyable, Interface
+class Vmm::Vm : Noncopyable, Interface
 {
 	public:
 

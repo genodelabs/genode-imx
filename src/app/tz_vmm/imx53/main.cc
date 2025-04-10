@@ -24,10 +24,9 @@
 #include <serial_driver.h>
 #include <block_driver.h>
 
-using namespace Genode;
+namespace Vmm { class Main; }
 
-
-class Main
+class Vmm::Main
 {
 	private:
 
@@ -117,4 +116,5 @@ class Main
 };
 
 
-void Component::construct(Env &env) { static Main main(env); }
+void Component::construct(Genode::Env &env) {
+	static Vmm::Main main(env); }

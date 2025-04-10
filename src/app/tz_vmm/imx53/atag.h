@@ -20,7 +20,9 @@
 #include <base/stdint.h>
 #include <util/string.h>
 
-class Atag {
+namespace Vmm { class Atag; }
+
+class Vmm::Atag {
 
 	private:
 

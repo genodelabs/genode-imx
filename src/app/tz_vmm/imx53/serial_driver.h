@@ -21,10 +21,13 @@
 /* local includes */
 #include <vm.h>
 
-namespace Genode { class Serial_driver; }
+namespace Vmm {
+	using namespace Genode;
+	class Serial_driver;
+}
 
 
-class Genode::Serial_driver
+class Vmm::Serial_driver
 {
 	private:
 

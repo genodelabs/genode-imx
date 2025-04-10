@@ -20,7 +20,9 @@
 /* local includes */
 #include <ram.h>
 
-class Mmu
+namespace Vmm { class Mmu; }
+
+class Vmm::Mmu
 {
 	private:
 

@@ -17,7 +17,9 @@
 /* Genode includes */
 #include <os/attached_mmio.h>
 
-class M4if : Genode::Attached_mmio<0x11c>
+namespace Vmm { class M4if; }
+
+class Vmm::M4if : Genode::Attached_mmio<0x11c>
 {
 	private:
 

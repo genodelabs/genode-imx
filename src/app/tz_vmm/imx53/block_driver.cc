@@ -19,7 +19,7 @@
 #include <util/construct_at.h>
 #include <util/xml_node.h>
 
-using namespace Genode;
+using namespace Vmm;
 
 
 /*********************************

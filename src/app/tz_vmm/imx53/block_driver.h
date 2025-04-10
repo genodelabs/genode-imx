@@ -18,18 +18,14 @@
 /* Genode includes */
 #include <block_session/connection.h>
 #include <base/allocator_avl.h>
+#include <util/xml_node.h>
 
 /* local includes */
 #include <vm.h>
 
-namespace Genode {
+namespace Vmm { class Block_driver; }
 
-	class Xml_node;
-	class Block_driver;
-}
-
-
-class Genode::Block_driver
+class Vmm::Block_driver
 {
 	private:
 

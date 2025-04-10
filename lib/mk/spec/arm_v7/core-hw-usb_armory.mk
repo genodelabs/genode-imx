@@ -9,10 +9,10 @@ REP_INC_DIR += src/core/board/usb_armory
 REP_INC_DIR += src/core/spec/arm_v7/trustzone
 
 # add C++ sources
-SRC_CC += kernel/vm_thread_on.cc
+SRC_CC += kernel/vcpu_thread_on.cc
 SRC_CC += spec/arm/imx_epit.cc
 SRC_CC += spec/arm/imx_tzic.cc
-SRC_CC += spec/arm_v7/trustzone/kernel/vm.cc
+SRC_CC += spec/arm_v7/trustzone/kernel/vcpu.cc
 SRC_CC += spec/arm_v7/trustzone/platform_services.cc
 SRC_CC += spec/arm_v7/trustzone/vm_session_component.cc
 SRC_CC += vm_session_common.cc

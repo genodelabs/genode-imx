@@ -44,7 +44,7 @@ class Vmm::Serial_driver
 
 		void handle_smc(Vm &vm, Vcpu_state &state);
 
-		Serial_driver(Ram_allocator &ram, Region_map &local_rm)
+		Serial_driver(Ram_allocator &ram, Env::Local_rm &local_rm)
 		: _buf(ram, local_rm, BUF_SIZE) { }
 };
 

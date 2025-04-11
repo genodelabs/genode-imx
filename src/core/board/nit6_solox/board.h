@@ -21,6 +21,7 @@
 /* base-hw core includes */
 #include <spec/arm/cortex_a9_global_timer.h>
 #include <spec/arm/cortex_a9_cpu.h>
+#include <no_vcpu_board.h>
 
 namespace Board {
 

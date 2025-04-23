@@ -61,14 +61,6 @@ void __printk_safe_exit(void)
 }
 
 
-#include <linux/sched/task.h>
-
-void __put_task_struct(struct task_struct * tsk)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/sched.h>
 
 pid_t __task_pid_nr_ns(struct task_struct * task,enum pid_type type,struct pid_namespace * ns)

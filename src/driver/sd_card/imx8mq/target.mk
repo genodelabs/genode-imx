@@ -7,7 +7,8 @@ SRC_CC  += main.cc
 SRC_CC  += lx_emul/random.cc
 SRC_CC  += lx_emul/shared_dma_buffer.cc
 
-SRC_C   += block.c
+SRC_C   += lx_emul/block.c
+
 SRC_C   += dummies.c
 SRC_C   += lx_emul.c
 SRC_C   += lx_emul/common_dummies.c

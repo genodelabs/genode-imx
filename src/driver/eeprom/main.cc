@@ -63,19 +63,17 @@ struct Main
 		_mac_0.enabled(true);
 		_mac_1.enabled(true);
 
-		try {
-			Reporter::Xml_generator xml(_mac_0, [&] () {
-				xml.node("nic", [&] () {
-					xml.attribute("mac", _read_mac(MAC_0_OFFSET)); });
-			});
-		} catch (...) { warning("Could not report mac address 0"); }
+		if (_mac_0.generate([&] (Xml_generator &xml) {
+			xml.node("nic", [&] () {
+				xml.attribute("mac", _read_mac(MAC_0_OFFSET)); });
+		}).failed())
+			warning("Could not report mac address 0");
 
-		try {
-			Reporter::Xml_generator xml(_mac_1, [&] () {
+		if (_mac_1.generate([&] (Xml_generator &xml) {
 				xml.node("nic", [&] () {
 					xml.attribute("mac", _read_mac(MAC_1_OFFSET)); });
-			});
-		} catch (...) { warning("Could not report mac address 1"); }
+		}).failed())
+			warning("Could not report mac address 1");
 	}
 };
 

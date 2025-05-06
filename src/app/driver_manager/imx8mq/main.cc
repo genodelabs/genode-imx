@@ -310,7 +310,7 @@ void Driver_manager::Main::_generate_usb_config(Reporter &usb_config,
                                                 Xml_node devices,
                                                 Xml_node policy) const
 {
-	Reporter::Xml_generator xml(usb_config, [&] () {
+	Reporter::Result const result = usb_config.generate([&] (Xml_generator &xml) {
 
 		xml.node("report", [&] () { xml.attribute("devices", true); });
 
@@ -357,6 +357,9 @@ void Driver_manager::Main::_generate_usb_config(Reporter &usb_config,
 			});
 		});
 	});
+
+	if (result == Buffer_error::EXCEEDED)
+		warning("config report exceeds maximum size");
 }
 
 
@@ -393,7 +396,7 @@ void Driver_manager::Main::_handle_pci_devices_update()
 
 void Driver_manager::Main::_generate_init_config(Reporter &init_config) const
 {
-	Reporter::Xml_generator xml(init_config, [&] () {
+	Reporter::Result const result = init_config.generate([&] (Xml_generator &xml) {
 
 		xml.attribute("verbose", false);
 		xml.attribute("prio_levels", 2);
@@ -431,12 +434,15 @@ void Driver_manager::Main::_generate_init_config(Reporter &init_config) const
 				if (nvme) _nvme_driver->gen_service_forwarding_policy(xml);
 		});
 	});
+
+	if (result == Buffer_error::EXCEEDED)
+		warning("init config report exceeds maximum size");
 }
 
 
 void Driver_manager::Main::_generate_block_devices(Reporter &block_devices) const
 {
-	Reporter::Xml_generator xml(block_devices, [&] () {
+	Reporter::Result const result = block_devices.generate([&] (Xml_generator &xml) {
 
 		_sd_cards.xml().for_each_sub_node([&] (Xml_node sd_card) {
 
@@ -479,6 +485,9 @@ void Driver_manager::Main::_generate_block_devices(Reporter &block_devices) cons
 			});
 		}
 	});
+
+	if (result == Buffer_error::EXCEEDED)
+		warning("init config report exceeds maximum size");
 }
 
 

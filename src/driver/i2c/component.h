@@ -59,7 +59,7 @@ class I2c::Root : public Root_component<I2c::Session_component>
 
 	protected:
 
-		Session_component *_create_session(char const *args) override
+		Create_result _create_session(char const *args) override
 		{
 			char device_name_c_string[I2c::Device_name::capacity()] { };
 			Arg_string::find_arg(args, "label").string(device_name_c_string, sizeof(device_name_c_string), "");
@@ -87,7 +87,7 @@ class I2c::Root : public Root_component<I2c::Session_component>
 			);
 
 			if (session_ptr)
-				return session_ptr;
+				return *session_ptr;
 			else
 				throw Service_denied();
 		}

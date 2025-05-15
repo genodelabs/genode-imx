@@ -100,7 +100,7 @@ EXPORT_SYMBOL_GPL(imx8mp_media_blk_ctrl_dev_data);
 static unsigned long my_clk_recalc_rate(struct clk_hw *hw,
                                      unsigned long parent_rate)
 {
-	struct clk *c = lx_emul_clock_get(ccm_of_node, *clk_hw_get_name(hw));
+	struct clk *c = lx_emul_clock_get(ccm_of_node, clk_hw_get_name(hw));
 	return c ? lx_emul_clock_get_rate(c) : 0;
 }
 

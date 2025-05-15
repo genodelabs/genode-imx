@@ -4,12 +4,12 @@
 		<service name="ROM" label_last="ld.lib.so"> <parent/> </service>
 		<service name="CPU">   <parent/> </service>
 		<service name="PD">    <parent/> </service>
+		<service name="RM">    <parent/> </service>
 		<service name="LOG">   <parent/> </service>
 		<service name="Timer"> <parent/> </service>
 	</common_routes>
 
 	<start name="black_hole"/>
-	<start name="mixer"/>
 	<start name="system_clock"/>
 	<start name="recall_fs"/>
 
@@ -44,29 +44,12 @@
 		</route>
 	</start>
 
-	<start name="falkon_backdrop" priority="-2" pkg="sticks_blue_backdrop">
-		<route>
-			<service name="Gui"> <parent label="backdrop"/> </service>
-		</route>
-		<config>
-			<libc/>
-			<vfs>
-				<rom name="genode_logo.png"/>
-				<rom name="grid.png"/>
-			</vfs>
-			<fill color="#0e1624" />
-			<image png="grid.png"        tiled="yes" alpha="100" />
-			<image png="genode_logo.png" anchor="bottom_right" alpha="50"
-			                             xpos="-20" ypos="-20" />
-		</config>
-	</start>
-
-	<start ram="1G" name="falkon-jemalloc" priority="-2" pkg="cproc/pkg/falkon-jemalloc/2024-10-28">
+	<start ram="1G" name="falkon" priority="-2" pkg="cproc/pkg/falkon/2025-04-11">
 		<route>
 			<service name="Nic">     <child name="nic_router"/>   </service>
 			<service name="Rtc">     <child name="system_clock"/> </service>
-			<service name="Play">    <child name="mixer"/>        </service>
-			<service name="Record">  <child name="mixer"/>        </service>
+			<service name="Play">    <child name="black_hole"/>   </service>
+			<service name="Record">  <child name="black_hole"/>   </service>
 			<service name="Capture"> <child name="black_hole"/>   </service>
 			<service name="File_system" label_prefix="config ->">    <child name="ram_fs"/> </service>
 			<service name="File_system" label_prefix="downloads ->"> <child name="ram_fs"/> </service>

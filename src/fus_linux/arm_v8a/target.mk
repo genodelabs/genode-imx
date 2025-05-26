@@ -1,5 +1,5 @@
 TARGET   := fus_linux
-REQUIRES := arm_64
+REQUIRES := arm_64 gcc_14_wont_build_linux_5.15
 
 CUSTOM_TARGET_DEPS := kernel_build.phony
 

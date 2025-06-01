@@ -4,6 +4,7 @@ imx_linux
 jitterentropy
 nic_session
 os
+pin_control_session
 platform_session
 report_session
 timer_session

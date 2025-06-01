@@ -19,6 +19,7 @@
 #include <lx_emul/nic.h>
 #include <lx_user/io.h>
 #include <genode_c_api/uplink.h>
+#include <pin_control_session/connection.h>
 
 #include <net/mac_address.h>
 
@@ -27,7 +28,10 @@ namespace Stmmac_driver {
 	struct Main;
 }
 
-static Genode::uint8_t mac_address[6];
+static Genode::uint8_t                  mac_address[6];
+static Pin_control::Connection         *phy_reset_pin;
+static bool                             phy_reset_pin_active_high;
+
 
 struct Stmmac_driver::Main
 {
@@ -51,11 +55,16 @@ struct Stmmac_driver::Main
 
 	bool _mac_by_rom { _config.node().attribute_value("mac_address_by_rom",
 	                                                  false) };
+	bool _phy_reset_control { _config.node().attribute_value("phy_reset_control",
+	                                                 false) };
+	bool _phy_reset_active_high { _config.node().attribute_value("phy_reset_active_high",
+	                                                 false) };
 
 	Attached_rom_dataspace _dtb { _env, "nic.dtb" };
 
-	Constructible<Attached_rom_dataspace> _mac { };
-	Constructible<Driver>                 _driver { };
+	Constructible<Attached_rom_dataspace>          _mac { };
+	Constructible<Driver>                          _driver { };
+	Genode::Constructible<Pin_control::Connection> _pin { };
 
 	/**
 	 * Signal handler triggered by activity of the uplink connection
@@ -90,6 +99,11 @@ struct Stmmac_driver::Main
 	:
 		_env(env)
 	{
+		if (_phy_reset_control) {
+			_pin.construct(env, "eqos_phy_reset");
+			phy_reset_pin = &*_pin;
+			phy_reset_pin_active_high = _phy_reset_active_high;
+		}
 		if (_mac_by_rom) {
 			_mac.construct(env, "mac");
 			_mac->sigh(_mac_handler);
@@ -103,6 +117,30 @@ struct Stmmac_driver::Main
 void Component::construct(Genode::Env &env)
 {
 	static Stmmac_driver::Main main(env);
+}
+
+
+extern "C" void lx_emul_reset_control_assert(void)
+{
+	if (phy_reset_pin) {
+		if (phy_reset_pin_active_high) {
+			phy_reset_pin->state(true);
+		} else {
+			phy_reset_pin->state(false);
+		}
+	}
+}
+
+
+extern "C" void lx_emul_reset_control_deassert(void)
+{
+	if (phy_reset_pin) {
+		if (phy_reset_pin_active_high) {
+			phy_reset_pin->state(false);
+		} else {
+			phy_reset_pin->state(true);
+		}
+	}
 }
 
 

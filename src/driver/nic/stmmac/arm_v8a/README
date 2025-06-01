@@ -1,0 +1,17 @@
+The stmmac_nic component implement the UPLINK session to connect to
+a nic_router. It can operate eqos ethernet controller found in i.MX SoC family.
+
+Its configuration consists of just one node. The <config/> node, with optional attributes.
+
+! <config mac_address_by_rom="yes"
+!         phy_reset_control="yes"
+!         phy_reset_active_high="yes"/>
+
+The driver can read the MAC address from a ROM, in the case it is stored on an
+eeprom or efuse. It can also control the phy_reset pin via a Pin_control session, when
+activated it open the session with 'eqos_phy_reset' label.
+
+:"mac_address_by_rom"    (yes/no) read mac_address from a ROM session
+:"phy_reset_control"     (yes/no) open Pin_control session for PHY reset
+:"phy_reset_active_high" (yes/no) determines if reset is active low or high
+

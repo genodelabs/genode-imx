@@ -439,15 +439,6 @@ struct reset_control * __devm_reset_control_get(struct device * dev,const char *
 }
 
 
-#include <linux/reset.h>
-
-int reset_control_deassert(struct reset_control * rstc)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
 #include <linux/pm_runtime.h>
 
 int __pm_runtime_set_status(struct device * dev,unsigned int status)
@@ -484,15 +475,6 @@ struct reset_control * __reset_control_get(struct device * dev,const char * id,i
 	static struct reset_control dummy;
 	lx_emul_trace(__func__);
 	return &dummy;
-}
-
-
-#include <linux/reset.h>
-
-int reset_control_assert(struct reset_control * rstc)
-{
-	lx_emul_trace(__func__);
-	return 0;
 }
 
 

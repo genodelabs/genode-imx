@@ -14,6 +14,21 @@
 #include <lx_emul.h>
 #include <linux/slab.h>
 
+#include <linux/reset.h>
+
+
+int reset_control_assert(struct reset_control * rstc)
+{
+	lx_emul_reset_control_assert();
+	return 0;
+}
+
+int reset_control_deassert(struct reset_control * rstc)
+{
+	lx_emul_reset_control_deassert();
+	return 0;
+}
+
 
 unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n);
 unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n)

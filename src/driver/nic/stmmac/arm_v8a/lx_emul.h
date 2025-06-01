@@ -26,6 +26,8 @@ extern "C" {
 #endif
 
 void lx_emul_get_mac_address(void *buf);
+void lx_emul_reset_control_assert(void);
+void lx_emul_reset_control_deassert(void);
 
 #ifdef __cplusplus
 }

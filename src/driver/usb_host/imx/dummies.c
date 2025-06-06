@@ -151,7 +151,7 @@ int kobject_uevent(struct kobject * kobj,enum kobject_action action)
 
 void kernfs_notify(struct kernfs_node * kn)
 {
-	lx_emul_trace_and_stop(__func__);
+	lx_emul_trace(__func__);
 }
 
 

@@ -462,10 +462,9 @@ void Driver_manager::Main::_generate_block_devices(Reporter &block_devices) cons
 		});
 
 		/* for now just report the first name space */
-		if (_nvme_ns.xml().has_sub_node("namespace")) {
+		Xml_node const &nvme_ctrl = _nvme_ns.xml();
+		nvme_ctrl.with_optional_sub_node("namespace", [&] (Xml_node const &nvme_ns) {
 
-			Xml_node nvme_ctrl = _nvme_ns.xml();
-			Xml_node nvme_ns   = _nvme_ns.xml().sub_node("namespace");
 			xml.node("device", [&] () {
 
 				unsigned long const
@@ -483,7 +482,7 @@ void Driver_manager::Main::_generate_block_devices(Reporter &block_devices) cons
 				xml.attribute("model",       model);
 				xml.attribute("serial",      serial);
 			});
-		}
+		});
 	});
 
 	if (result == Buffer_error::EXCEEDED)

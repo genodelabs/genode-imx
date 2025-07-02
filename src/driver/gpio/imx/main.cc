@@ -44,7 +44,7 @@ struct Main
 
 		log("--- Freescale gpio driver ---");
 
-		Gpio::process_config(config_rom.xml(), driver);
+		Gpio::process_config(config_rom.node(), driver);
 
 		/*
 		 * Announce service

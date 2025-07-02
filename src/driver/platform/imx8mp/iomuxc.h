@@ -15,6 +15,7 @@
 #define __PLATFORM__IMX__IOMUXC_H_
 
 #include <os/attached_mmio.h>
+#include <base/node.h>
 
 namespace Driver {
 	using namespace Genode;
@@ -572,15 +573,15 @@ struct Driver::Iomuxc : Genode::Attached_mmio<0x10000>
 		}
 	}
 
-	Iomuxc(Env &env, Xml_node info)
+	Iomuxc(Env &env, Node const &info)
 	:
 		Attached_mmio<SIZE>(env, { (char*)PINCTRL_MMIO_BASE, SIZE })
 	{
 		using Board_name = String<64>;
 
 		Board_name board;
-		info.with_optional_sub_node("board", [&] (Xml_node xml) {
-			board = xml.attribute_value("name", Board_name()); });
+		info.with_optional_sub_node("board", [&] (Node const &node) {
+			board = node.attribute_value("name", Board_name()); });
 
 		if (board == "imx8mp_iot_gate") {
 			_settings(iot_gate_pinctrl_setting,

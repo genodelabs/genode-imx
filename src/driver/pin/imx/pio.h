@@ -96,8 +96,8 @@ struct Pio_driver::Pio
 		using Name = Platform::Device::Name;
 
 		unsigned i = 0;
-		platform.with_xml([&] (Xml_node &xml) {
-			xml.for_each_sub_node("device", [&] (Xml_node node) {
+		platform.with_node([&] (Node const &node) {
+			node.for_each_sub_node("device", [&] (Node const &node) {
 				if (i >= Bank::NUM)
 					return;
 				Name name = node.attribute_value("name", Name());

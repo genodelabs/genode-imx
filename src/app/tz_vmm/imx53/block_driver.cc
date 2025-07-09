@@ -17,7 +17,6 @@
 
 /* Genode includes */
 #include <util/construct_at.h>
-#include <util/xml_node.h>
 
 using namespace Vmm;
 
@@ -59,7 +58,7 @@ void Block_driver::Request_cache::remove(void *pkt, void **req)
  **************************/
 
 Block_driver::Device::Device(Env              &env,
-                             Xml_node   const &node,
+                             Node       const &node,
                              Range_allocator  &alloc,
                              Id_space<Device> &id_space,
                              Id                id,
@@ -87,12 +86,12 @@ void Block_driver::Device::start_irq_handling()
  ** Block_driver **
  ******************/
 
-Block_driver::Block_driver(Env       &env,
-                           Xml_node   config,
-                           Allocator &alloc,
-                           Vm        &vm) : _dev_alloc(&alloc)
+Block_driver::Block_driver(Env        &env,
+                           Node const &config,
+                           Allocator  &alloc,
+                           Vm         &vm) : _dev_alloc(&alloc)
 {
-	config.for_each_sub_node("block", [&] (Xml_node node) {
+	config.for_each_sub_node("block", [&] (Node const &node) {
 		try { new (alloc) Device(env, node, _dev_alloc, _devs,
 		                         Device::Id { _dev_count++ }, vm); }
 		catch (Device::Invalid) { error("invalid block device"); }

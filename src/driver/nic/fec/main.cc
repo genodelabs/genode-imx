@@ -46,8 +46,8 @@ struct Main
 
 	Attached_rom_dataspace _config  { _env, "config" };
 
-	bool _mac_by_rom { _config.xml().attribute_value("mac_address_by_rom",
-	                                                 false) };
+	bool _mac_by_rom { _config.node().attribute_value("mac_address_by_rom",
+	                                                  false) };
 
 	Attached_rom_dataspace _dtb_rom { _env, "nic.dtb" };
 
@@ -76,14 +76,12 @@ struct Main
 			return;
 
 		_mac->update();
-		_mac->xml().with_sub_node("nic",
-			[&] (Xml_node node)
-			{
-				Mac_address m { node.attribute_value("mac", Mac_address()) };
-				memcpy(mac_address, m.addr, 6);
-				_driver.construct(_env, _signal_handler,
-				                  _dtb_rom.local_addr<void>());
-			}, [&] () { });
+		_mac->node().with_sub_node("nic", [&] (Node const &node) {
+			Mac_address m { node.attribute_value("mac", Mac_address()) };
+			memcpy(mac_address, m.addr, 6);
+			_driver.construct(_env, _signal_handler,
+			                  _dtb_rom.local_addr<void>());
+		}, [&] () { });
 	}
 
 	Main(Env &env)

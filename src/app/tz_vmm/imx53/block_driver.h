@@ -18,7 +18,6 @@
 /* Genode includes */
 #include <block_session/connection.h>
 #include <base/allocator_avl.h>
-#include <util/xml_node.h>
 
 /* local includes */
 #include <vm.h>
@@ -92,7 +91,7 @@ class Vmm::Block_driver
 				struct Invalid : Exception { };
 
 				Device(Env              &env,
-				       Xml_node   const &node,
+				       Node       const &node,
 				       Range_allocator  &alloc,
 				       Id_space<Device> &id_space,
 				       Id                id,
@@ -145,10 +144,7 @@ class Vmm::Block_driver
 
 		void handle_smc(Vm &vm, Vcpu_state &state);
 
-		Block_driver(Env       &env,
-		             Xml_node   config,
-		             Allocator &alloc,
-		             Vm        &vm);
+		Block_driver(Env &, Node const &, Allocator &, Vm &);
 };
 
 #endif /* _BLOCK_DRIVER_H_ */

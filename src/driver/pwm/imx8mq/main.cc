@@ -70,7 +70,7 @@ struct Main
 	{
 		log("--- i.MX Pulse-width-modulation driver ---");
 
-		Xml_node config  = _config.xml();
+		Node const &config = _config.node();
 		unsigned period  = config.attribute_value<unsigned>("period", 0);
 		unsigned sample  = config.attribute_value<unsigned>("sample", 0);
 		String<16> clk   = config.attribute_value("clock_source", String<16>());

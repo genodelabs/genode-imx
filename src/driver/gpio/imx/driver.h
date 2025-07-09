@@ -179,8 +179,8 @@ class Imx_driver : public Gpio::Driver
 
 			unsigned i = 0;
 
-			_platform_connection.with_xml([&] (Xml_node &xml) {
-				xml.for_each_sub_node("device", [&] (Xml_node node) {
+			_platform_connection.with_node([&] (Node const &node) {
+				node.for_each_sub_node("device", [&] (Node const &node) {
 					if (i >= MAX_BANKS) return;
 
 					Device::Name name = node.attribute_value("name", Device::Name());

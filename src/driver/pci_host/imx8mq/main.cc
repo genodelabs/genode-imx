@@ -17,7 +17,6 @@
 #include <os/reporter.h>
 #include <platform_session/device.h>
 #include <timer_session/connection.h>
-#include <util/xml_generator.h>
 
 #include <pci/config.h>
 
@@ -288,23 +287,23 @@ struct Scanner
 	struct Io_64bit_bus_address_not_supported {};
 	struct Invalid_interrupt {};
 
-	uint32_t _io_base(Xml_node const &node)
+	uint32_t _io_base(Node const &node)
 	{
 		addr_t   addr = ~0UL;
 		unsigned idx  = 0;
-		node.for_each_sub_node("io_mem", [&] (Xml_node const &xml) {
-			if (idx++ == 1) addr = xml.attribute_value("phys_addr", ~0UL); });
+		node.for_each_sub_node("io_mem", [&] (Node const &node) {
+			if (idx++ == 1) addr = node.attribute_value("phys_addr", ~0UL); });
 		if (addr > 0xffffffff)
 			throw Io_64bit_bus_address_not_supported();
 		return (uint32_t) addr;
 	}
 
-	unsigned _irq(Xml_node const &node)
+	unsigned _irq(Node const &node)
 	{
 		unsigned irq = 0;
 		unsigned idx = 0;
-		node.for_each_sub_node("irq", [&] (Xml_node const &xml) {
-			if (idx++ == 0) irq = xml.attribute_value("number", 0U); });
+		node.for_each_sub_node("irq", [&] (Node const &node) {
+			if (idx++ == 0) irq = node.attribute_value("number", 0U); });
 		if (irq < 32)
 			throw Invalid_interrupt();
 		return irq;
@@ -317,16 +316,16 @@ struct Scanner
 	Pcie_controller  controller;
 	Pci_device       pci_dev;
 
-	Scanner(Pci::bus_t             bus,
-	        Xml_node       const & xml,
-	        Platform::Connection & platform,
-	        Timer::Connection    & timer,
-	        Xml_generator        & generator)
+	Scanner(Pci::bus_t            bus,
+	        Node           const &node,
+	        Platform::Connection &platform,
+	        Timer::Connection    &timer,
+	        Generator            &generator)
 	:
-		name(xml.attribute_value("name", Device_name())),
+		name(node.attribute_value("name", Device_name())),
 		device(platform, name),
-		io_base(_io_base(xml)),
-		irq(_irq(xml)),
+		io_base(_io_base(node)),
+		irq(_irq(node)),
 		controller(timer, device, { 0 }, bus, io_base),
 		pci_dev(device, { 1 })
 	{
@@ -436,14 +435,14 @@ struct Main
 	{
 		Pci::bus_t bus = 0;
 
-		reporter.generate([&] (Xml_generator & generator)
+		reporter.generate([&] (Generator &g)
 		{
-			platform.with_xml([&] (Xml_node const &xml)
+			platform.with_node([&] (Node const &node)
 			{
-				xml.for_each_sub_node("device", [&] (Xml_node const &xml)
+				node.for_each_sub_node("device", [&] (Node const &node)
 				{
 					try {
-						scanner.construct(bus, xml, platform, timer, generator);
+						scanner.construct(bus, node, platform, timer, g);
 						bus += Pcie_controller::BUS_COUNT_PER_CONTROLLER;
 						scanner.destruct();
 					} catch (...) {}

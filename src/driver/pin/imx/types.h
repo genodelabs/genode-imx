@@ -9,7 +9,6 @@
 #define _TYPES_H_
 
 /* Genode includes */
-#include <util/xml_node.h>
 #include <base/log.h>
 
 namespace Pin_driver {
@@ -39,7 +38,7 @@ struct Pin_driver::Name
 
 	String string;
 
-	static Name from_xml(Xml_node const &node)
+	static Name from_node(Node const &node)
 	{
 		return { node.attribute_value("name", String()) };
 	}
@@ -57,7 +56,7 @@ struct Pin_driver::Index
 
 	class Invalid : Exception { };
 
-	static Index from_xml(Xml_node const &node)
+	static Index from_node(Node const &node)
 	{
 		if (!node.has_attribute("index")) {
 			warning("pin declaration lacks 'index' attribute: ", node);
@@ -77,7 +76,7 @@ struct Pin_driver::Function
 
 	class Invalid : Exception { };
 
-	static Function from_xml(Xml_node const &node)
+	static Function from_node(Node const &node)
 	{
 		if (node.has_type("in"))
 			return Function { INPUT };
@@ -117,7 +116,7 @@ struct Pin_driver::Pull
 
 	class Invalid : Exception { };
 
-	static Pull from_xml(Xml_node const &node)
+	static Pull from_node(Node const &node)
 	{
 		if (node.has_attribute("pull"))
 			warning("pull-up/pull-down not supported, must be done via IOMUXC");
@@ -133,7 +132,7 @@ struct Pin_driver::Irq_trigger
 
 	class Invalid : Exception { };
 
-	static Irq_trigger from_xml(Xml_node const &node)
+	static Irq_trigger from_node(Node const &node)
 	{
 		if (!node.has_attribute("irq"))
 			return Irq_trigger { RISING, OFF };
@@ -165,9 +164,9 @@ struct Pin_driver::Attr
 
 	bool output() const { return function.value == Function::OUTPUT; }
 
-	static Attr from_xml(Xml_node const &node)
+	static Attr from_node(Node const &node)
 	{
-		auto default_state_from_xml = [] (Xml_node const &node)
+		auto default_state_from_node = [] (Node const &node)
 		{
 			if (!node.has_attribute("default"))
 				return Pin::Level::HIGH_IMPEDANCE;
@@ -176,11 +175,11 @@ struct Pin_driver::Attr
 			       ? Pin::Level::HIGH : Pin::Level::LOW;
 		};
 
-		return { Pull::from_xml(node),
-		         Function::from_xml(node),
-		         Irq_trigger::from_xml(node),
+		return { Pull::from_node(node),
+		         Function::from_node(node),
+		         Irq_trigger::from_node(node),
 		         !node.has_attribute("default"),
-		         default_state_from_xml(node) };
+		         default_state_from_node(node) };
 	}
 
 	static Attr disabled()
@@ -211,7 +210,7 @@ struct Pio_driver::Bank
 
 	class Invalid : Exception { };
 
-	static Bank from_xml(Xml_node const &node)
+	static Bank from_node(Node const &node)
 	{
 		unsigned name = node.attribute_value("bank", (unsigned)NUM);
 
@@ -231,9 +230,9 @@ struct Pio_driver::Pin_id
 	Bank  bank;
 	Index index;
 
-	static Pin_id from_xml(Xml_node const &node)
+	static Pin_id from_node(Node const &node)
 	{
-		return { Bank ::from_xml(node), Index::from_xml(node) };
+		return { Bank ::from_node(node), Index::from_node(node) };
 	}
 
 	bool operator == (Pin_id const &other) const

@@ -59,7 +59,7 @@ class Vmm::Main
 		                         _heap, _exception_handler };
 		M4if          _m4if    { _env, {(char *)M4IF_BASE, M4IF_SIZE} };
 		Serial_driver _serial  { _env.ram(), _env.rm() };
-		Block_driver  _block   { _env, _config.xml(), _heap, _vm };
+		Block_driver  _block   { _env, _config.node(), _heap, _vm };
 
 		void _handle_smc(Vcpu_state &state)
 		{

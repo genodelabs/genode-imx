@@ -40,9 +40,9 @@ struct Framebuffer::Main
 
 	Attached_rom_dataspace _config { _env, "config" };
 
-	unsigned _disp   { _config.xml().attribute_value<unsigned>("display",  0U) };
-	uint16_t _width  { _config.xml().attribute_value<uint16_t>("width",  800U) };
-	uint16_t _height { _config.xml().attribute_value<uint16_t>("height", 480U) };
+	unsigned _disp   { _config.node().attribute_value<unsigned>("display",  0U) };
+	uint16_t _width  { _config.node().attribute_value<uint16_t>("width",  800U) };
+	uint16_t _height { _config.node().attribute_value<uint16_t>("height", 480U) };
 
 	Capture::Area const  _size     { _width, _height };
 	Platform::Connection _platform { _env      };

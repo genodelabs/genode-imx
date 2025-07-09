@@ -18,7 +18,6 @@
 /* Genode includes */
 #include <base/env.h>
 #include <i2c_session/i2c_session.h>
-#include <util/xml_node.h>
 
 namespace I2c {
 	using namespace Genode;

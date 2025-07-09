@@ -35,7 +35,7 @@ struct I2c::Main
 
 		Attached_rom_dataspace _config { _env, "config" };
 
-		static I2c::Driver::Args _driver_args_from_config(Xml_node config)
+		static I2c::Driver::Args _driver_args_from_config(Node const &config)
 		{
 			constexpr uint16_t const default_bus_speed_khz { 400 };
 			return {
@@ -46,7 +46,7 @@ struct I2c::Main
 			};
 		}
 
-		I2c::Driver _driver { _env, _driver_args_from_config(_config.xml()) };
+		I2c::Driver _driver { _env, _driver_args_from_config(_config.node()) };
 		I2c::Root   _root { _env.ep().rpc_ep(), _sliced_heap,
 		                    _driver, _config };
 

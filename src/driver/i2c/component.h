@@ -67,9 +67,9 @@ class I2c::Root : public Root_component<I2c::Session_component>
 
 			Session_component *session_ptr = nullptr;
 
-			with_matching_policy(device_name, _config_rom.xml(),
+			with_matching_policy(device_name, _config_rom.node(),
 
-				[&] (Xml_node const &policy) {
+				[&] (Node const &policy) {
 
 					uint8_t const device_address = policy.attribute_value("bus_address", static_cast<uint8_t>(0));
 

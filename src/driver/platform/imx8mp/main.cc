@@ -35,7 +35,7 @@ struct Driver::Main
 	Signal_handler<Main>   _system_handler { _env.ep(), *this,
 	                                         &Main::_system_update };
 
-	bool _verbose { _config_rom.xml().attribute_value("verbose", false) };
+	bool _verbose { _config_rom.node().attribute_value("verbose", false) };
 
 	Iomuxc   _iomuxc   { _env, _common.platform_info() };
 	Watchdog _watchdog { _env };
@@ -73,7 +73,7 @@ void Driver::Main::_system_update()
 	if (!_system_rom.valid())
 		return;
 
-	auto const state = _system_rom.xml().attribute_value("state", String<16>());
+	auto const state = _system_rom.node().attribute_value("state", String<16>());
 
 	if (state == "reset") {
 		if (_verbose) warning("Will reset...");

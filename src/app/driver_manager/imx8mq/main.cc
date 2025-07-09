@@ -52,7 +52,7 @@ class Driver_manager::Device_driver : Noncopyable
 
 	protected:
 
-		static void _gen_common_start_node_content(Xml_generator &xml,
+		static void _gen_common_start_node_content(Generator     &g,
 		                                           Name    const &name,
 		                                           Binary  const &binary,
 		                                           Ram_quota      ram,
@@ -60,50 +60,50 @@ class Driver_manager::Device_driver : Noncopyable
 		                                           Priority       priority,
 		                                           Version        version)
 		{
-			xml.attribute("name", name);
-			xml.attribute("caps", String<64>(caps));
-			xml.attribute("priority", priority.value);
-			xml.attribute("version", version.value);
-			xml.node("binary", [&] () { xml.attribute("name", binary); });
-			xml.node("resource", [&] () {
-				xml.attribute("name", "RAM");
-				xml.attribute("quantum", String<64>(ram));
+			g.attribute("name", name);
+			g.attribute("caps", String<64>(caps));
+			g.attribute("priority", priority.value);
+			g.attribute("version", version.value);
+			g.node("binary", [&] { g.attribute("name", binary); });
+			g.node("resource", [&] {
+				g.attribute("name", "RAM");
+				g.attribute("quantum", String<64>(ram));
 			});
 		}
 
 		template <typename SESSION>
-		static void _gen_provides_node(Xml_generator &xml)
+		static void _gen_provides_node(Generator &g)
 		{
-			xml.node("provides", [&] () {
-				xml.node("service", [&] () {
-					xml.attribute("name", SESSION::service_name()); }); });
+			g.node("provides", [&] {
+				g.node("service", [&] {
+					g.attribute("name", SESSION::service_name()); }); });
 		}
 
-		static void _gen_config_route(Xml_generator &xml, char const *config_name)
+		static void _gen_config_route(Generator &g, char const *config_name)
 		{
-			xml.node("service", [&] () {
-				xml.attribute("name", Rom_session::service_name());
-				xml.attribute("label", "config");
-				xml.node("parent", [&] () {
-					xml.attribute("label", config_name); });
+			g.node("service", [&] {
+				g.attribute("name", Rom_session::service_name());
+				g.attribute("label", "config");
+				g.node("parent", [&] {
+					g.attribute("label", config_name); });
 			});
 		}
 
-		static void _gen_default_parent_route(Xml_generator &xml)
+		static void _gen_default_parent_route(Generator &g)
 		{
-			xml.node("any-service", [&] () {
-				xml.node("parent", [&] () { }); });
+			g.node("any-service", [&] {
+				g.node("parent", [&] { }); });
 		}
 
 		template <typename SESSION>
-		static void _gen_forwarded_service(Xml_generator &xml,
+		static void _gen_forwarded_service(Generator &g,
 		                                   Device_driver::Name const &name)
 		{
-			xml.node("service", [&] () {
-				xml.attribute("name", SESSION::service_name());
-				xml.node("default-policy", [&] () {
-					xml.node("child", [&] () {
-						xml.attribute("name", name);
+			g.node("service", [&] {
+				g.attribute("name", SESSION::service_name());
+				g.node("default-policy", [&] {
+					g.node("child", [&] {
+						g.attribute("name", name);
 					});
 				});
 			});
@@ -113,7 +113,7 @@ class Driver_manager::Device_driver : Noncopyable
 
 	public:
 
-		virtual void generate_start_node(Xml_generator &xml) const = 0;
+		virtual void generate_start_node(Generator &g) const = 0;
 };
 
 
@@ -123,44 +123,44 @@ struct Driver_manager::Sd_card_driver : Device_driver
 
 	Sd_card_driver(Attached_rom_dataspace & ds) : _sd_cards(ds) {}
 
-	void generate_start_node(Xml_generator &xml) const override
+	void generate_start_node(Generator &g) const override
 	{
-		xml.node("start", [&] () {
-			_gen_common_start_node_content(xml, "sd_card", "imx8mq_sd_card",
+		g.node("start", [&] {
+			_gen_common_start_node_content(g, "sd_card", "imx8mq_sd_card",
 			                               Ram_quota{16*1024*1024}, Cap_quota{300},
 			                               Priority{0}, Version{0});
-			_gen_provides_node<Block::Session>(xml);
-			xml.node("config", [&] () {
-				xml.attribute("report", "yes");
-				_sd_cards.xml().for_each_sub_node([&] (Xml_node sd_card) {
+			_gen_provides_node<Block::Session>(g);
+			g.node("config", [&] {
+				g.attribute("report", "yes");
+				_sd_cards.node().for_each_sub_node([&] (Node const &sd_card) {
 					typedef String<80> Label;
 					Label const label = sd_card.attribute_value("label", Label());
-					xml.node("policy", [&] () {
-						xml.attribute("label_suffix", label);
-						xml.attribute("device",       label);
+					g.node("policy", [&] {
+						g.attribute("label_suffix", label);
+						g.attribute("device",       label);
 					});
 				});
 			});
-			xml.node("route", [&] () {
-				xml.node("service", [&] () {
-					xml.attribute("name", "Report");
-					xml.node("parent", [&] () { xml.attribute("label", "sd_cards"); });
+			g.node("route", [&] {
+				g.node("service", [&] {
+					g.attribute("name", "Report");
+					g.node("parent", [&] { g.attribute("label", "sd_cards"); });
 				});
-				_gen_default_parent_route(xml);
+				_gen_default_parent_route(g);
 			});
 		});
 	}
 
 	typedef String<32> Default_label;
 
-	void gen_service_forwarding_policy(Xml_generator &xml) const
+	void gen_service_forwarding_policy(Generator &g) const
 	{
-		_sd_cards.xml().for_each_sub_node([&] (Xml_node sd_card) {
+		_sd_cards.node().for_each_sub_node([&] (Node const &sd_card) {
 			typedef String<80> Label;
 			Label const label = sd_card.attribute_value("label", Label());
-			xml.node("policy", [&] () {
-				xml.attribute("label_suffix", label);
-				xml.node("child", [&] () { xml.attribute("name", "sd_card"); });
+			g.node("policy", [&] {
+				g.attribute("label_suffix", label);
+				g.node("child", [&] { g.attribute("name", "sd_card"); });
 			});
 		});
 	}
@@ -169,39 +169,39 @@ struct Driver_manager::Sd_card_driver : Device_driver
 
 struct Driver_manager::Nvme_driver : Device_driver
 {
-	void generate_start_node(Xml_generator &xml) const override
+	void generate_start_node(Generator &g) const override
 	{
-		xml.node("start", [&] () {
-			_gen_common_start_node_content(xml, "nvme", "nvme",
+		g.node("start", [&] {
+			_gen_common_start_node_content(g, "nvme", "nvme",
 			                               Ram_quota{8*1024*1024}, Cap_quota{100},
 			                               Priority{-1}, Version{0});
-			_gen_provides_node<Block::Session>(xml);
-			xml.node("config", [&] () {
-				xml.node("report", [&] () { xml.attribute("namespaces", "yes"); });
-				xml.node("policy", [&] () {
-					xml.attribute("label_suffix", String<64>("nvme-0"));
-					xml.attribute("namespace", 1);
-					xml.attribute("writeable", "yes");
+			_gen_provides_node<Block::Session>(g);
+			g.node("config", [&] {
+				g.node("report", [&] { g.attribute("namespaces", "yes"); });
+				g.node("policy", [&] {
+					g.attribute("label_suffix", String<64>("nvme-0"));
+					g.attribute("namespace", 1);
+					g.attribute("writeable", "yes");
 				});
 			});
-			xml.node("route", [&] () {
-				xml.node("service", [&] () {
-					xml.attribute("name", "Report");
-					xml.node("parent", [&] () { xml.attribute("label", "nvme_ns"); });
+			g.node("route", [&] {
+				g.node("service", [&] {
+					g.attribute("name", "Report");
+					g.node("parent", [&] { g.attribute("label", "nvme_ns"); });
 				});
-				_gen_default_parent_route(xml);
+				_gen_default_parent_route(g);
 			});
 		});
 	}
 
 	typedef String<32> Default_label;
 
-	void gen_service_forwarding_policy(Xml_generator &xml) const
+	void gen_service_forwarding_policy(Generator &g) const
 	{
-		xml.node("policy", [&] () {
-			xml.attribute("label_suffix", String<64>("nvme-0"));
-			xml.node("child", [&] () {
-				xml.attribute("name", "nvme"); });
+		g.node("policy", [&] {
+			g.attribute("label_suffix", String<64>("nvme-0"));
+			g.node("child", [&] {
+				g.attribute("name", "nvme"); });
 		});
 	}
 };
@@ -238,14 +238,14 @@ struct Driver_manager::Main : private Block_devices_generator
 	Signal_handler<Main> _sd_cards_update_handler {
 		_env.ep(), *this, &Main::_handle_sd_cards_update };
 
-	static void _gen_parent_service_xml(Xml_generator &xml, char const *name)
+	static void _gen_parent_service(Generator &g, char const *name)
 	{
-		xml.node("service", [&] () { xml.attribute("name", name); });
+		g.node("service", [&] { g.attribute("name", name); });
 	};
 
-	void _generate_init_config    (Reporter &) const;
-	void _generate_usb_config (Reporter &, Xml_node, Xml_node) const;
-	void _generate_block_devices  (Reporter &) const;
+	void _generate_init_config(Reporter &) const;
+	void _generate_usb_config(Reporter &, Node const &, Node const &) const;
+	void _generate_block_devices(Reporter &) const;
 
 	/**
 	 * Block_devices_generator interface
@@ -302,29 +302,28 @@ void Driver_manager::Main::_handle_usb_devices_update()
 	_usb_devices.update();
 	_usb_policy.update();
 
-	_generate_usb_config(_usb_config, _usb_devices.xml(), _usb_policy.xml());
+	_generate_usb_config(_usb_config, _usb_devices.node(), _usb_policy.node());
 }
 
 
 void Driver_manager::Main::_generate_usb_config(Reporter &usb_config,
-                                                Xml_node devices,
-                                                Xml_node policy) const
+                                                Node const &devices,
+                                                Node const &policy) const
 {
-	Reporter::Result const result = usb_config.generate([&] (Xml_generator &xml) {
+	Reporter::Result const result = usb_config.generate([&] (Generator &g) {
 
-		xml.node("report", [&] () { xml.attribute("devices", true); });
+		g.node("report", [&] { g.attribute("devices", true); });
 
 		/* incorporate user-managed policy */
-		policy.with_raw_content([&] (char const *start, size_t length) {
-			xml.append(start, length); });
+		(void)g.append_node_content(policy, Generator::Max_depth { 10 });
 
 		/* usb hid drv gets all hid devices */
-		xml.node("policy", [&] () {
-			xml.attribute("label_prefix", "usb_hid");
-			xml.attribute("class", "0x3");
+		g.node("policy", [&] {
+			g.attribute("label_prefix", "usb_hid");
+			g.attribute("class", "0x3");
 		});
 
-		devices.for_each_sub_node("device", [&] (Xml_node device) {
+		devices.for_each_sub_node("device", [&] (Node const &device) {
 
 			typedef String<64> Label;
 			typedef String<32> Id;
@@ -346,14 +345,14 @@ void Driver_manager::Main::_generate_usb_config(Reporter &usb_config,
 			if (!expose_as_usb_raw)
 				return;
 
-			xml.node("policy", [&] () {
-				xml.attribute("label_suffix", label);
-				xml.attribute("vendor_id",  vendor_id);
-				xml.attribute("product_id", product_id);
+			g.node("policy", [&] {
+				g.attribute("label_suffix", label);
+				g.attribute("vendor_id",  vendor_id);
+				g.attribute("product_id", product_id);
 
 				/* annotate policy to make storage devices easy to spot */
 				if (class_code == USB_CLASS_MASS_STORAGE)
-					xml.attribute("class", "storage");
+					g.attribute("class", "storage");
 			});
 		});
 	});
@@ -373,8 +372,8 @@ void Driver_manager::Main::_handle_pci_devices_update()
 
 	bool has_nvme = false;
 
-	_pci_devices.xml().for_each_sub_node([&] (Xml_node device) {
-		device.with_optional_sub_node("pci-config", [&] (Xml_node pci) {
+	_pci_devices.node().for_each_sub_node([&] (Node const &device) {
+		device.with_optional_sub_node("pci-config", [&] (Node const &pci) {
 
 			uint16_t const class_code = (uint16_t)(pci.attribute_value("class", 0U) >> 8);
 
@@ -396,42 +395,42 @@ void Driver_manager::Main::_handle_pci_devices_update()
 
 void Driver_manager::Main::_generate_init_config(Reporter &init_config) const
 {
-	Reporter::Result const result = init_config.generate([&] (Xml_generator &xml) {
+	Reporter::Result const result = init_config.generate([&] (Generator &g) {
 
-		xml.attribute("verbose", false);
-		xml.attribute("prio_levels", 2);
+		g.attribute("verbose", false);
+		g.attribute("prio_levels", 2);
 
-		xml.node("report", [&] () {
-			xml.attribute("child_ram", true);
-			xml.attribute("delay_ms", 2500);
+		g.node("report", [&] {
+			g.attribute("child_ram", true);
+			g.attribute("delay_ms", 2500);
 		});
 
-		xml.node("heartbeat", [&] () { xml.attribute("rate_ms", 2500); });
+		g.node("heartbeat", [&] { g.attribute("rate_ms", 2500); });
 
-		xml.node("parent-provides", [&] () {
-			_gen_parent_service_xml(xml, Rom_session::service_name());
-			_gen_parent_service_xml(xml, Cpu_session::service_name());
-			_gen_parent_service_xml(xml, Pd_session::service_name());
-			_gen_parent_service_xml(xml, Rm_session::service_name());
-			_gen_parent_service_xml(xml, Log_session::service_name());
-			_gen_parent_service_xml(xml, Timer::Session::service_name());
-			_gen_parent_service_xml(xml, Platform::Session::service_name());
-			_gen_parent_service_xml(xml, Report::Session::service_name());
+		g.node("parent-provides", [&] {
+			_gen_parent_service(g, Rom_session::service_name());
+			_gen_parent_service(g, Cpu_session::service_name());
+			_gen_parent_service(g, Pd_session::service_name());
+			_gen_parent_service(g, Rm_session::service_name());
+			_gen_parent_service(g, Log_session::service_name());
+			_gen_parent_service(g, Timer::Session::service_name());
+			_gen_parent_service(g, Platform::Session::service_name());
+			_gen_parent_service(g, Report::Session::service_name());
 		});
 
-		_sd_card_driver.generate_start_node(xml);
+		_sd_card_driver.generate_start_node(g);
 
 		if (_nvme_driver.constructed())
-			_nvme_driver->generate_start_node(xml);
+			_nvme_driver->generate_start_node(g);
 
 		/* block-service forwarding rules */
 		bool const nvme = _nvme_driver.constructed() &&
-		                  _nvme_ns.xml().has_sub_node("namespace");
+		                  _nvme_ns.node().has_sub_node("namespace");
 
-		xml.node("service", [&] () {
-			xml.attribute("name", Block::Session::service_name());
-				_sd_card_driver.gen_service_forwarding_policy(xml);
-				if (nvme) _nvme_driver->gen_service_forwarding_policy(xml);
+		g.node("service", [&] {
+			g.attribute("name", Block::Session::service_name());
+				_sd_card_driver.gen_service_forwarding_policy(g);
+				if (nvme) _nvme_driver->gen_service_forwarding_policy(g);
 		});
 	});
 
@@ -442,11 +441,11 @@ void Driver_manager::Main::_generate_init_config(Reporter &init_config) const
 
 void Driver_manager::Main::_generate_block_devices(Reporter &block_devices) const
 {
-	Reporter::Result const result = block_devices.generate([&] (Xml_generator &xml) {
+	Reporter::Result const result = block_devices.generate([&] (Generator &g) {
 
-		_sd_cards.xml().for_each_sub_node([&] (Xml_node sd_card) {
+		_sd_cards.node().for_each_sub_node([&] (Node const &sd_card) {
 
-			xml.node("device", [&] () {
+			g.node("device", [&] {
 
 				unsigned long const
 					block_count = sd_card.attribute_value("block_count", 0UL),
@@ -455,17 +454,17 @@ void Driver_manager::Main::_generate_block_devices(Reporter &block_devices) cons
 				typedef String<80> Label;
 				Label const label = sd_card.attribute_value("label", Label());
 
-				xml.attribute("label",       label);
-				xml.attribute("block_count", block_count);
-				xml.attribute("block_size",  block_size);
+				g.attribute("label",       label);
+				g.attribute("block_count", block_count);
+				g.attribute("block_size",  block_size);
 			});
 		});
 
 		/* for now just report the first name space */
-		Xml_node const &nvme_ctrl = _nvme_ns.xml();
-		nvme_ctrl.with_optional_sub_node("namespace", [&] (Xml_node const &nvme_ns) {
+		Node const &nvme_ctrl = _nvme_ns.node();
+		nvme_ctrl.with_optional_sub_node("namespace", [&] (Node const &nvme_ns) {
 
-			xml.node("device", [&] () {
+			g.node("device", [&] {
 
 				unsigned long const
 					block_count = nvme_ns.attribute_value("block_count", 0UL),
@@ -476,11 +475,11 @@ void Driver_manager::Main::_generate_block_devices(Reporter &block_devices) cons
 				typedef String<20+1> Serial;
 				Serial const serial = nvme_ctrl.attribute_value("serial", Serial());
 
-				xml.attribute("label",       String<16>("nvme-0"));
-				xml.attribute("block_count", block_count);
-				xml.attribute("block_size",  block_size);
-				xml.attribute("model",       model);
-				xml.attribute("serial",      serial);
+				g.attribute("label",       String<16>("nvme-0"));
+				g.attribute("block_count", block_count);
+				g.attribute("block_size",  block_size);
+				g.attribute("model",       model);
+				g.attribute("serial",      serial);
 			});
 		});
 	});

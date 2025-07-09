@@ -10,7 +10,7 @@
  * This file is part of the Genode OS framework, which is distributed
  * under the terms of the GNU Affero General Public License version 3.
  */
- 
+
 #include <base/component.h>
 #include <i2c_session/connection.h>
 #include <os/reporter.h>
@@ -63,15 +63,15 @@ struct Main
 		_mac_0.enabled(true);
 		_mac_1.enabled(true);
 
-		if (_mac_0.generate([&] (Xml_generator &xml) {
-			xml.node("nic", [&] () {
-				xml.attribute("mac", _read_mac(MAC_0_OFFSET)); });
+		if (_mac_0.generate([&] (Generator &g) {
+			g.node("nic", [&] {
+				g.attribute("mac", _read_mac(MAC_0_OFFSET)); });
 		}).failed())
 			warning("Could not report mac address 0");
 
-		if (_mac_1.generate([&] (Xml_generator &xml) {
-				xml.node("nic", [&] () {
-					xml.attribute("mac", _read_mac(MAC_1_OFFSET)); });
+		if (_mac_1.generate([&] (Generator &g) {
+				g.node("nic", [&] {
+					g.attribute("mac", _read_mac(MAC_1_OFFSET)); });
 		}).failed())
 			warning("Could not report mac address 1");
 	}

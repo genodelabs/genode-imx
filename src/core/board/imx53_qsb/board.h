@@ -25,8 +25,9 @@
 #include <spec/arm_v7/cpu_support.h>
 #include <spec/arm/cortex_a8_page_table.h>
 
-namespace Core { using Cpu = Arm_v7_cpu; }
-
-namespace Board { using namespace Hw::Imx53_qsb_board; }
+namespace Board {
+	using namespace Hw::Imx53_qsb_board;
+	using Cpu = Arm_v7_cpu;
+}
 
 #endif /* _CORE__SPEC__IMX53_QSB__BOARD_H_ */

@@ -25,8 +25,9 @@
 #include <spec/arm_v7/cpu_support.h>
 #include <spec/arm/cortex_a8_page_table.h>
 
-namespace Core { using Cpu = Arm_v7_cpu; }
-
-namespace Board { using namespace Hw::Usb_armory_board; }
+namespace Board {
+	using namespace Hw::Usb_armory_board;
+	using Cpu = Arm_v7_cpu;
+}
 
 #endif /* _CORE__SPEC__USB_ARMORY__BOARD_H_ */

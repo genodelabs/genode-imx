@@ -1,4 +1,4 @@
-assert_spec arm_v8a
+assert {[have_board mnt_reform2]}
 
 create_boot_directory
 import_from_depot [depot_user]/src/[base_src] \

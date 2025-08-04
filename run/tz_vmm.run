@@ -5,13 +5,8 @@
 # \date   2012-06-25
 #
 
-assert_spec hw
-
-if {![have_board imx53_qsb_tz]} {
-
-	puts "\n Run script is not supported on this platform. \n"
-	exit 0
-}
+assert {[have_spec hw]}
+assert {[have_board imx53_qsb_tz]}
 
 create_boot_directory
 import_from_depot [depot_user]/src/[base_src] \

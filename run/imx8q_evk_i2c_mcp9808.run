@@ -1,4 +1,4 @@
-assert_spec arm_v8a
+assert {[have_board imx8q_evk]}
 
 create_boot_directory
 

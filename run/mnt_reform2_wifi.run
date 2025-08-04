@@ -1,3 +1,5 @@
+assert {[have_board mnt_reform2]}
+
 source ${genode_dir}/repos/dde_linux/run/wifi_config.inc
 
 create_boot_directory

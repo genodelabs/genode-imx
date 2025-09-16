@@ -15,6 +15,7 @@
 #define _SRC__CORE__SPEC__ARM__IMX_EPIT_H_
 
 /* Kernel includes */
+#include <hw/spec/arm/cpu.h>
 #include <util/mmio.h>
 
 namespace Board { class Timer; }
@@ -83,7 +84,7 @@ struct Board::Timer : Genode::Mmio<0x14>
 		write<Sr::Ocif>(1);
 	}
 
-	Timer(unsigned);
+	Timer(Hw::Arm_cpu::Id);
 
 	void init();
 };

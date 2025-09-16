@@ -26,7 +26,7 @@ using namespace Kernel;
 unsigned Timer::interrupt_id() const { return Board::EPIT_1_IRQ; }
 
 
-Board::Timer::Timer(unsigned)
+Board::Timer::Timer(Hw::Arm_cpu::Id)
 :
 	Mmio({(char *)Platform::mmio_to_virt(Board::EPIT_1_MMIO_BASE), Mmio::SIZE})
 {

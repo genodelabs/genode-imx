@@ -163,7 +163,7 @@ Bootstrap::Platform::Board::Board()
 }
 
 
-static inline void switch_to_supervisor_mode(unsigned cpu_id)
+static inline void switch_to_supervisor_mode(Bootstrap::Platform::Cpu_id cpu_id)
 {
 	using Cpsr = Hw::Arm_cpu::Psr;
 
@@ -173,7 +173,7 @@ static inline void switch_to_supervisor_mode(unsigned cpu_id)
 	Cpsr::I::set(cpsr, 1);
 
 	Genode::addr_t const stack = Hw::Mm::hypervisor_stack().base +
-	                             (cpu_id+1) * 0x1000;
+	                             (cpu_id.value+1) * 0x1000;
 
 	asm volatile (
 		"msr sp_svc, sp        \n" /* copy current mode's sp           */
@@ -187,11 +187,11 @@ static inline void switch_to_supervisor_mode(unsigned cpu_id)
 }
 
 
-unsigned Bootstrap::Platform::enable_mmu()
+Bootstrap::Platform::Cpu_id Bootstrap::Platform::enable_mmu()
 {
 	static volatile bool primary_cpu = true;
 	static unsigned long timer_freq  = Cpu::Cntfrq::read();
-	unsigned cpu = Cpu::Mpidr::Aff_0::get(Cpu::Mpidr::read());
+	Cpu_id cpu { Cpu::Mpidr::Aff_0::get(Cpu::Mpidr::read()) };
 
 	/* locally initialize interrupt controller */
 	::Board::Pic pic { };

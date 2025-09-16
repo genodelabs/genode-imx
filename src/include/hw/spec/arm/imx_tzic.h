@@ -14,6 +14,7 @@
 #ifndef _SRC__LIB__HW__SPEC__ARM__IMX_TZIC_H_
 #define _SRC__LIB__HW__SPEC__ARM__IMX_TZIC_H_
 
+#include <hw/spec/arm/cpu.h>
 #include <util/mmio.h>
 
 namespace Hw { class Pic; }
@@ -109,7 +110,7 @@ class Hw::Pic : public Genode::Mmio<0xf04>
 		/**
 		 * Unmask interrupt 'i'
 		 */
-		void unmask(unsigned const i, unsigned) {
+		void unmask(unsigned const i, Hw::Arm_cpu::Id) {
 			if (_valid(i)) { write<Enset::Set_enable>(1, i); } }
 
 		/**

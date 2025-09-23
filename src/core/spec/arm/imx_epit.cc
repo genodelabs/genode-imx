@@ -69,6 +69,8 @@ void Board::Timer::init()
 
 void Timer::_start_one_shot(time_t const ticks)
 {
+	_device._last_timeout_duration = ticks;
+
 	/*
 	 * First unset the interrupt flag,
 	 * otherwise if the tick is small enough, we loose an interrupt
@@ -96,7 +98,7 @@ time_t Timer::_duration() const
 {
 	using Device = Board::Timer;
 	Device::Cnt::access_t const initial_cnt {
-		(Device::Cnt::access_t)_last_timeout_duration };
+		(Device::Cnt::access_t)_device._last_timeout_duration };
 
 	Device::Cnt::access_t const curr_cnt { _device.read<Device::Cnt>() };
 	if (curr_cnt > initial_cnt)

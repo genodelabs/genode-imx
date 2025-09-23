@@ -16,6 +16,7 @@
 
 /* Kernel includes */
 #include <hw/spec/arm/cpu.h>
+#include <kernel/types.h>
 #include <util/mmio.h>
 
 namespace Board { class Timer; }
@@ -68,6 +69,8 @@ struct Board::Timer : Genode::Mmio<0x14>
 	struct Lr   : Register<0x8,  32> { }; /* load value register */
 	struct Cmpr : Register<0xc,  32> { }; /* compare value register */
 	struct Cnt  : Register<0x10, 32> { }; /* counter register */
+
+	Kernel::time_t _last_timeout_duration { 0 };
 
 	/**
 	 * Disable timer and clear its interrupt output

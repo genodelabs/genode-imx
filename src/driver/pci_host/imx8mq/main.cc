@@ -437,6 +437,7 @@ struct Main
 
 		reporter.generate([&] (Generator &g)
 		{
+			platform.update();
 			platform.with_node([&] (Node const &node)
 			{
 				node.for_each_sub_node("device", [&] (Node const &node)

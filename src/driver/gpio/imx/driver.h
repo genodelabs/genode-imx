@@ -178,7 +178,7 @@ class Imx_driver : public Gpio::Driver
 			using namespace Platform;
 
 			unsigned i = 0;
-
+			_platform_connection.update();
 			_platform_connection.with_node([&] (Node const &node) {
 				node.for_each_sub_node("device", [&] (Node const &node) {
 					if (i >= MAX_BANKS) return;

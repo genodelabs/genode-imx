@@ -96,6 +96,7 @@ struct Pio_driver::Pio
 		using Name = Platform::Device::Name;
 
 		unsigned i = 0;
+		platform.update();
 		platform.with_node([&] (Node const &node) {
 			node.for_each_sub_node("device", [&] (Node const &node) {
 				if (i >= Bank::NUM)

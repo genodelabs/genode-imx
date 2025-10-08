@@ -25,7 +25,7 @@ void do_softirq_own_stack(void)
 
 void __iomem * ioremap_prot(phys_addr_t phys_addr,size_t size,unsigned long prot)
 {
-	return lx_emul_io_mem_map(phys_addr, size);
+	return lx_emul_io_mem_map(phys_addr, size, false);
 }
 
 

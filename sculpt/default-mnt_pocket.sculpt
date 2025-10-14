@@ -9,6 +9,6 @@ launcher: download_debug_info black_hole trace_logger recall_fs mixer system_clo
 
 presets: empty nano3d window_manager falkon_web_browser
 
-depot: genodelabs cnuke alex-ab mstein nfeske cproc chelmuth jschlatow ssumpf skalk
+depot: genodelabs cnuke alex-ab nfeske cproc chelmuth jschlatow ssumpf skalk
 
 build: driver/platform/imx8mp app/sculpt_manager monitor

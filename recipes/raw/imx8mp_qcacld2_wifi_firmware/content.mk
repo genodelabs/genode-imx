@@ -17,8 +17,7 @@ LICENSE.wifi:
 	  echo >> $@; \
 	done
 
+include $(GENODE_DIR)/repos/base/recipes/content.inc
+
 imx8mp_qcacld2_wifi_firmware.tar: ucode_files LICENSE.wifi
-	tar --mtime='2023-05-03 00:00Z' --remove-files \
-	    --owner=0 --group=0 --numeric-owner --mode='go=' \
-	    -cf $@ -C . qca9377/* wlan/* && \
-	rmdir qca9377 wlan
+	$(TAR) --remove-files -cf $@ -C . qca9377/* wlan/* && rmdir qca9377 wlan

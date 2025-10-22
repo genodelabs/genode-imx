@@ -28,8 +28,6 @@ Bootstrap::Platform::Board::Board()
 	          Memory_region { ::Board::Cpu_mmio::IRQ_CONTROLLER_REDIST_BASE,
 	                          ::Board::Cpu_mmio::IRQ_CONTROLLER_REDIST_SIZE })
 {
-	::Board::Pic pic {};
-
 	static volatile unsigned long iomux_values[][2] {
 		// IOMUXC
 		{ 0x30330064, 0x6        },

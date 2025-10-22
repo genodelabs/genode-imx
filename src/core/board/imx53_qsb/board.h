@@ -26,6 +26,9 @@
 #include <spec/arm/cortex_a8_page_table.h>
 
 namespace Board {
+	using Hw::Global_interrupt_controller;
+	struct Local_interrupt_controller : Hw::Local_interrupt_controller {
+		using Hw::Local_interrupt_controller::Local_interrupt_controller; };
 	using namespace Hw::Imx53_qsb_board;
 	using Cpu = Arm_v7_cpu;
 }

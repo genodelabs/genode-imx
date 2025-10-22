@@ -24,7 +24,8 @@ namespace Board {
 
 	using namespace Hw::Imx53_qsb_board;
 
-	using Hw::Pic;
+	using Hw::Global_interrupt_controller;
+	using Hw::Local_interrupt_controller;
 
 	bool secure_irq(unsigned irq);
 }

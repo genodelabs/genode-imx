@@ -24,7 +24,8 @@ namespace Board {
 
 	using namespace Hw::Usb_armory_board;
 
-	using Hw::Pic;
+	using Hw::Global_interrupt_controller;
+	using Hw::Local_interrupt_controller;
 
 	bool secure_irq(unsigned irq);
 }

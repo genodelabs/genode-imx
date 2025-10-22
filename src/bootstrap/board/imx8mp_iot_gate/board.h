@@ -28,7 +28,8 @@ namespace Board {
 		static void wake_up_all_cpus(void*);
 	};
 
-	using Hw::Pic;
+	using Hw::Global_interrupt_controller;
+	using Hw::Local_interrupt_controller;
 };
 
 #endif /* _BOOTSTRAP__SPEC__IMX8MP_IOT_GATE__BOARD_H_ */

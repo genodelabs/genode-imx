@@ -22,7 +22,8 @@
 namespace Board {
 
 	using namespace Hw::Imx7d_sabre_board;
-	using Pic = Hw::Gicv2;
+	using Hw::Global_interrupt_controller;
+	using Hw::Local_interrupt_controller;
 	static constexpr bool NON_SECURE = true;
 }
 

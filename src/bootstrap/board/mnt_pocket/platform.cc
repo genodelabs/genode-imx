@@ -243,8 +243,6 @@ Bootstrap::Platform::Board::Board()
 	          Memory_region { ::Board::Cpu_mmio::IRQ_CONTROLLER_REDIST_BASE,
 	                          ::Board::Cpu_mmio::IRQ_CONTROLLER_REDIST_SIZE })
 {
-	::Board::Pic pic { };
-
 	/*
 	 * First, increase voltage to 1V via power-management IC
 	 * PCA9450 (rev. c) from NXP

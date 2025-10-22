@@ -13,7 +13,7 @@
 
 #include <board.h>
 
-Hw::Pic::Pic()
+Hw::Local_interrupt_controller::Local_interrupt_controller(Global_interrupt_controller&)
 :
 	Mmio({(char *)Board::IRQ_CONTROLLER_BASE, Board::IRQ_CONTROLLER_SIZE})
 {

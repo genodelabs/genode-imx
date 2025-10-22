@@ -23,7 +23,8 @@
 namespace Board {
 
 	using namespace Hw::Nit6_solox_board;
-	using Pic = Hw::Gicv2;
+	using Hw::Global_interrupt_controller;
+	using Hw::Local_interrupt_controller;
 	struct L2_cache;
 
 	static constexpr bool NON_SECURE = false;

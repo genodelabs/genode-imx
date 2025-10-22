@@ -191,10 +191,11 @@ Bootstrap::Platform::Cpu_id Bootstrap::Platform::enable_mmu()
 {
 	static volatile bool primary_cpu = true;
 	static unsigned long timer_freq  = Cpu::Cntfrq::read();
+	static ::Board::Global_interrupt_controller gic {};
 	Cpu_id cpu { Cpu::Mpidr::Aff_0::get(Cpu::Mpidr::read()) };
 
 	/* locally initialize interrupt controller */
-	::Board::Pic pic { };
+	::Board::Local_interrupt_controller lic { gic };
 
 	prepare_nonsecure_world(timer_freq);
 	prepare_hypervisor((addr_t)core_pd->table_base);

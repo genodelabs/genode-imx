@@ -18,4 +18,5 @@
 using namespace Core;
 
 
-Hw::Pic::Pic() : Mmio({(char *)Platform::mmio_to_virt(Board::IRQ_CONTROLLER_BASE), Mmio::SIZE}) { }
+Hw::Local_interrupt_controller::Local_interrupt_controller(Global_interrupt_controller&)
+: Mmio({(char *)Platform::mmio_to_virt(Board::IRQ_CONTROLLER_BASE), Mmio::SIZE}) { }

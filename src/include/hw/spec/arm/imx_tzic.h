@@ -17,16 +17,34 @@
 #include <hw/spec/arm/cpu.h>
 #include <util/mmio.h>
 
-namespace Hw { class Pic; }
+namespace Hw {
+
+	/**
+	 * The TrustZone-ware interrupt controller from Freescale is used
+	 * on uni-processor platforms only, therefore there is no difference
+	 * in between global and local controller. Anyway, the local interface
+	 * is the one actively used by the kernel code, so we fill that with
+	 * the actual functionality, and leave the global controller as a
+	 * simple class used to get the overall interrupt count only.
+	 */
+	struct Global_interrupt_controller
+	{
+		static constexpr unsigned NR_OF_IRQ = 109;
+
+		/* no suspend/resume on this platform */
+		void resume() {}
+	};
+
+	class Local_interrupt_controller;
+}
 
 
-class Hw::Pic : public Genode::Mmio<0xf04>
+class Hw::Local_interrupt_controller : public Genode::Mmio<0xf04>
 {
-	public:
-
-		enum { NR_OF_IRQ = 109, };
-
 	protected:
+
+		static constexpr unsigned NR_OF_IRQ =
+			Global_interrupt_controller::NR_OF_IRQ;
 
 		/**
 		 * Software Interrupt Trigger Register
@@ -88,7 +106,7 @@ class Hw::Pic : public Genode::Mmio<0xf04>
 
 		enum { IPI = 0xffff };
 
-		Pic();
+		Local_interrupt_controller(Global_interrupt_controller&);
 
 		/**
 		 * Receive a pending request number 'i'

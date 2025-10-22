@@ -15,20 +15,17 @@
 #define _CORE__SPEC__NIT6_SOLOX__BOARD_H_
 
 /* base-hw internal includes */
-#include <hw/spec/arm/gicv2.h>
 #include <hw/spec/arm/nit6_solox_board.h>
 
 /* base-hw core includes */
 #include <spec/arm/cortex_a9_global_timer.h>
 #include <spec/arm/cortex_a9_cpu.h>
+#include <spec/arm/gicv2.h>
 #include <no_vcpu_board.h>
 
 namespace Board {
 
 	using namespace Hw::Nit6_solox_board;
-
-	class Global_interrupt_controller { public: void init() {} };
-	class Pic : public Hw::Gicv2 { public: Pic(Global_interrupt_controller &) { } };
 
 	using L2_cache = Hw::Pl310;
 

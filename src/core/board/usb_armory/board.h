@@ -28,6 +28,9 @@
 namespace Board {
 	using namespace Hw::Usb_armory_board;
 	using Cpu = Arm_v7_cpu;
+	using Hw::Global_interrupt_controller;
+	struct Local_interrupt_controller : Hw::Local_interrupt_controller {
+		using Hw::Local_interrupt_controller::Local_interrupt_controller; };
 }
 
 #endif /* _CORE__SPEC__USB_ARMORY__BOARD_H_ */

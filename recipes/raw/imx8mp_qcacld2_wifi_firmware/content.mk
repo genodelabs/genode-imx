@@ -11,7 +11,7 @@ ucode_files:
 	cp $(PORT_DIR)/firmware/regulatory.db.p7s .
 
 LICENSE.wifi:
-	for i in $(PORT_DIR)/firmware/{LICENSE.qca_firmware,notice.txt}; do \
+	for i in $(addprefix $(PORT_DIR)/firmware/,LICENSE.qca_firmware notice.txt); do \
 	echo "$${i##*/}:" >> $@; \
 	  cat $$i >> $@; \
 	  echo >> $@; \

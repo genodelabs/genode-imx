@@ -10,8 +10,15 @@
 	</common_routes>
 
 	<start name="black_hole"/>
-	<start name="system_clock"/>
 	<start name="recall_fs"/>
+
+	<start name="system_clock" pkg="ssumpf/pkg/sntp_dummy_rtc/2025-10-27">
+		<route>
+			<service name="Nic"> <child name="nic_router"/> </service>
+		</route>
+	</start>
+
+	<start name="mesa_gpu-cpu" priority="-2" pkg="mesa_gpu-cpu"/>
 
 	<start name="window_layouter" priority="-1" pkg="window_layouter">
 		<route>
@@ -44,7 +51,7 @@
 		</route>
 	</start>
 
-	<start ram="1G" name="falkon" priority="-2" pkg="cproc/pkg/falkon/2025-04-11">
+	<start ram="1G" name="falkon" priority="-2" pkg="cproc/pkg/falkon/2025-10-27">
 		<route>
 			<service name="Nic">     <child name="nic_router"/>   </service>
 			<service name="Rtc">     <child name="system_clock"/> </service>
@@ -54,9 +61,11 @@
 			<service name="File_system" label_prefix="config ->">    <child name="ram_fs"/> </service>
 			<service name="File_system" label_prefix="downloads ->"> <child name="ram_fs"/> </service>
 			<service name="Gui">                            <child name="wm"/> </service>
-			<service name="Report" label="falkon -> shape"> <child name="wm"/> </service>
+			<service name="Report" label="shape">           <child name="wm"/> </service>
 			<service name="Report" label="clipboard">       <child name="wm"/> </service>
 			<service name="ROM"    label="clipboard">       <child name="wm"/> </service>
+			<service name="ROM"    label="mesa_gpu.lib.so"> <child name="mesa_gpu-cpu"/> </service>
+			<service name="Gpu">                            <child name="black_hole"/> </service>
 		</route>
 	</start>
 

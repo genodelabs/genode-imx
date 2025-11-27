@@ -605,7 +605,7 @@ struct Driver::Ccm
 	                                           system_pll2_div10, system_pll1_div2,
 	                                           system_pll1_div20, video_pll1_clk,
 	                                           system_pll1_div10, audio_pll1_clk,
-	                                           ext_clk_1 };
+	                                           ext_clk_1, true };
 	Root_clock gpt2_clk_root                 { clocks, "gpt2_clk_root",
 	                                           root_range(108), m25_ref_clk,
 	                                           system_pll2_div10, system_pll1_div2,
@@ -772,7 +772,7 @@ struct Driver::Ccm
 	Gate ecspi2_gate     { clocks, "ecspi2_gate",     gate_range(8),   ecspi2_clk_root         };
 	Gate ecspi3_gate     { clocks, "ecspi3_gate",     gate_range(9),   ecspi3_clk_root         };
 	Gate enet1_gate      { clocks, "enet1_gate",      gate_range(10),  enet_axi_clk_root       };
-	Gate gpt1_gate       { clocks, "gpt1_gate",       gate_range(16),  gpt1_clk_root           };
+	Gate gpt1_gate       { clocks, "gpt1_gate",       gate_range(16),  gpt1_clk_root, true     };
 	Gate i2c1_gate       { clocks, "i2c1_gate",       gate_range(23),  i2c1_clk_root           };
 	Gate i2c2_gate       { clocks, "i2c2_gate",       gate_range(24),  i2c2_clk_root           };
 	Gate i2c3_gate       { clocks, "i2c3_gate",       gate_range(25),  i2c3_clk_root           };

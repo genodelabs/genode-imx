@@ -59,7 +59,8 @@ struct Gpc
 			state.r[2] = id;
 			state.r[3] = ON;
 
-			state = control.system_control(state);
+			if (control.rpc_cap().valid())
+				state = control.system_control(state);
 
 			if (state.r[0] != 0)
 				Genode::error("Cannot enable power domain ", name);
@@ -73,7 +74,8 @@ struct Gpc
 			state.r[2] = id;
 			state.r[3] = OFF;
 
-			state = control.system_control(state);
+			if (control.rpc_cap().valid())
+				state = control.system_control(state);
 
 			if (state.r[0] != 0)
 				Genode::error("Cannot disable power domain ", name);

@@ -659,7 +659,7 @@ struct ptp_clock { int dummy; };
 struct ptp_clock * ptp_clock_register(struct ptp_clock_info * info,struct device * parent)
 {
 	static struct ptp_clock ret;
-	memset(&ret, 0, sizeof(ret));
+	bzero(&ret, sizeof(ret));
 	lx_emul_trace(__func__);
 	return &ret;
 }

@@ -69,7 +69,7 @@ Vm::Vm(Env                &env,
 
 void Vm::start(Vcpu_state &state)
 {
-	memset((void*)&state, 0, sizeof(Vcpu_state));
+	bzero((void*)&state, sizeof(Vcpu_state));
 	_load_kernel(state);
 	_load_kernel_surroundings();
 	state.cpsr          = 0x93; /* SVC mode and IRQs disabled */

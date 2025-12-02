@@ -204,7 +204,7 @@ struct Framebuffer::Ipu : Platform::Device::Mmio<0x1080000 + 15 * 4 + 4>
 				Genode::uint32_t res3[3];
 			} __attribute__((packed));
 
-			Cp_mem() { Genode::memset(this, 0, sizeof(Cp_mem)); }
+			Cp_mem() { Genode::bzero(this, sizeof(Cp_mem)); }
 	} __attribute__((packed));
 
 

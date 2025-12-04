@@ -844,10 +844,9 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 		Session_component(Genode::Env        &env,
 		                  Genode::Entrypoint &ep,
 		                  Resources    const &resources,
-		                  Label        const &label,
-		                  Diag                diag)
+		                  Label        const &label)
 		:
-			Session_object { ep, resources, label, diag },
+			Session_object { ep, resources, label },
 			_env           { env },
 			_ep            { ep },
 			_alloc         { _env.ram(), _env.rm() },
@@ -1067,8 +1066,7 @@ struct Gpu::Root : Gpu::Root_component
 
 			return *new (_alloc) Session_component(_env, _env.ep(),
 			                                       session_resources_from_args(args),
-			                                       label,
-			                                       session_diag_from_args(args));
+			                                       label);
 		}
 
 		void _upgrade_session(Session_component &sc, char const *args) override

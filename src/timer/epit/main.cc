@@ -262,12 +262,10 @@ struct Timer::Session_component : Session_object<Timer::Session, Session_compone
 	Session_component(Env             &env,
 	                  Resources const &resources,
 	                  Label     const &label,
-	                  Diag      const &diag,
 	                  Alarms          &alarms,
 	                  Device          &device)
 	:
-		Session_object(env.ep(), resources, label, diag),
-		_alarms(alarms), _device(device)
+		Session_object(env.ep(), resources, label), _alarms(alarms), _device(device)
 	{ }
 
 	/**
@@ -347,7 +345,6 @@ struct Timer::Root : public Root_component<Session_component>
 				Session_component(_env,
 				                  session_resources_from_args(args),
 				                  session_label_from_args(args),
-				                  session_diag_from_args(args),
 				                  _alarms, _device);
 		}
 

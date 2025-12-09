@@ -1,5 +1,5 @@
 _/raw/mnt_reform2-devices
-_/pkg/imx8mq_wifi
+_/pkg/imx8mq_wifi_minimal
 _/src/fec_nic
 _/src/imx8mq_fb
 _/src/imx_pin

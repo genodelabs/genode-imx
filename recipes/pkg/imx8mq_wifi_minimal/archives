@@ -1,0 +1,6 @@
+_/src/imx8mq_wifi
+_/src/openssl
+_/src/vfs
+_/src/vfs_jitterentropy
+_/src/libc
+_/raw/imx8mq_no_wifi_firmware

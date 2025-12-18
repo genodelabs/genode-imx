@@ -21,8 +21,99 @@ namespace Driver {
 	using namespace Genode;
 
 	struct Iomuxc;
+	struct Iomuxc_gpr;
 };
 
+
+/******************************
+ ** General Purpose Register **
+ ******************************/
+
+enum Gpr_indices {
+	GPR_REG, GPR_MODE, GPR_MAX };
+
+
+static Genode::uint32_t iot_gate_gpr_setting[][GPR_MAX] {
+	{ 0x00, 0x00000000 },
+	{ 0x04, 0x00690000 },
+	{ 0x08, 0x00000000 },
+	{ 0x0C, 0x000000ff },
+	{ 0x10, 0x0b000000 },
+	{ 0x14, 0x00000000 },
+	{ 0x18, 0x00000000 },
+	{ 0x1C, 0x00000000 },
+	{ 0x20, 0x00000000 },
+	{ 0x24, 0x00000000 },
+	{ 0x28, 0x0003000b },
+	{ 0x2C, 0x3dff04e1 },
+	{ 0x30, 0x00004000 },
+	{ 0x34, 0x00000000 },
+	{ 0x38, 0x03490000 },
+	{ 0x3C, 0x6188ffff },
+	{ 0x40, 0x49409100 },
+	{ 0x44, 0x6188ffff },
+	{ 0x48, 0x00000000 },
+	{ 0x4C, 0x00000000 },
+	{ 0x50, 0x00000000 },
+	{ 0x54, 0x00000000 },
+	{ 0x58, 0x00000001 },
+	{ 0x5C, 0x00000000 },
+	{ 0x60, 0x000000ff },
+	{ 0x64, 0x00000000 },
+	{ 0x68, 0x00000000 },
+	{ 0x6C, 0x00000000 },
+};
+
+
+struct Driver::Iomuxc_gpr: Genode::Attached_mmio<0x10000>
+{
+	enum {
+		GPR_MMIO_BASE = 0x30340000,
+		GPR_MMIO_SIZE = 0x10000,
+	};
+
+	struct Gpr : Mmio<32>
+	{
+		struct Reg : Register<0, 32> {};
+
+		Gpr(Byte_range_ptr const &range, Reg::access_t gpr_config)
+		:
+			Mmio<SIZE>(range)
+		{
+			write<Reg>(gpr_config);
+		}
+	};
+
+	void _settings(auto pinctrl_setting, unsigned count)
+	{
+		for (unsigned i = 0; i < count; i++) {
+			Gpr gpr(range_at(pinctrl_setting[i][GPR_REG]),
+			        pinctrl_setting[i][GPR_MODE]);
+		}
+	}
+
+	Iomuxc_gpr(Env &env, Node const &info)
+	:
+		Attached_mmio<SIZE>(env, { (char*)GPR_MMIO_BASE, SIZE })
+	{
+		using Board_name = String<64>;
+
+		Board_name board;
+		info.with_optional_sub_node("board", [&] (Node const &node) {
+			board = node.attribute_value("name", Board_name()); });
+
+		if (board == "imx8mp_iot_gate") {
+			_settings(iot_gate_gpr_setting,
+			          sizeof(iot_gate_gpr_setting) / (GPR_MAX*sizeof(uint32_t)));
+			return;
+		}
+	}
+};
+
+
+/***********************
+ ** I/O MUX Registers **
+ ***********************/
 
 /* The following values are taken from device-tree sources of the
  * vendor from their Linux kernel forks, therefore they have this

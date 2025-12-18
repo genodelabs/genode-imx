@@ -37,8 +37,9 @@ struct Driver::Main
 
 	bool _verbose { _config_rom.node().attribute_value("verbose", false) };
 
-	Iomuxc   _iomuxc   { _env, _common.platform_info() };
-	Watchdog _watchdog { _env };
+	Iomuxc_gpr _iomuxc_gpr { _env, _common.platform_info() };
+	Iomuxc     _iomuxc     { _env, _common.platform_info() };
+	Watchdog   _watchdog   { _env };
 
 	Ccm _ccm { _env, _common.devices().clocks(), _verbose };
 	Gpc _gpc { _env, _common.devices().powers() };

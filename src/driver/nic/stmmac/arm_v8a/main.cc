@@ -28,10 +28,6 @@ namespace Stmmac_driver {
 	struct Main;
 }
 
-static Genode::uint8_t                  mac_address[6];
-static Pin_control::Connection         *phy_reset_pin;
-static bool                             phy_reset_pin_active_high;
-
 
 struct Stmmac_driver::Main
 {
@@ -62,9 +58,10 @@ struct Stmmac_driver::Main
 
 	Attached_rom_dataspace _dtb { _env, "nic.dtb" };
 
-	Constructible<Attached_rom_dataspace>          _mac { };
-	Constructible<Driver>                          _driver { };
-	Genode::Constructible<Pin_control::Connection> _pin { };
+	Constructible<Attached_rom_dataspace>  _mac_rom { };
+	Net::Mac_address                       _mac { };
+	Constructible<Driver>                  _driver { };
+	Constructible<Pin_control::Connection> _pin { };
 
 	/**
 	 * Signal handler triggered by activity of the uplink connection
@@ -82,15 +79,12 @@ struct Stmmac_driver::Main
 
 	void _handle_mac()
 	{
-		using Mac_address = Net::Mac_address;
-
-		if (_driver.constructed())
+		if (_driver.constructed() || !_mac_rom.constructed())
 			return;
 
-		_mac->update();
-		_mac->node().with_sub_node("nic", [&] (Node const &node) {
-			Mac_address m { node.attribute_value("mac", Mac_address()) };
-			memcpy(mac_address, m.addr, 6);
+		_mac_rom->update();
+		_mac_rom->node().with_sub_node("nic", [&] (Node const &node) {
+			_mac = { node.attribute_value("mac", Net::Mac_address()) };
 			_driver.construct(_env, _signal_handler, _dtb.local_addr<void>());
 		}, [&] { });
 	}
@@ -99,52 +93,55 @@ struct Stmmac_driver::Main
 	:
 		_env(env)
 	{
-		if (_phy_reset_control) {
+		if (_phy_reset_control)
 			_pin.construct(env, "eqos_phy_reset");
-			phy_reset_pin = &*_pin;
-			phy_reset_pin_active_high = _phy_reset_active_high;
-		}
+
 		if (_mac_by_rom) {
-			_mac.construct(env, "mac");
-			_mac->sigh(_mac_handler);
+			_mac_rom.construct(env, "mac");
+			_mac_rom->sigh(_mac_handler);
 			_handle_mac();
 		} else
 			_driver.construct(_env, _signal_handler, _dtb.local_addr<void>());
 	}
+
+	void with_reset_pin(auto const &fn) {
+		if (_pin.constructed()) fn(*_pin, _phy_reset_active_high); }
+
+	void with_mac_address(auto const &fn) { fn(_mac); }
 };
+
+
+static Stmmac_driver::Main& main_singleton(Genode::Env &env = Lx_kit::env().env)
+{
+	static Stmmac_driver::Main main(env);
+	return main;
+}
 
 
 void Component::construct(Genode::Env &env)
 {
-	static Stmmac_driver::Main main(env);
+	main_singleton(env);
 }
 
 
 extern "C" void lx_emul_reset_control_assert(void)
 {
-	if (phy_reset_pin) {
-		if (phy_reset_pin_active_high) {
-			phy_reset_pin->state(true);
-		} else {
-			phy_reset_pin->state(false);
-		}
-	}
+	main_singleton().with_reset_pin(
+		[] (auto &pin, bool assert_high) {
+			pin.state(assert_high); });
 }
 
 
 extern "C" void lx_emul_reset_control_deassert(void)
 {
-	if (phy_reset_pin) {
-		if (phy_reset_pin_active_high) {
-			phy_reset_pin->state(false);
-		} else {
-			phy_reset_pin->state(true);
-		}
-	}
+	main_singleton().with_reset_pin(
+		[] (auto &pin, bool assert_high) {
+			pin.state(!assert_high); });
 }
 
 
 extern "C" void lx_emul_get_mac_address(void *buf)
 {
-	Genode::memcpy(buf, mac_address, 6);
+	main_singleton().with_mac_address(
+		[&] (auto mac) { Genode::memcpy(buf, mac.addr, 6); });
 }
